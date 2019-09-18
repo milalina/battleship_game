@@ -4,6 +4,8 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Set;
 
 //connecting the class to a db table
@@ -51,6 +53,13 @@ public class Player {
             gameResult.add(element.getGame());
         }
         return gameResult;
+    }
+
+    public Map<String, Object> makePlayerDTO() {
+        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+        dto.put("id", this.getId());//object
+        dto.put("email", this.getUserName());
+        return dto;
     }
 
 

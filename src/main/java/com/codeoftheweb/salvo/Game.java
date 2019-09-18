@@ -42,25 +42,41 @@ public class Game {
         return id;
     }
 
-
-   public Map<String, Object> makeGameDTO() {
-        Map<String, Object> dto = new LinkedHashMap<String, Object>();
-        dto.put("id", this.getId());//object
+    public Map<String, Object> makeGameDTO() {
+      Map<String, Object> dto = new LinkedHashMap<String, Object>();
+       dto.put("id", this.getId());//object
         dto.put("created", this.getGameCreatedAt().toInstant().toEpochMilli());
         dto.put("gamePlayers", getGamePlayerDto());
         return dto;
-    }
+   }
 
-    public List<GamePlayerDto> getGamePlayerDto() {
-        List<GamePlayerDto> myGamePlayerDtoList= new ArrayList<>();
-        for (GamePlayer element: gamePlayers) {
-            Player player = element.getPlayer();
-            PlayerDto myPlayerDto = new PlayerDto(player.getId(), player.getUserName());
-            GamePlayerDto myGamePlayerDto = new GamePlayerDto (element.getId(), myPlayerDto);
-            myGamePlayerDtoList.add(myGamePlayerDto);
+    public List<Map<String, Object>> getGamePlayerDto() {
+        List<Map<String, Object>> myGamePlayerDtoList= new ArrayList<>();
+        for (GamePlayer element: gamePlayers){
+            myGamePlayerDtoList.add(element.makeGamePlayerDTO());
         }
         return myGamePlayerDtoList;
     }
+
+//Creating DTO with DTO Classes
+//   public Map<String, Object> makeGameDTO() {
+//        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+//        dto.put("id", this.getId());//object
+//        dto.put("created", this.getGameCreatedAt().toInstant().toEpochMilli());
+//        dto.put("gamePlayers", getGamePlayerDto());
+//        return dto;
+//    }
+//
+//    public List<GamePlayerDto> getGamePlayerDto() {
+//        List<GamePlayerDto> myGamePlayerDtoList= new ArrayList<>();
+//        for (GamePlayer element: gamePlayers) {
+//            Player player = element.getPlayer();
+//            PlayerDto myPlayerDto = new PlayerDto(player.getId(), player.getUserName());
+//            GamePlayerDto myGamePlayerDto = new GamePlayerDto (element.getId(), myPlayerDto);
+//            myGamePlayerDtoList.add(myGamePlayerDto);
+//        }
+//        return myGamePlayerDtoList;
+//    }
 
 //    public GamePlayerDto(int id, PlayerDto player) {
 //        this.id = id;

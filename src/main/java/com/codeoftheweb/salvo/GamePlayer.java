@@ -2,14 +2,8 @@ package com.codeoftheweb.salvo;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import java.util.Date;
+import javax.persistence.*;
+import java.util.*;
 
 @Entity
 public class GamePlayer {
@@ -27,6 +21,9 @@ public class GamePlayer {
     @JoinColumn(name="player_id")
     private Player player;
 
+    @OneToMany(mappedBy="gamePlayer", fetch = FetchType.EAGER)
+    List<Ship> ships = new ArrayList<>();
+
     public GamePlayer() {
     }
 
@@ -34,7 +31,21 @@ public class GamePlayer {
         this.game = game;
         this.player = player;
         this.joinDate = joinDate;
+
     }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public List<Ship> getShips() {
+        return ships;
+    }
+
+   public void addShip(Ship ship){
+        ship.setGamePlayer(this);
+        ships.add(ship);
+   }
 
     public Game getGame() {
         return game;
@@ -66,6 +77,12 @@ public class GamePlayer {
 
     public long getId() {
         return id;
+    }
+    public Map<String, Object> makeGamePlayerDTO() {
+        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+        dto.put("id", this.getId());//object
+        dto.put("player", this.getPlayer().makePlayerDTO());
+        return dto;
     }
 }
 

@@ -4,7 +4,11 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 
 @SpringBootApplication
@@ -16,7 +20,7 @@ public class SalvoApplication {
 
 	@Bean
 	public CommandLineRunner initData(PlayerRepository repositoryPlayer, GameRepository repositoryGame,
-									  GamePlayerRepository repositoryGamePlayer) {
+									  GamePlayerRepository repositoryGamePlayer, ShipRepository repositoryShip) {
 		return (args) -> {
 			Player player1 = new Player ("j.bauer@ctu.gov");
 			Player player2 = new Player ("c.obrian@ctu.gov");
@@ -77,6 +81,49 @@ public class SalvoApplication {
 			repositoryGamePlayer.save(gamePlayer11);
 
 			System.out.println(gamePlayer6.toString());
+
+			List<String> shipLocations1 = Arrays.asList("H2", "H3", "H4");
+			List<String> shipLocations2 = Arrays.asList("E1", "F1", "G1");
+			List<String> shipLocations3 = Arrays.asList("B4", "B5");
+			List<String> shipLocations4 = Arrays.asList("B5", "C5", "D5");
+			List<String> shipLocations5 = Arrays.asList("F1", "F2");
+			List<String> shipLocations6 = Arrays.asList("B5", "C5", "D5");
+			List<String> shipLocations7 = Arrays.asList("C6", "C7");
+			List<String> shipLocations8 = Arrays.asList("A2", "A3", "A4");
+			List<String> shipLocations9 = Arrays.asList("G6", "H6");
+
+
+			Ship ship1 = new Ship("Destroyer", shipLocations1);
+			Ship ship2 = new Ship("Submarine", shipLocations2);
+			Ship ship3 = new Ship("Patrol Boat", shipLocations3);
+			Ship ship4 = new Ship("Destroyer", shipLocations4);
+			Ship ship5 = new Ship("Patrol Boat", shipLocations5);
+			Ship ship6 = new Ship("Submarine", shipLocations6);
+			Ship ship7 = new Ship("Patrol Boat", shipLocations7);
+			Ship ship8 = new Ship("Destroyer", shipLocations8);
+			Ship ship9 = new Ship("Patrol Boat", shipLocations9);
+
+			gamePlayer1.addShip(ship1);
+			gamePlayer1.addShip(ship2);
+			gamePlayer1.addShip(ship3);
+			gamePlayer2.addShip(ship4);
+			gamePlayer2.addShip(ship5);
+			gamePlayer3.addShip(ship6);
+			gamePlayer3.addShip(ship7);
+			gamePlayer4.addShip(ship8);
+			gamePlayer4.addShip(ship9);
+
+			repositoryShip.save(ship1);
+			repositoryShip.save(ship2);
+			repositoryShip.save(ship3);
+			repositoryShip.save(ship4);
+			repositoryShip.save(ship5);
+			repositoryShip.save(ship6);
+			repositoryShip.save(ship7);
+			repositoryShip.save(ship8);
+			repositoryShip.save(ship9);
+
+
 		};
 	}
 

@@ -22,7 +22,6 @@ public class AppController {
     public List<Object> getAllGames() {
         List<Game> games = gameRepository
                 .findAll();
-
         return games
                 .stream()
                 .map(element -> element.makeGameDTO())
