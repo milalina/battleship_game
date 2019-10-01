@@ -20,7 +20,8 @@ public class SalvoApplication {
 
 	@Bean
 	public CommandLineRunner initData(PlayerRepository repositoryPlayer, GameRepository repositoryGame,
-									  GamePlayerRepository repositoryGamePlayer, ShipRepository repositoryShip) {
+									  GamePlayerRepository repositoryGamePlayer, ShipRepository repositoryShip,
+									  SalvoRepository repositorySalvo) {
 		return (args) -> {
 			Player player1 = new Player ("j.bauer@ctu.gov");
 			Player player2 = new Player ("c.obrian@ctu.gov");
@@ -29,11 +30,7 @@ public class SalvoApplication {
 			Player player5 = new Player ("d.palmer@whitehouse.gov");
 
 
-			repositoryPlayer.save(player1);
-			repositoryPlayer.save(player2);
-			repositoryPlayer.save(player3);
-			repositoryPlayer.save(player4);
-			repositoryPlayer.save(player5);
+
 
 			Date date1 = new Date ();
 			Date date2 = new Date(System.currentTimeMillis() - 3600 * 1000);
@@ -49,12 +46,7 @@ public class SalvoApplication {
 			Game game5 = new Game(date5);
 			Game game6 = new Game(date6);
 
-			repositoryGame.save(game1);
-			repositoryGame.save(game2);
-			repositoryGame.save(game3);
-			repositoryGame.save(game4);
-			repositoryGame.save(game5);
-			repositoryGame.save(game6);
+
 
 			GamePlayer gamePlayer1= new GamePlayer(game1, player1, date1);
 			GamePlayer gamePlayer2= new GamePlayer(game1, player2, date1);
@@ -67,6 +59,20 @@ public class SalvoApplication {
 			GamePlayer gamePlayer9= new GamePlayer(game5, player4, date5);
 			GamePlayer gamePlayer10= new GamePlayer(game5, player1, date5);
 			GamePlayer gamePlayer11= new GamePlayer(game6, player5, date6);
+
+			repositoryPlayer.save(player1);
+			repositoryPlayer.save(player2);
+			repositoryPlayer.save(player3);
+			repositoryPlayer.save(player4);
+			repositoryPlayer.save(player5);
+
+
+			repositoryGame.save(game1);
+			repositoryGame.save(game2);
+			repositoryGame.save(game3);
+			repositoryGame.save(game4);
+			repositoryGame.save(game5);
+			repositoryGame.save(game6);
 
 			repositoryGamePlayer.save(gamePlayer1);
 			repositoryGamePlayer.save(gamePlayer2);
@@ -122,6 +128,33 @@ public class SalvoApplication {
 			repositoryShip.save(ship7);
 			repositoryShip.save(ship8);
 			repositoryShip.save(ship9);
+
+			Date turn1 = new Date();
+			Date turn2 = new Date();
+
+			List<String> salvoLocations1=Arrays.asList("B5", "C5", "F1");
+			List<String> salvoLocations2=Arrays.asList("B4", "B5", "B6");
+			List<String> salvoLocations3=Arrays.asList("F2", "D5");
+			List<String> salvoLocations4=Arrays.asList("E1", "H3", "A2");
+
+			Salvo salvo1= new Salvo(turn1, salvoLocations1);
+			Salvo salvo2= new Salvo(turn1, salvoLocations2);
+			Salvo salvo3= new Salvo(turn2, salvoLocations3);
+			Salvo salvo4= new Salvo(turn2, salvoLocations4);
+
+			gamePlayer1.addSalvo(salvo1);
+			gamePlayer1.addSalvo(salvo3);
+			gamePlayer2.addSalvo(salvo2);
+			gamePlayer2.addSalvo(salvo4);
+
+			repositorySalvo.save(salvo1);
+			repositorySalvo.save(salvo2);
+			repositorySalvo.save(salvo3);
+			repositorySalvo.save(salvo4);
+
+
+
+
 
 
 		};

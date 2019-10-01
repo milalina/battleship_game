@@ -24,6 +24,9 @@ public class GamePlayer {
     @OneToMany(mappedBy="gamePlayer", fetch = FetchType.EAGER)
     List<Ship> ships = new ArrayList<>();
 
+    @OneToMany(mappedBy="gamePlayer", fetch = FetchType.LAZY)
+    List<Salvo> salvoes = new ArrayList<>();
+
     public GamePlayer() {
     }
 
@@ -31,7 +34,6 @@ public class GamePlayer {
         this.game = game;
         this.player = player;
         this.joinDate = joinDate;
-
     }
 
     public void setId(long id) {
@@ -42,10 +44,19 @@ public class GamePlayer {
         return ships;
     }
 
+    public List<Salvo> getSalvoes() {
+        return salvoes;
+    }
+
    public void addShip(Ship ship){
         ship.setGamePlayer(this);
         ships.add(ship);
    }
+
+    public void addSalvo(Salvo salvo){
+        salvo.setGamePlayer(this);
+        salvoes.add(salvo);
+    }
 
     public Game getGame() {
         return game;
@@ -78,11 +89,53 @@ public class GamePlayer {
     public long getId() {
         return id;
     }
+
+
+    public Map<String, Object> makeGameDTOForGamePlayer() {
+        Map<String, Object> gameDTOForGamePlayerMap = new LinkedHashMap<String, Object>();
+        gameDTOForGamePlayerMap.putAll(this.getGame().makeGameDTO());
+        gameDTOForGamePlayerMap.put("ships", this.makeShipDtoList());
+
+        return gameDTOForGamePlayerMap;
+    }
+
     public Map<String, Object> makeGamePlayerDTO() {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id", this.getId());//object
         dto.put("player", this.getPlayer().makePlayerDTO());
         return dto;
     }
+
+    public List<Map<String, Object>> makeShipDtoList() {
+        List<Map<String, Object>> myGamePlayerShipDtoList= new ArrayList<>();
+        List<Ship> ships = this.getShips();
+        for (Ship ship: ships){
+            myGamePlayerShipDtoList.add(ship.makeShipDTOMap());
+        }
+        return myGamePlayerShipDtoList;
+    }
+
+
+
+    public Map<Integer, Object> makeGPSalvoDTO() {
+        Map<Integer, Object> salvoDto = new LinkedHashMap<Integer, Object>();
+        List<Salvo> salvos = this.getSalvoes();
+        int turnNumber = 1;
+        for (Salvo salvo: salvoes) {
+            salvoDto.put(turnNumber, salvo.getSalvoLocations());
+            turnNumber+=1;
+        }
+        return salvoDto;
+    }
+
+    public Map<Long, Object> makePlayerSalvoDTO() {
+        Map<Long, Object> dto = new LinkedHashMap<>();
+        Long playerId = this.getPlayer().getId();
+        dto.put(playerId, this.makeGPSalvoDTO());
+        System.out.println("dto"+dto);
+        return dto;
+    }
+
 }
+
 

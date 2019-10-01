@@ -18,7 +18,7 @@ public class Player {
     private long id; //a unique number assigned to each player
     private String userName;
 
-    @OneToMany(mappedBy="player", fetch=FetchType.EAGER)
+    @OneToMany(mappedBy="player", fetch=FetchType.EAGER)//fetch=FetchType.EAGER=if you load a player, load gamePlayer as well
     Set<GamePlayer> gamePlayers;
 
     public Player() { } //a no-argument constructor for JPA to create new instances
@@ -38,6 +38,7 @@ public class Player {
     public String toString() {
         return userName;
     }
+
     public void addGamePlayer(GamePlayer gamePlayer) {
         gamePlayer.setPlayer(this);
         gamePlayers.add(gamePlayer);

@@ -1,0 +1,93 @@
+
+body{
+/*background:
+radial-gradient(black 15%, transparent 16%) 0 0,
+radial-gradient(black 15%, transparent 16%) 8px 8px,
+radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 0 1px,
+radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 8px 9px;
+background-color:#282828;
+background-size:16px 16px;*/
+
+background:
+linear-gradient(27deg, #151515 5px, transparent 5px) 0 5px,
+linear-gradient(207deg, #151515 5px, transparent 5px) 10px 0px,
+linear-gradient(27deg, #222 5px, transparent 5px) 0px 10px,
+linear-gradient(207deg, #222 5px, transparent 5px) 10px 5px,
+linear-gradient(90deg, #1b1b1b 10px, transparent 10px),
+linear-gradient(#1d1d1d 25%, #1a1a1a 25%, #1a1a1a 50%, transparent 50%, transparent 75%, #242424 75%, #242424);
+background-color: #131313;
+background-size: 20px 20px;
+}
+
+.container{
+    display: grid;
+    grid-template-columns: 0% 50% 5% 45% 0%;
+    grid-template-rows: 10% 38% 5% 37% 10%;
+}
+
+.shipG{
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 2;
+    grid-row-end: 3;
+    text-align: center;
+}
+.salvoG{
+    grid-column-start: 4;
+    grid-column-end: 5;
+    grid-row-start: 2;
+    grid-row-end: 3;
+    text-align: center;
+}
+.table{
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 3px;
+}
+table{
+width: 100%;   
+}
+td,th {border: none !important;
+    text-align: center;
+}
+
+.letter,th{
+color: gray;
+}
+
+.player{
+    font-size: 2em;
+    padding-left: 10px;
+   padding-right: 10px;
+   background-color: purple !important;
+   color: grey !important;
+   border-radius: 15px;
+   
+}
+.vs{
+    font-size: 2em;   
+}
+.cell{
+    width: 6%;
+    height: 6%;
+    background-color: purple; 
+    position: relative;
+    border-radius: 15px;
+}
+.empty_cell{
+    width: 6%;
+    height: 6%;
+    background-color: purple;
+    position: relative;
+    border-radius: 15px;
+}
+.heading{
+    grid-column-start: 2;
+    grid-column-end: 5;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    justify-self: center;
+    color: purple;
+}

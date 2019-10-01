@@ -3,6 +3,7 @@ package com.codeoftheweb.salvo;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -18,6 +19,14 @@ public class Game {
 
     @OneToMany(mappedBy="game", fetch=FetchType.EAGER)
     Set <GamePlayer> gamePlayers;
+
+    public Set<GamePlayer> getGamePlayers() {
+        return gamePlayers;
+    }
+
+    public void setGamePlayers(Set<GamePlayer> gamePlayers) {
+        this.gamePlayers = gamePlayers;
+    }
 
     public Game() { } //a no-argument constructor for JPA to create new instances
 
@@ -43,11 +52,28 @@ public class Game {
     }
 
     public Map<String, Object> makeGameDTO() {
-      Map<String, Object> dto = new LinkedHashMap<String, Object>();
-       dto.put("id", this.getId());//object
+        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+        dto.put("id", this.getId());//object
         dto.put("created", this.getGameCreatedAt().toInstant().toEpochMilli());
         dto.put("gamePlayers", getGamePlayerDto());
+        //dto.put("salvoes", )
         return dto;
+    }
+
+    public Map<String, Object> makeGameDTOGamePlayer(Player player) {
+      Map<String, Object> dto = new LinkedHashMap<String, Object>();
+      dto.putAll(makeGameDTO());
+      dto.put("ships", getGamePlayerOfPlayer(player).makeShipDtoList());
+      return dto;
+   }
+
+   public GamePlayer getGamePlayerOfPlayer(Player player){
+        for (GamePlayer element: gamePlayers){
+            if (player == element.getPlayer()){
+                return element;
+            }
+        }
+       return null;
    }
 
     public List<Map<String, Object>> getGamePlayerDto() {
@@ -57,6 +83,78 @@ public class Game {
         }
         return myGamePlayerDtoList;
     }
+
+    public List<Player> getPlayer() {
+        List<Player> players= new ArrayList<>();
+        for (GamePlayer element: gamePlayers) {
+            players.add(element.getPlayer());
+        }
+        return players;
+    }
+
+    public Map<String, Object> getPlayersSalvoesMap(){
+        Map<String, Object> playersSalvoesMap = new LinkedHashMap<String, Object>();
+        List<Map<Long, Object>> playersSalvoesList=new ArrayList<>();
+        for (GamePlayer element: gamePlayers){
+            playersSalvoesList.add(element.makePlayerSalvoDTO());}
+        playersSalvoesMap.put("salvoes", playersSalvoesList);
+        return playersSalvoesMap;
+    }
+
+    }
+
+       /*
+
+        public Map<String, Object> getPlayersSalvoes(){
+        Map<String, Object> playersSalvoesMap = new LinkedHashMap<Long, Object>();
+        Map<Long, Object> playersSalvoes = new LinkedHashMap<Long, Object>();
+        for (GamePlayer element: gamePlayers){
+            playersSalvoes.put(element.makePlayerSalvoDTO());
+        }
+        playersSalvoesMap.put("salvoes", )
+        return playersSalvoesMap;
+    }
+
+    }
+
+   public List<Ship> makeShipDtoList() {
+        List<Ship> ships1;
+        GamePlayer currentGamePlayer = new GamePlayer();
+        ships1 = currentGamePlayer.getShips();
+        return ships1;}
+
+   public List<Map<String, Object>> makeShipDtoList() {
+        List<Map<String, Object>> myGamePlayerShipDtoList= new ArrayList<>();
+        for (List<Ship> ship: ships){
+            myGamePlayerShipDtoList.add(ship.makeShipDTOMap());
+        }
+        return myGamePlayerShipDtoList;
+    }
+
+    public List <ArrayList> makeShipDtoList() {
+        List<ArrayList> myGamePlayerShipDtoList= new ArrayList<>();
+        for (GamePlayer element: gamePlayers){
+            myGamePlayerShipDtoList.add(element.getShips());
+        }
+        return myGamePlayerShipDtoList;
+    }
+
+    public List<Ship> makeShipDtoList() {
+        List<Ship> ships1;
+        GamePlayer currentGamePlayer = new GamePlayer();
+        ships1 = currentGamePlayer.getShips();
+        return ships1;
+    }
+
+     public List<ArrayList> makeShipDtoList() {
+        List<ArrayList> gamePlayerShips;
+        GamePlayer currentGamePlayer = new GamePlayer();
+        gamePlayerShips=currentGamePlayer.getShips().stream().map(element -> element.makeShipDTOMap());
+        return gamePlayerShips;
+    }
+    */
+
+
 
 //Creating DTO with DTO Classes
 //   public Map<String, Object> makeGameDTO() {
@@ -88,18 +186,6 @@ public class Game {
 //        this.id = id;
 //        this.player = player;
 //    }
-
-    public List<Player> getPlayer() {
-        List<Player> players= new ArrayList<>();
-        for (GamePlayer element: gamePlayers) {
-            players.add(element.getPlayer());
-        }
-        return players;
-    }
-
-
-    }
-
 
 
 
