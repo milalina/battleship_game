@@ -71,8 +71,8 @@ public class Ship {
         this.shipLocations = shipLocations;
     }
 
-    public List <Ship> getGamePlayerShips(){
-        List <Ship> ships;
+    public Set <Ship> getGamePlayerShips(){
+        Set <Ship> ships;
         ships = gamePlayer.getShips();
         return ships;
     }

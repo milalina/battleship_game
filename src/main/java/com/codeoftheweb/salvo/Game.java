@@ -20,6 +20,9 @@ public class Game {
     @OneToMany(mappedBy="game", fetch=FetchType.EAGER)
     Set <GamePlayer> gamePlayers;
 
+    @OneToMany(mappedBy="game", fetch=FetchType.EAGER)
+    List <Score> scores;
+
     public Set<GamePlayer> getGamePlayers() {
         return gamePlayers;
     }
@@ -47,6 +50,19 @@ public class Game {
         gamePlayers.add(gamePlayer);
     }
 
+    public void addScore(Score score) {
+       score.setGame(this);
+        scores.add(score);
+    }
+
+    public List<Score> getScores() {
+        return scores;
+    }
+
+    public void setScores(List<Score> scores) {
+        this.scores = scores;
+    }
+
     public long getId() {
         return id;
     }
@@ -56,7 +72,6 @@ public class Game {
         dto.put("id", this.getId());//object
         dto.put("created", this.getGameCreatedAt().toInstant().toEpochMilli());
         dto.put("gamePlayers", getGamePlayerDto());
-        //dto.put("salvoes", )
         return dto;
     }
 
@@ -92,18 +107,21 @@ public class Game {
         return players;
     }
 
-    public Map<String, Object> getPlayersSalvoesMap(){
+    //redundant function for making playerSalvoDto
+    /*public Map<String, Object> getPlayersSalvoesMap(){
         Map<String, Object> playersSalvoesMap = new LinkedHashMap<String, Object>();
         List<Map<Long, Object>> playersSalvoesList=new ArrayList<>();
         for (GamePlayer element: gamePlayers){
             playersSalvoesList.add(element.makePlayerSalvoDTO());}
         playersSalvoesMap.put("salvoes", playersSalvoesList);
         return playersSalvoesMap;
-    }
+    }*/
 
     }
 
        /*
+
+
 
         public Map<String, Object> getPlayersSalvoes(){
         Map<String, Object> playersSalvoesMap = new LinkedHashMap<Long, Object>();

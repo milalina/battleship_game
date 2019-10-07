@@ -8,8 +8,10 @@ new Vue({
         gamePlayerYou: 0,
         gamePlayerOther: 0,
         shipLocations: [],
-        mySalvoes:["B5", "C5", "F1", "F2", "D5"],
-        enemySalvoes:["B4", "B5", "B6", "E1", "H3", "A2"],
+        mySalvoesObject: 0,
+        mySalvoes:[],
+        enemySalvoesObject: 0,
+        enemySalvoes:[],
         damagedShipLocations: [],
 
     },
@@ -48,10 +50,17 @@ new Vue({
             if (this.game[0].gamePlayers[1].id == this.gamePlayerId) {
                 this.gamePlayerYou = this.game[0].gamePlayers[1].player.email
                 this.gamePlayerOther = this.game[0].gamePlayers[0].player.email
+                this.mySalvoesObject = this.game[0].gamePlayers[1].salvoes
+                this.enemySalvoesObject= this.game[0].gamePlayers[0].salvoes
             } else {
                 this.gamePlayerYou = this.game[0].gamePlayers[0].player.email
                 this.gamePlayerOther = this.game[0].gamePlayers[1].player.email
+                this.mySalvoesObject = this.game[0].gamePlayers[0].salvoes
+                this.enemySalvoesObject= this.game[0].gamePlayers[1].salvoes
             }
+            this.fillArrMySalvoes()
+            this.fillArrEnemySalvoes()
+            console.log(this.mySalvoesObject)
         },
 
         makeGPShipsArray() {
@@ -65,8 +74,6 @@ new Vue({
         },
 
         displayShips() {
-            console.log(this.shipLocations)
-            console.log(this.damagedShipLocations)
                 for (i in this.shipLocations) {
                     document.getElementById(this.shipLocations[i]).style.backgroundColor = "grey";
                 }
@@ -86,6 +93,17 @@ new Vue({
            this.displayShips();
         },
 
+        fillArrMySalvoes(mySalvoes, mySalvoesObject){
+            for (i in this.mySalvoesObject){
+                this.mySalvoes.push.apply(this.mySalvoes,this.mySalvoesObject[i]);
+            }
+        },
+
+        fillArrEnemySalvoes(enemySalvoes, enemySalvoesObject){
+            for (i in this.enemySalvoesObject){
+                this.enemySalvoes.push.apply(this.enemySalvoes,this.enemySalvoesObject[i]);
+            }
+        },
         displayMySalvoes(){
             for (i in this.mySalvoes){
                 document.getElementById(this.shipLocations[i]+"s").innerHTML='<i class="glyphicon glyphicon-screenshot" style="font-size:17px;color:purple;background-color:grey;"></i>'; 

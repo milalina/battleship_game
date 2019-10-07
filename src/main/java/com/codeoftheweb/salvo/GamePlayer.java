@@ -1,5 +1,6 @@
 package com.codeoftheweb.salvo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -22,7 +23,7 @@ public class GamePlayer {
     private Player player;
 
     @OneToMany(mappedBy="gamePlayer", fetch = FetchType.EAGER)
-    List<Ship> ships = new ArrayList<>();
+    Set<Ship> ships = new HashSet<>();
 
     @OneToMany(mappedBy="gamePlayer", fetch = FetchType.LAZY)
     List<Salvo> salvoes = new ArrayList<>();
@@ -40,7 +41,7 @@ public class GamePlayer {
         this.id = id;
     }
 
-    public List<Ship> getShips() {
+    public Set<Ship> getShips() {
         return ships;
     }
 
@@ -90,6 +91,12 @@ public class GamePlayer {
         return id;
     }
 
+   public Double getScore(){
+       Score playerScore = this.getPlayer().getScore(game);
+       if (playerScore != null && playerScore.getFinishDate()!=null){
+       return playerScore.getPlayerScore();}
+       return null;
+   }
 
     public Map<String, Object> makeGameDTOForGamePlayer() {
         Map<String, Object> gameDTOForGamePlayerMap = new LinkedHashMap<String, Object>();
@@ -103,12 +110,14 @@ public class GamePlayer {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id", this.getId());//object
         dto.put("player", this.getPlayer().makePlayerDTO());
+        dto.put("salvoes", this.makeGPSalvoDTO());
+        dto.put("score", this.getScore());
         return dto;
     }
 
     public List<Map<String, Object>> makeShipDtoList() {
         List<Map<String, Object>> myGamePlayerShipDtoList= new ArrayList<>();
-        List<Ship> ships = this.getShips();
+        Set<Ship> ships = this.getShips();
         for (Ship ship: ships){
             myGamePlayerShipDtoList.add(ship.makeShipDTOMap());
         }
@@ -128,14 +137,27 @@ public class GamePlayer {
         return salvoDto;
     }
 
-    public Map<Long, Object> makePlayerSalvoDTO() {
+    //redundant function for making playerSalvoDto
+  /*  public Map<Long, Object> makePlayerSalvoDTO() {
         Map<Long, Object> dto = new LinkedHashMap<>();
         Long playerId = this.getPlayer().getId();
         dto.put(playerId, this.makeGPSalvoDTO());
-        System.out.println("dto"+dto);
         return dto;
-    }
+    }*/
 
+    @JsonIgnore
+    public GamePlayer getOpponent(){
+        Set<GamePlayer> gamePlayers = this.getGame().getGamePlayers();
+        final GamePlayer[] opponent = new GamePlayer[1];
+        gamePlayers.forEach(e -> {
+            if(e.getId() != this.getId()){
+                opponent[0] = e;
+            }
+        });
+        return  opponent[0];
+    }
 }
+
+
 
 

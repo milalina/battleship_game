@@ -2,6 +2,8 @@ new Vue({
     el: "#games",
     data: {
         games: [],
+        gamePlayersArray:[],
+        leaderboard:[{}],
     },
     methods: {
         fetchData: function () {
@@ -13,6 +15,7 @@ new Vue({
                 .then((data) => {
                     console.log(data);
                     this.games = data;
+                    console.log(this.games)
                     this.isLoaded();
                 })
                 .catch(function (error) {
@@ -22,11 +25,10 @@ new Vue({
 
         isLoaded: function () {
             if (this.games.length == 0) {
-                console.log("yes")
                 return false;
             } else {
                 this.milisecsToLocalTime();
-                console.log("no")
+                this.fillUpGamePlayersArray();
                 return true
             }
         },
@@ -37,6 +39,18 @@ new Vue({
                 this.games[i].created = convertingTime.toLocaleString();
             }
         },
+
+        fillUpGamePlayersArray(gamePlayersArray, games){
+            for(i in this.games){
+             this.gamePlayersArray.push.apply(this.gamePlayersArray, this.games[i].gamePlayers)
+            } 
+            console.log(this.gamePlayersArray)
+        },
+
+        fillUpObjectLeaderboard(){
+            
+            
+        }
 
     },
 

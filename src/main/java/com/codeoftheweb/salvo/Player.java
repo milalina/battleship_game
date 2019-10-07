@@ -3,10 +3,7 @@ package com.codeoftheweb.salvo;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 //connecting the class to a db table
 @Entity //create a player table for this class. An Entity class is equivalent to a row of a database
@@ -19,7 +16,10 @@ public class Player {
     private String userName;
 
     @OneToMany(mappedBy="player", fetch=FetchType.EAGER)//fetch=FetchType.EAGER=if you load a player, load gamePlayer as well
-    Set<GamePlayer> gamePlayers;
+    Set<GamePlayer> gamePlayers = new HashSet<>();
+
+    @OneToMany(mappedBy="player", fetch=FetchType.EAGER)//fetch=FetchType.EAGER=if you load a player, load gamePlayer as well
+    List<Score> scores = new ArrayList<>();
 
     public Player() { } //a no-argument constructor for JPA to create new instances
 
@@ -44,9 +44,15 @@ public class Player {
         gamePlayers.add(gamePlayer);
     }
 
+    public void addScore(Score score) {
+        score.setPlayer(this);
+        scores.add(score);
+    }
+
     public long getId() {
         return id;
     }
+
 
     Set<Game> games(){
         Set<Game> gameResult = new HashSet<>();
@@ -55,6 +61,16 @@ public class Player {
         }
         return gameResult;
     }
+
+    public Score getScore(Game game){
+        for(Score element: scores){
+            if(element.getGame() == game){
+                return element;
+            }
+        }
+        return null;
+    }
+
 
     public Map<String, Object> makePlayerDTO() {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();

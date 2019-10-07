@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -7,26 +8,67 @@
     <title>Salvo!</title>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 </head>
-<body>
-    <div class="container">
-    <h1>
-        Games!
-    </h1>
-<div id="games">
-    <ol >
-        <li v-if="isLoaded" v-for= "game in games">
-           <span class="player">{{game.created}}: </span> 
-           <span class="player">{{game.gamePlayers[0].player.email}},</span>
-        </li>
-    </ol>
-</div>
-</div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-<script src="games.js"> </script>
-</body>
-</html>
 
-<span class="player"> {{game.gamePlayers[1].player.email}};</span>
+<body>
+    <div class="container" id="games">
+        <h1 class="games-heading">
+            Games
+        </h1>
+        <div id="games-overview">
+            <div class="table">
+                <table>
+                    <tr>
+                        <th class="player-list">
+                            N
+                        </th>
+                        <th class="player-list">
+                            Started
+                        </th>
+                        <th class="player-list">
+                            Players
+                        </th>
+                    </tr>
+                    <tbody>
+                        <tr v-if="isLoaded" v-for="(game, index) in games">
+                            <td class="player-list">
+                                {{index+1}}
+                            </td>
+                            <td class="player-list">
+                                {{game.created}}
+                            </td>
+                            <td class="player-list">
+                                {{game.gamePlayers[0].player.email}} 
+                            </td>
+                            
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div id="leaderboard">
+            <div class="table">
+                <table>
+                    <tr>
+                        <th class="player-list">Player</th>
+                        <th class="player-list">Total</th>
+                        <th class="player-list">Won</th>
+                        <th class="player-list">Lost</th>
+                        <th class="player-list">Tied</th>
+                    </tr>
+                    <tbody>
+                        <tr>
+                            <td class="player-list"> </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="games.js"> </script>
+</body>
+
+</html>
 

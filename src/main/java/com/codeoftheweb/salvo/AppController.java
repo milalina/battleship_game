@@ -17,14 +17,16 @@ public class AppController {
     private GamePlayerRepository gamePlayerRepository;
     private SalvoRepository salvoRepository;
     private ShipRepository shipRepository;
+    private ScoreRepository scoreRepository;
     @Autowired //tells to create an instance of 'Repository' and store it in the instance variable 'repository'
     //private PlayerRepository playerRepository;
     public AppController(GameRepository gameRepository, GamePlayerRepository gamePlayerRepository, SalvoRepository
-            salvoRepository, ShipRepository shipRepository){
+            salvoRepository, ShipRepository shipRepository, ScoreRepository scoreRepository){
         this.gameRepository = gameRepository;
         this.gamePlayerRepository = gamePlayerRepository;
         this.shipRepository= shipRepository;
         this.salvoRepository= salvoRepository;
+        this.scoreRepository= scoreRepository;
     }
 
     @RequestMapping("/games")
@@ -47,7 +49,7 @@ public class AppController {
         GamePlayer currentGamePlayer = gamePlayerRepository.findGamePlayerById(gamePlayerId);
         List<Map<String, Object>> gameView= new ArrayList<>();
         gameView.add(currentGamePlayer.makeGameDTOForGamePlayer());
-        gameView.add(currentGamePlayer.getGame().getPlayersSalvoesMap());
+       // gameView.add(currentGamePlayer.getGame().getPlayersSalvoesMap());
         return gameView;
     }
 

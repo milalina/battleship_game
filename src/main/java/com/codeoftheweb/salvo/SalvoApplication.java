@@ -21,7 +21,7 @@ public class SalvoApplication {
 	@Bean
 	public CommandLineRunner initData(PlayerRepository repositoryPlayer, GameRepository repositoryGame,
 									  GamePlayerRepository repositoryGamePlayer, ShipRepository repositoryShip,
-									  SalvoRepository repositorySalvo) {
+									  SalvoRepository repositorySalvo, ScoreRepository repositoryScore) {
 		return (args) -> {
 			Player player1 = new Player ("j.bauer@ctu.gov");
 			Player player2 = new Player ("c.obrian@ctu.gov");
@@ -29,15 +29,14 @@ public class SalvoApplication {
 			Player player4 = new Player ("t.almeida@ctu.gov");
 			Player player5 = new Player ("d.palmer@whitehouse.gov");
 
-
-
-
 			Date date1 = new Date ();
 			Date date2 = new Date(System.currentTimeMillis() - 3600 * 1000);
 			Date date3 = new Date(System.currentTimeMillis() - 7200 * 1000);
 			Date date4 = new Date(System.currentTimeMillis() - 10800 * 1000);
 			Date date5 = new Date(System.currentTimeMillis() - 14400 * 1000);
 			Date date6 = new Date(System.currentTimeMillis() - 18000 * 1000);
+			Date date7 = new Date(System.currentTimeMillis() - 21600 * 1000);
+			Date date8 = new Date(System.currentTimeMillis() - 25200 * 1000);
 
 			Game game1 = new Game(date1);
 			Game game2 = new Game(date2);
@@ -45,7 +44,8 @@ public class SalvoApplication {
 			Game game4 = new Game(date4);
 			Game game5 = new Game(date5);
 			Game game6 = new Game(date6);
-
+			Game game7 = new Game(date7);
+			Game game8 = new Game(date8);
 
 
 			GamePlayer gamePlayer1= new GamePlayer(game1, player1, date1);
@@ -58,33 +58,9 @@ public class SalvoApplication {
 			GamePlayer gamePlayer8= new GamePlayer(game4, player2, date4);
 			GamePlayer gamePlayer9= new GamePlayer(game5, player4, date5);
 			GamePlayer gamePlayer10= new GamePlayer(game5, player1, date5);
-			GamePlayer gamePlayer11= new GamePlayer(game6, player5, date6);
-
-			repositoryPlayer.save(player1);
-			repositoryPlayer.save(player2);
-			repositoryPlayer.save(player3);
-			repositoryPlayer.save(player4);
-			repositoryPlayer.save(player5);
-
-
-			repositoryGame.save(game1);
-			repositoryGame.save(game2);
-			repositoryGame.save(game3);
-			repositoryGame.save(game4);
-			repositoryGame.save(game5);
-			repositoryGame.save(game6);
-
-			repositoryGamePlayer.save(gamePlayer1);
-			repositoryGamePlayer.save(gamePlayer2);
-			repositoryGamePlayer.save(gamePlayer3);
-			repositoryGamePlayer.save(gamePlayer4);
-			repositoryGamePlayer.save(gamePlayer5);
-			repositoryGamePlayer.save(gamePlayer6);
-			repositoryGamePlayer.save(gamePlayer7);
-			repositoryGamePlayer.save(gamePlayer8);
-			repositoryGamePlayer.save(gamePlayer9);
-			repositoryGamePlayer.save(gamePlayer10);
-			repositoryGamePlayer.save(gamePlayer11);
+			GamePlayer gamePlayer11= new GamePlayer(game6, player3, date6);
+			GamePlayer gamePlayer12= new GamePlayer(game7, player4, date7);
+			GamePlayer gamePlayer13= new GamePlayer(game8, player3, date8);
 
 			System.out.println(gamePlayer6.toString());
 
@@ -119,16 +95,6 @@ public class SalvoApplication {
 			gamePlayer4.addShip(ship8);
 			gamePlayer4.addShip(ship9);
 
-			repositoryShip.save(ship1);
-			repositoryShip.save(ship2);
-			repositoryShip.save(ship3);
-			repositoryShip.save(ship4);
-			repositoryShip.save(ship5);
-			repositoryShip.save(ship6);
-			repositoryShip.save(ship7);
-			repositoryShip.save(ship8);
-			repositoryShip.save(ship9);
-
 			Date turn1 = new Date();
 			Date turn2 = new Date();
 
@@ -147,16 +113,92 @@ public class SalvoApplication {
 			gamePlayer2.addSalvo(salvo2);
 			gamePlayer2.addSalvo(salvo4);
 
+			Date finishDate1 = new Date(System.currentTimeMillis() - 1800 * 1000);
+			Date finishDate2 = new Date(System.currentTimeMillis() - 5400 * 1000);
+			Date finishDate3 = new Date(System.currentTimeMillis() - 7200 * 1000);
+			Date finishDate4 = new Date(System.currentTimeMillis() - 9000 * 1000);
+
+			double playerScore1 = 1.0;
+			double playerScore2= 0;
+			double playerScore3=0.5;
+			double playerScore4=0.5;
+			double playerScore5 = 1.0;
+			double playerScore6= 0;
+			double playerScore7=0.5;
+			double playerScore8=0.5;
+			//double playerScore9=null;
+			//double playerScore10=null;
+
+			Score score1= new Score(finishDate1, playerScore1, game1);
+			Score score2= new Score(finishDate1, playerScore2, game1);
+			Score score3= new Score(finishDate2, playerScore3, game2);
+			Score score4= new Score(finishDate2, playerScore4, game2);
+			Score score5= new Score(finishDate3, playerScore5, game3);
+			Score score6= new Score(finishDate3, playerScore6, game3);
+			Score score7= new Score(finishDate4, playerScore7, game4);
+			Score score8= new Score(finishDate4, playerScore8, game4);
+
+			player1.addScore(score1);
+			player2.addScore(score2);
+			player1.addScore(score3);
+			player2.addScore(score4);
+			player2.addScore(score5);
+			player4.addScore(score6);
+			player2.addScore(score7);
+			player1.addScore(score8);
+
+			repositoryPlayer.save(player1);
+			repositoryPlayer.save(player2);
+			repositoryPlayer.save(player3);
+			repositoryPlayer.save(player4);
+			repositoryPlayer.save(player5);
+
+			repositoryGame.save(game1);
+			repositoryGame.save(game2);
+			repositoryGame.save(game3);
+			repositoryGame.save(game4);
+			repositoryGame.save(game5);
+			repositoryGame.save(game6);
+            repositoryGame.save(game7);
+            repositoryGame.save(game8);
+
+			repositoryGamePlayer.save(gamePlayer1);
+			repositoryGamePlayer.save(gamePlayer2);
+			repositoryGamePlayer.save(gamePlayer3);
+			repositoryGamePlayer.save(gamePlayer4);
+			repositoryGamePlayer.save(gamePlayer5);
+			repositoryGamePlayer.save(gamePlayer6);
+			repositoryGamePlayer.save(gamePlayer7);
+			repositoryGamePlayer.save(gamePlayer8);
+			repositoryGamePlayer.save(gamePlayer9);
+			repositoryGamePlayer.save(gamePlayer10);
+			repositoryGamePlayer.save(gamePlayer11);
+			repositoryGamePlayer.save(gamePlayer12);
+			repositoryGamePlayer.save(gamePlayer13);
+
+			repositoryShip.save(ship1);
+			repositoryShip.save(ship2);
+			repositoryShip.save(ship3);
+			repositoryShip.save(ship4);
+			repositoryShip.save(ship5);
+			repositoryShip.save(ship6);
+			repositoryShip.save(ship7);
+			repositoryShip.save(ship8);
+			repositoryShip.save(ship9);
+
 			repositorySalvo.save(salvo1);
 			repositorySalvo.save(salvo2);
 			repositorySalvo.save(salvo3);
 			repositorySalvo.save(salvo4);
 
-
-
-
-
-
+			repositoryScore.save(score1);
+			repositoryScore.save(score2);
+			repositoryScore.save(score3);
+			repositoryScore.save(score4);
+			repositoryScore.save(score5);
+			repositoryScore.save(score6);
+			repositoryScore.save(score7);
+			repositoryScore.save(score8);
 		};
 	}
 
