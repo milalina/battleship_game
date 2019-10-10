@@ -21,10 +21,21 @@ public class Player {
     @OneToMany(mappedBy="player", fetch=FetchType.EAGER)//fetch=FetchType.EAGER=if you load a player, load gamePlayer as well
     List<Score> scores = new ArrayList<>();
 
+    private String password;
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public Player() { } //a no-argument constructor for JPA to create new instances
 
-    public Player(String emailAddress) {
-        this.userName = emailAddress;
+    public Player(String email, String password) {
+        this.userName = email;
+        this.password=password;
     }
 
     public String getUserName() {

@@ -11,9 +11,29 @@
 
 <body>
     <div class="container" id="games">
-        <h1 class="games-heading">
-            Games
-        </h1>
+        <div class="signup">
+            <div class="field">
+                <label for="email">Email: </label>
+                <input type="email" name="email" v-model="email">
+            </div>
+            <div class="field">
+                <label for="password">Password: </label>
+                <input type="password" name="password" v-model="password">
+            </div>
+            <p v-if="feedback" class="feedback">{{feedback}}</p>
+            <div class="field">
+                <button @click="signup" class="button">Signup</button>
+            </div>
+            <div class="field">
+                <button @click="signup" class="button">Log in</button>
+            </div>
+        </div>
+        <div class="logout">
+            <span class="player-logged-in">{{email}}</span>
+            <div class="field">
+                    <button class="button">Log out</button>
+            </div>
+        </div>
         <div id="games-overview">
             <div class="table">
                 <table>
@@ -37,9 +57,9 @@
                                 {{game.created}}
                             </td>
                             <td class="player-list">
-                                {{game.gamePlayers[0].player.email}} 
+                                {{game.gamePlayers[0].player.email}}
                             </td>
-                            
+
                         </tr>
                     </tbody>
                 </table>
@@ -56,8 +76,12 @@
                         <th class="player-list">Tied</th>
                     </tr>
                     <tbody>
-                        <tr>
-                            <td class="player-list"> </td>
+                        <tr v-for="element in leaderboard">
+                            <td class="player-list">{{element.name}}</td>
+                            <td class="player-list">{{element.total}}</td>
+                            <td class="player-list">{{element.won}} </td>
+                            <td class="player-list">{{element.lost}}</td>
+                            <td class="player-list">{{element.tied}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -71,5 +95,3 @@
 </body>
 
 </html>
-
-

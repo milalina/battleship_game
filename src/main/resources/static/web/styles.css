@@ -22,17 +22,61 @@ background-size: 20px 20px;
 .container{
     display: grid;
     grid-template-columns: 0% 50% 5% 45% 0%;
-    grid-template-rows: 10% 38% 5% 37% 10%;
+    grid-template-rows: 30% 38% 5% 17% 10%;
 }
 /*ALL GAMES*/
 
-.games-heading{
+.signup{
     grid-column-start: 2;
     grid-column-end: 5;
     grid-row-start: 1;
     grid-row-end: 2;
-    justify-self: center;
-    color: purple;  
+    text-align: end;
+    color: purple; 
+    padding-top: 30px;
+}
+.player-logged-in{
+    padding-left: 10px;
+   padding-right: 10px;
+   background-color: purple !important;
+   color: grey !important;
+   border-radius: 15px;
+   padding-bottom: 15px;
+   padding-top: 15px;
+   margin-bottom: 10px;
+   
+}
+.logout{
+    grid-column-start: 2;
+    grid-column-end: 5;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    text-align: end;
+    color: purple; 
+    padding-top: 30px;  
+}
+
+.button{
+    background-color: purple;
+    color: grey;
+    border-radius: 15px; 
+    height: 40px; 
+    border: none;
+    width: 90px;
+    margin-bottom: 10px;
+}
+
+input{
+    background-color: purple;
+    color: grey;
+    border-radius: 15px; 
+    height: 40px;
+    border: none;
+    margin-bottom: 10px;
+}
+
+.feedback{
+    color: purple;
 }
 
 #games-overview{

@@ -4,8 +4,11 @@ new Vue({
         games: [],
         gamePlayersArray: [],
         uniquePlayerIdArray: [],
-        leaderboard: [{}],
-        emptyArray:[],
+        leaderboard: [],
+        emptyArray: [],
+        email: null,
+        password: null,
+        feedback: null,
     },
     methods: {
         fetchData: function () {
@@ -60,49 +63,74 @@ new Vue({
         },
 
         fillUpObjectLeaderboard() {
-            console.log(this.uniquePlayerIdArray);
-            console.log(this.gamePlayersArray)
-            var total=[];
+            var total = [];
             for (i in this.uniquePlayerIdArray) {
                 var player;
                 var total;
                 var won;
                 var lost;
                 var tied;
-                this.emptyArray=[];
-                totalArray=[];
+                this.emptyArray = [];
+                totalArray = [];
                 for (j in this.gamePlayersArray) {
-                    if (this.uniquePlayerIdArray[i] == this.gamePlayersArray[j].player.id && this.gamePlayersArray[j].score!=null) {
+                    if (this.uniquePlayerIdArray[i] == this.gamePlayersArray[j].player.id && this.gamePlayersArray[j].score != null) {
                         player = this.gamePlayersArray[j].player.email
                         this.emptyArray.push(this.gamePlayersArray[j].score)
-                    }  
+                    }
                 }
-                console.log(this.emptyArray)
                 totalArray.push(this.emptyArray.reduce((a, b) => a + b));
-                total=totalArray[0];
-                console.log(total) 
-                var counts={};
+
+                //counting the occurrences of won, lost or tie in a player's array of scores
+                total = totalArray[0];
+                var counts = {};
                 for (k in this.emptyArray) {
                     var num = this.emptyArray[k];
                     counts[num] = counts[num] ? counts[num] + 1 : 1;
                 }
-                won = counts[1.0]; lost = counts[0]; tied = counts[0.5]
-                console.log(won, lost, tied)
-                console.log(player)
+                won = counts[1.0] ? counts[1.0] : 0;
+                lost = counts[0] ? counts[0] : 0;
+                tied = counts[0.5] ? counts[0.5] : 0;
+
+                //dynamically filling up the object leaderboard
+                this.leaderboard.push({
+                    "name": " " + player,
+                    "total": " " + total,
+                    "won": " " + won,
+                    "lost": " " + lost,
+                    "tied": " " + tied,
+                })
             }
+        },
+
+        signup(){
+            if(this.email ){
+                this.feedback = "Well done!"
+            }else{
+                this.feedback = "You must enter all fields"
+                console.log(this.email)
+            }
+        },
+
+        loggedI(){
+
         }
+
 
     },
 
-    /*computed: {
-        isLoaded: function () {
-            if (this.games.length == 0) {
-                return false;
-            } else {
-                return true
+    /* computed: {
+        leaderboardComplete: function () {
+            for (i in this.leaderboard) {
+                if (this.leaderboard[i].won == undefined) {
+                    this.leaderboard[i].won = 0
+                } else if (this.leaderboard[i].lost == undefined) {
+                    this.leaderboard[i].lost = 0
+                } else if (this.leaderboard[i].tied == undefined) {
+                    this.leaderboard[i].tied = 0
+                }
             }
         }
-    },*/
+    }, */
 
     created: function () {
         this.fetchData();
