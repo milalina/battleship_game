@@ -38,14 +38,20 @@ background-size: 20px 20px;
 .player-logged-in{
     padding-left: 10px;
    padding-right: 10px;
-   background-color: purple !important;
+   background-color: rgba(128, 0, 128, 0.445) !important;
    color: grey !important;
    border-radius: 15px;
    padding-bottom: 15px;
    padding-top: 15px;
+   margin-top: 10px;
    margin-bottom: 10px;
    
 }
+
+.logout-field{
+margin-top: 30px;
+}
+
 .logout{
     grid-column-start: 2;
     grid-column-end: 5;
@@ -54,6 +60,8 @@ background-size: 20px 20px;
     text-align: end;
     color: purple; 
     padding-top: 30px;  
+    margin-top: 10px;
+   margin-bottom: 10px;
 }
 
 .button{
@@ -64,6 +72,18 @@ background-size: 20px 20px;
     border: none;
     width: 90px;
     margin-bottom: 10px;
+}
+
+.new-game-button{
+    /*text-align: start;*/
+    background-color: purple;
+    color: grey;
+    border-radius: 15px; 
+    height: 40px; 
+    border: none;
+    width: 130px;
+    margin-bottom: 0px;
+    padding-bottom: 0px;
 }
 
 input{
@@ -82,7 +102,7 @@ input{
 #games-overview{
     grid-column-start: 2;
     grid-column-end: 3;
-    grid-row-start: 2;
+    grid-row-start: 1;
     grid-row-end: 3; 
     color: purple;
     padding-top: 30px;
@@ -93,8 +113,7 @@ input{
    padding-right: 10px;*/
    background-color: purple !important;
    color: grey !important;
-   border-radius: 15px;
-   
+   border-radius: 15px;  
 }
 
 #leaderboard{

@@ -12,4 +12,5 @@ import java.util.List; //import statement for using Java class 'List in this cod
 @RepositoryRestResource
 public interface PlayerRepository extends JpaRepository<Player, Long>{
     Player findByUserName(@Param("userName")String userName);
+    Player findOneByUserName(String userName);
 }

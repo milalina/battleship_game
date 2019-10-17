@@ -73,6 +73,7 @@ public class Player {
         return gameResult;
     }
 
+
     public Score getScore(Game game){
         for(Score element: scores){
             if(element.getGame() == game){
@@ -82,13 +83,20 @@ public class Player {
         return null;
     }
 
+    public Long getGamePlayerForThisGame(Game game){
+        for (GamePlayer element : gamePlayers){
+            if(element.getGame()== game){
+                return element.getId();
+            }
+        }
+        return null;
+    }
 
-    public Map<String, Object> makePlayerDTO() {
+    public Map<String, Object> makePlayerDTO(Game game) {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
+        dto.put("gpid", this.getGamePlayerForThisGame(game));
         dto.put("id", this.getId());//object
         dto.put("email", this.getUserName());
         return dto;
     }
-
-
 }

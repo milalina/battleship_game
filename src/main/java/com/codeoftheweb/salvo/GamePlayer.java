@@ -109,7 +109,7 @@ public class GamePlayer {
     public Map<String, Object> makeGamePlayerDTO() {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id", this.getId());//object
-        dto.put("player", this.getPlayer().makePlayerDTO());
+        dto.put("player", this.getPlayer().makePlayerDTO(game));
         dto.put("salvoes", this.makeGPSalvoDTO());
         dto.put("score", this.getScore());
         return dto;

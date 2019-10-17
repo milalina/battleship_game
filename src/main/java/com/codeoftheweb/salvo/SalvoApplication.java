@@ -1,10 +1,10 @@
 package com.codeoftheweb.salvo;
 
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -13,7 +13,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 
@@ -27,22 +30,26 @@ import java.util.List;
 
 
 @SpringBootApplication
-public class SalvoApplication {
+public class SalvoApplication extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
 		SpringApplication.run(SalvoApplication.class, args);
 	}
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 	@Bean
 	public CommandLineRunner initData(PlayerRepository repositoryPlayer, GameRepository repositoryGame,
 									  GamePlayerRepository repositoryGamePlayer, ShipRepository repositoryShip,
 									  SalvoRepository repositorySalvo, ScoreRepository repositoryScore) {
 		return (args) -> {
-			Player player1 = new Player ("j.bauer@ctu.gov", "24");
-			Player player2 = new Player ("c.obrian@ctu.gov", "42");
-			Player player3 = new Player ("kim_bauer@gmail.com", "kb");
-			Player player4 = new Player ("t.almeida@ctu.gov", "mole");
-			Player player5 = new Player ("d.palmer@whitehouse.gov", "palm");
+            Player player1 = new Player ("j.bauer@ctu.gov", passwordEncoder.encode("24"));
+            Player player2 = new Player ("c.obrian@ctu.gov", passwordEncoder.encode("42"));
+            Player player3 = new Player ("kim_bauer@gmail.com", passwordEncoder.encode("kb"));
+            Player player4 = new Player ("t.almeida@ctu.gov", passwordEncoder.encode("mole"));
+            Player player5 = new Player ("d.palmer@whitehouse.gov", passwordEncoder.encode("palm"));
+
 
 			Date date1 = new Date ();
 			Date date2 = new Date(System.currentTimeMillis() - 3600 * 1000);
@@ -216,15 +223,22 @@ public class SalvoApplication {
 			repositoryScore.save(score8);
 
 		};
+
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 }
+//WebAuthenticationConfiguration class ensures that every request to the application is authenticated
+//The job of this new class is to take the name someone has entered for log in, search the database with
+// that name, and return a UserDetails object with name, password, and role information for that user, if any.
 
-@Configuration
+@Configuration //this annotation helps Spring find the class
 class WebAuthenticationConfig extends GlobalAuthenticationConfigurerAdapter {
-
     @Autowired
     private PlayerRepository playerRepository;
-
     @Override
     public void init(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userName-> {
@@ -238,6 +252,7 @@ class WebAuthenticationConfig extends GlobalAuthenticationConfigurerAdapter {
         });
     }
 }
+
 @EnableWebSecurity
 @Configuration
 class WebAccessConfig extends WebSecurityConfigurerAdapter {
@@ -246,10 +261,14 @@ class WebAccessConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/web/games.html").permitAll()
-                .antMatchers("/web/styles/games.css").permitAll()
+                .antMatchers("/web/games.js").permitAll()
+                .antMatchers("/web/styles.css").permitAll()
                 .antMatchers("/api/games").permitAll()
                 .antMatchers("/api/game_view/*").hasAuthority("USER")
-                .antMatchers("/rest/*").denyAll()
+                .antMatchers("/api/players").permitAll()
+                .antMatchers("/api/login").permitAll()
+                .antMatchers("/api/logout").hasAuthority("USER")
+                .antMatchers("/*").denyAll()
                 .anyRequest().fullyAuthenticated();
         // turn off checking for CSRF tokens
         http.csrf().disable();
@@ -262,8 +281,10 @@ class WebAccessConfig extends WebSecurityConfigurerAdapter {
         // if login fails, just send an authentication failure response
         http.formLogin().failureHandler((request, response, authentication)
                 -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED));
+        http.formLogin().loginProcessingUrl("/api/login");
         // if logout is successful, just send a success response
         http.logout().logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler());
+        http.logout().logoutUrl("/api/logout");
     }
 
     private void clearAuthenticationAttributes(HttpServletRequest request) {
