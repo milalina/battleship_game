@@ -8,4 +8,5 @@ import java.util.Date;
 @RepositoryRestResource
 public interface GameRepository extends JpaRepository<Game, Date>{
     List<Game> findByGameCreatedAt(Date date);
+   Game findGameById(Long id);
 }

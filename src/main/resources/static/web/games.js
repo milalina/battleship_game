@@ -13,6 +13,7 @@ new Vue({
         login: true,
         logout: false,
         currentPlayer: null,
+        feedbackGameCreated: null,
     },
     methods: {
         fetchData: function () {
@@ -52,6 +53,49 @@ new Vue({
                         this.feedback = "Well done!"
                     } else {
                         this.feedback = "Try again!"
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
+        },
+        createNewGame: function () {
+            fetch("http://localhost:8080/api/game?username=" + this.email, {
+                    method: "post"
+                })
+                .then(function (response) {
+                    console.log(response);
+                    return response.status
+
+                })
+                .then((status) => {
+                    if (status == 201) {
+                     this.feedbackGameCreated="Game created!"
+                     setTimeout(() => {
+                        this.feedbackGameCreated = null;
+                    }, 1000);
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
+        },
+
+        joinGame: function () {
+            fetch("http://localhost:8080/api/game?username=" + this.email, {
+                    method: "post"
+                })
+                .then(function (response) {
+                    console.log(response);
+                    return response.status
+
+                })
+                .then((status) => {
+                    if (status == 201) {
+                     this.feedbackGameCreated="Game created!"
+                     setTimeout(() => {
+                        this.feedbackGameCreated = null;
+                    }, 1000);
                     }
                 })
                 .catch(function (error) {
@@ -122,14 +166,13 @@ new Vue({
                 if (!this.games[i].gamePlayers[1]) {
                     feedback = "Join the Game!"
                 }
-                if (this.currentPlayer == this.games[i].gamePlayers[0].player.email) {
+                if (this.currentPlayer && this.currentPlayer.name == this.games[i].gamePlayers[0].player.email) {
                     htmlGameUrl = "game.html?gp=" + this.games[i].gamePlayers[0].id
                     console.log(htmlGameUrl )
-                } 
-                if (this.currentPlayer == this.games[i].gamePlayers[1].player.email) {
+                } else if (this.currentPlayer && gp2ID > 0 &&  this.currentPlayer.name == this.games[i].gamePlayers[1].player.email) {
                     htmlGameUrl = "game.html?gp=" + gp2ID
                     console.log(htmlGameUrl)
-                }
+                }else{htmlGameUrl = "games.html"}
 
             
             this.gamesObjectForHTML.push({
@@ -162,6 +205,7 @@ new Vue({
     },
 
     fillUpObjectLeaderboard() {
+        console.log("test")
         var total = [];
         for (i in this.uniquePlayerIdArray) {
             var player;
@@ -227,28 +271,3 @@ created: function () {
 },
 
 })
-
-/* 
-fillUpObjectLeaderboard() {
-            console.log(this.uniquePlayerIdArray);
-            console.log(this.gamePlayersArray)
-            var total=[];
-            for (i in this.uniquePlayerIdArray) {
-                var won;
-                var lost;
-                var tied;
-                this.emptyArray=[];
-                total=[];
-                for (j in this.gamePlayersArray) {
-                    if (this.uniquePlayerIdArray[i] == this.gamePlayersArray[j].player.id && this.gamePlayersArray[j].score!=null) {
-                        this.emptyArray.push(this.gamePlayersArray[j].score)
-                    }  
-                }
-                console.log(this.emptyArray)
-                total.push(this.emptyArray.reduce((a, b) => a + b));
-                console.log(total) 
-            }
-        }
-links
-         
-*/

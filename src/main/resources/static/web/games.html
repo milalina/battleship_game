@@ -31,8 +31,9 @@
         <div v-if="logout || currentPlayer" class="logout">
             <span class="player-logged-in">{{email}}</span>
             <div class="field logout-field">
-                <button class="new-game-button">New Game</button>
+                <button   @click="createNewGame" class="new-game-button">New Game</button>
             </div>
+            <span v-if="feedbackGameCreated">{{feedbackGameCreated}}</span>
             <div class="field logout-field">
                 <button @click=" fetchLogoutInfo" class="button">Log out</button>
             </div>
@@ -67,7 +68,7 @@
                             </td>
                             <td class="player-list">
                             <a v-bind:href="game.url">
-                                <button v-bind:id="game.gameId" class="button">{{game.statusFeedback}}</button>
+                                <button v-bind:id="game.gameId" class="button-in-the-table">{{game.statusFeedback}}</button>
                             </a>
                             </td>
                         </tr>

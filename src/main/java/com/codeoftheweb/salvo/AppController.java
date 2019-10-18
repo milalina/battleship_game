@@ -95,6 +95,38 @@ public class AppController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @RequestMapping(path = "/game", method = RequestMethod.POST)
+    public ResponseEntity<Object> create(@RequestParam String username) {
+        if (username.isEmpty()) {
+            return new ResponseEntity<>("Missing data", HttpStatus.UNAUTHORIZED);
+        }
+        Game newGame = new Game(new Date());
+        Player currentPlayer = playerRepository.findOneByUserName(username);
+        gameRepository.save(newGame);
+        GamePlayer gpTest = new GamePlayer(newGame, currentPlayer, new Date());
+       gamePlayerRepository.save(gpTest);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @RequestMapping(path = "/game/{id}/players", method = RequestMethod.POST)
+    public ResponseEntity<Object> create(@RequestParam Long id, Authentication authentication) {
+        Player currentPlayer = playerRepository.findByUserName(authentication.getName());
+        if (currentPlayer==null) {
+            return new ResponseEntity<>("Missing data", HttpStatus.UNAUTHORIZED);
+        }
+        Game gameToJoin = gameRepository.findGameById(id);
+        if (gameToJoin==null) {
+            return new ResponseEntity<>("No such game", HttpStatus.FORBIDDEN);
+        }
+        Set<GamePlayer> gamePlayer = gameToJoin.getGamePlayers();
+        if(gamePlayer.size()>1){
+            return new ResponseEntity<>("Game is full", HttpStatus.FORBIDDEN);
+        }
+        GamePlayer gpTest = new GamePlayer(gameToJoin, currentPlayer, new Date());
+        gamePlayerRepository.save(gpTest);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
 
 
 

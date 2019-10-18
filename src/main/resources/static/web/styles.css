@@ -22,7 +22,7 @@ background-size: 20px 20px;
 .container{
     display: grid;
     grid-template-columns: 0% 50% 5% 45% 0%;
-    grid-template-rows: 30% 38% 5% 17% 10%;
+    grid-template-rows: 20% 38% 5% 17% 10%;
 }
 /*ALL GAMES*/
 
@@ -73,7 +73,11 @@ margin-top: 30px;
     width: 90px;
     margin-bottom: 10px;
 }
-
+.button-in-the-table{
+    background-color: grey;
+    color: purple;
+    border: none;
+}
 .new-game-button{
     /*text-align: start;*/
     background-color: purple;
@@ -99,29 +103,30 @@ input{
     color: purple;
 }
 
+.player-list { 
+    font-size: 1em;
+    /*padding-left: 10px;
+   padding-right: 10px;*/
+   background-color: grey !important;
+   color: purple !important;
+   border-radius: 15px;  
+}
+
 #games-overview{
+    grid-column-start: 2;
+    grid-column-end: 5;
+    grid-row-start: 2;
+    grid-row-end: 3;
+    text-align: center; 
+    padding-top: 30px;   
+}
+
+#leaderboard{
     grid-column-start: 2;
     grid-column-end: 3;
     grid-row-start: 1;
     grid-row-end: 3; 
     color: purple;
-    padding-top: 30px;
-}
-.player-list { 
-    font-size: 1em;
-    /*padding-left: 10px;
-   padding-right: 10px;*/
-   background-color: purple !important;
-   color: grey !important;
-   border-radius: 15px;  
-}
-
-#leaderboard{
-    grid-column-start: 4;
-    grid-column-end: 5;
-    grid-row-start: 2;
-    grid-row-end: 3;
-    text-align: center; 
     padding-top: 30px;
 }
 
@@ -154,6 +159,8 @@ width: 100%;
 }
 td,th {border: none !important;
     text-align: center;
+    padding: 0px;
+    margin: 0px;
 }
 
 .letter,th{
@@ -194,3 +201,23 @@ color: gray;
     justify-self: center;
     color: purple;
 }
+
+/*
+#games-overview{
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 3; 
+    color: purple;
+    padding-top: 30px;
+}
+
+#leaderboard{
+    grid-column-start: 4;
+    grid-column-end: 5;
+    grid-row-start: 2;
+    grid-row-end: 3;
+    text-align: center; 
+    padding-top: 30px;
+}
+*/

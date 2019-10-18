@@ -50,7 +50,6 @@ public class SalvoApplication extends SpringBootServletInitializer {
             Player player4 = new Player ("t.almeida@ctu.gov", passwordEncoder.encode("mole"));
             Player player5 = new Player ("d.palmer@whitehouse.gov", passwordEncoder.encode("palm"));
 
-
 			Date date1 = new Date ();
 			Date date2 = new Date(System.currentTimeMillis() - 3600 * 1000);
 			Date date3 = new Date(System.currentTimeMillis() - 7200 * 1000);
@@ -263,12 +262,14 @@ class WebAccessConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/web/games.html").permitAll()
                 .antMatchers("/web/games.js").permitAll()
                 .antMatchers("/web/styles.css").permitAll()
+                .antMatchers("/web/game.html/*").hasAuthority("USER")
                 .antMatchers("/api/games").permitAll()
                 .antMatchers("/api/game_view/*").hasAuthority("USER")
+                .antMatchers("/api/game").hasAuthority("USER")
                 .antMatchers("/api/players").permitAll()
                 .antMatchers("/api/login").permitAll()
                 .antMatchers("/api/logout").hasAuthority("USER")
-                .antMatchers("/*").denyAll()
+                .antMatchers("/rest/*").permitAll()
                 .anyRequest().fullyAuthenticated();
         // turn off checking for CSRF tokens
         http.csrf().disable();
