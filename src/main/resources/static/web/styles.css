@@ -22,7 +22,7 @@ background-size: 20px 20px;
 .container{
     display: grid;
     grid-template-columns: 0% 50% 5% 45% 0%;
-    grid-template-rows: 20% 38% 5% 17% 10%;
+    grid-template-rows: 30% 48% 5% 10% 7%;
 }
 /*ALL GAMES*/
 
@@ -32,13 +32,13 @@ background-size: 20px 20px;
     grid-row-start: 1;
     grid-row-end: 2;
     text-align: end;
-    color: purple; 
+    color: lightseagreen; 
     padding-top: 30px;
 }
 .player-logged-in{
     padding-left: 10px;
    padding-right: 10px;
-   background-color: rgba(128, 0, 128, 0.445) !important;
+   background-color: lightseagreen(128, 0, 128, 0.445) !important;
    color: grey !important;
    border-radius: 15px;
    padding-bottom: 15px;
@@ -58,14 +58,14 @@ margin-top: 30px;
     grid-row-start: 1;
     grid-row-end: 2;
     text-align: end;
-    color: purple; 
+    color: lightseagreen; 
     padding-top: 30px;  
     margin-top: 10px;
    margin-bottom: 10px;
 }
 
 .button{
-    background-color: purple;
+    background-color: lightseagreen;
     color: grey;
     border-radius: 15px; 
     height: 40px; 
@@ -75,23 +75,23 @@ margin-top: 30px;
 }
 .button-in-the-table{
     background-color: grey;
-    color: purple;
+    color: lightseagreen;
     border: none;
 }
 .new-game-button{
     /*text-align: start;*/
-    background-color: purple;
+    background-color: lightseagreen;
     color: grey;
     border-radius: 15px; 
     height: 40px; 
     border: none;
     width: 130px;
-    margin-bottom: 0px;
+    margin-bottom: 10px;
     padding-bottom: 0px;
 }
 
 input{
-    background-color: purple;
+    background-color: lightseagreen;
     color: grey;
     border-radius: 15px; 
     height: 40px;
@@ -100,7 +100,7 @@ input{
 }
 
 .feedback{
-    color: purple;
+    color: lightseagreen;
 }
 
 .player-list { 
@@ -108,7 +108,7 @@ input{
     /*padding-left: 10px;
    padding-right: 10px;*/
    background-color: grey !important;
-   color: purple !important;
+   color: lightseagreen !important;
    border-radius: 15px;  
 }
 
@@ -126,8 +126,9 @@ input{
     grid-column-end: 3;
     grid-row-start: 1;
     grid-row-end: 3; 
-    color: purple;
+    color: lightseagreen;
     padding-top: 30px;
+    padding-bottom: 30px;
 }
 
 /*GAME VIEW*/
@@ -171,7 +172,7 @@ color: gray;
     font-size: 2em;
     padding-left: 10px;
    padding-right: 10px;
-   background-color: purple !important;
+   background-color: lightseagreen !important;
    color: grey !important;
    border-radius: 15px;
    
@@ -182,14 +183,14 @@ color: gray;
 .cell{
     width: 6%;
     height: 6%;
-    background-color: purple; 
+    background-color: lightseagreen; 
     position: relative;
     border-radius: 15px;
 }
 .empty_cell{
     width: 6%;
     height: 6%;
-    background-color: purple;
+    background-color: lightseagreen;
     position: relative;
     border-radius: 15px;
 }
@@ -199,7 +200,7 @@ color: gray;
     grid-row-start: 1;
     grid-row-end: 2;
     justify-self: center;
-    color: purple;
+    color:lightseagreen;
 }
 
 /*
@@ -208,7 +209,7 @@ color: gray;
     grid-column-end: 3;
     grid-row-start: 1;
     grid-row-end: 3; 
-    color: purple;
+    color: lightseagreen;
     padding-top: 30px;
 }
 

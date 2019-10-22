@@ -70,10 +70,10 @@ new Vue({
                 })
                 .then((status) => {
                     if (status == 201) {
-                     this.feedbackGameCreated="Game created!"
-                     setTimeout(() => {
-                        this.feedbackGameCreated = null;
-                    }, 1000);
+                        this.feedbackGameCreated = "Game created!"
+                        setTimeout(() => {
+                            this.feedbackGameCreated = null;
+                        }, 1000);
                     }
                 })
                 .catch(function (error) {
@@ -81,26 +81,51 @@ new Vue({
                 })
         },
 
-        joinGame: function () {
-            fetch("http://localhost:8080/api/game?username=" + this.email, {
-                    method: "post"
-                })
+        joinGame: function (gameId) {
+            $.post("/api/game/" + gameId + "/player", {})
                 .then(function (response) {
                     console.log(response);
                     return response.status
-
                 })
                 .then((status) => {
-                    if (status == 201) {
-                     this.feedbackGameCreated="Game created!"
-                     setTimeout(() => {
-                        this.feedbackGameCreated = null;
-                    }, 1000);
+                    if (status == 200) {
+                        console.log("Congrats!")
+                    } else {
+                        this.feedback = "Try again!"
                     }
                 })
                 .catch(function (error) {
                     console.log(error);
                 })
+            /* const id = gameId
+            console.log(id)
+            $.post(`http://localhost:8080/api/game/${id}/players`)
+              .done(function () {
+                console.log("Player added to game")
+                // location.reload();
+              }).catch(err => console.log(err)) */
+            /*  fetch("http://localhost:8080/api/game/" + gameId + "/players", {
+                     method: "post",
+                     credentials: 'include',
+                     headers: {
+                         'Accept': 'application/json',
+                         'Content-Type': 'application/x-www-form-urlencoded'
+                     }
+                 })
+                 .then(function (response) {
+                     console.log(response);
+                     return response.status
+                 })
+                 .then((status) => {
+                     if (status == 201) {
+                         console.log("Congrats!")
+                     } else {
+                         this.feedback = "Try again!"
+                     }
+                 })
+                 .catch(function (error) {
+                     console.log(error);
+                 }) */
         },
 
         fetchLogoutInfo: function () {
@@ -133,9 +158,76 @@ new Vue({
             if (this.games.length == 0) {
                 return false;
             } else {
-                this.milisecsToLocalTime();
                 this.fillUpGamePlayersArray();
+                this.milisecsToLocalTime();
+                console.log("isLoaded works")
                 return true
+            }
+        },
+        //put all gamePlayers in one array
+        fillUpGamePlayersArray(gamePlayersArray, games) {
+            for (i in this.games) {
+                this.gamePlayersArray.push.apply(this.gamePlayersArray, this.games[i].gamePlayers)
+            }
+            console.log(this.gamePlayersArray)
+            this.fillUpUniquePlayerIdArray();
+        },
+        //reduce all gamePlayers to players
+        fillUpUniquePlayerIdArray() {
+            var emptyIntermediatePlayerIdArray = [];
+            for (i in this.gamePlayersArray) {
+                if (this.gamePlayersArray[i].score != null) {
+                    emptyIntermediatePlayerIdArray.push(this.gamePlayersArray[i].player.id)
+                }
+            }
+            this.uniquePlayerIdArray = emptyIntermediatePlayerIdArray.filter((item, index) => emptyIntermediatePlayerIdArray.indexOf(item) === index);
+            this.fillUpObjectLeaderboard();
+            console.log(this.gamePlayersArray)
+            console.log(this.uniquePlayerIdArray)
+        },
+
+        fillUpObjectLeaderboard() {
+            console.log("test")
+            var total = [];
+            for (i in this.uniquePlayerIdArray) {
+                var player;
+                var total;
+                var won;
+                var lost;
+                var tied;
+                this.emptyArray = [];
+                totalArray = [];
+                for (j in this.gamePlayersArray) {
+                    if (this.uniquePlayerIdArray[i] == this.gamePlayersArray[j].player.id && this.gamePlayersArray[j].score != null) {
+                        console.log(this.uniquePlayerIdArray[i])
+                        player = this.gamePlayersArray[j].player.email
+                        this.emptyArray.push(this.gamePlayersArray[j].score)
+                    }
+                }
+                console.log(this.emptyArray)
+                //(this.emptyArray.length < 2) ? totalArray.push(0) : 
+
+                totalArray.push(this.emptyArray.reduce((a, b) => a + b, 0));
+                //counting the occurrences of won, lost or tie in a player's array of scores
+
+                total = totalArray[0];
+                var counts = {};
+                for (k in this.emptyArray) {
+                    var num = this.emptyArray[k];
+                    counts[num] = counts[num] ? counts[num] + 1 : 1;
+                }
+                won = counts[1.0] ? counts[1.0] : 0;
+                lost = counts[0] ? counts[0] : 0;
+                tied = counts[0.5] ? counts[0.5] : 0;
+
+                //dynamically filling up the object leaderboard
+                this.leaderboard.push({
+                    "name": " " + player,
+                    "total": " " + total,
+                    "won": " " + won,
+                    "lost": " " + lost,
+                    "tied": " " + tied,
+                })
             }
         },
 
@@ -168,106 +260,68 @@ new Vue({
                 }
                 if (this.currentPlayer && this.currentPlayer.name == this.games[i].gamePlayers[0].player.email) {
                     htmlGameUrl = "game.html?gp=" + this.games[i].gamePlayers[0].id
-                    console.log(htmlGameUrl )
-                } else if (this.currentPlayer && gp2ID > 0 &&  this.currentPlayer.name == this.games[i].gamePlayers[1].player.email) {
+                } else if (this.currentPlayer && gp2ID > 0 && this.currentPlayer.name == this.games[i].gamePlayers[1].player.email) {
                     htmlGameUrl = "game.html?gp=" + gp2ID
-                    console.log(htmlGameUrl)
-                }else{htmlGameUrl = "games.html"}
+                } else {
+                    htmlGameUrl = "games.html"
+                }
 
-            
-            this.gamesObjectForHTML.push({
-                "started": " " + this.games[i].created,
-                "gamePlayer1": " " + this.games[i].gamePlayers[0].player.email,
-                "gamePlayer2": " " + player2Email,
-                "statusFeedback": " " + feedback,
-                "gameId": " " + this.games[i].id,
-                "url": " " + htmlGameUrl,
-            })
-            console.log(this.gamesObjectForHTML)
+
+                this.gamesObjectForHTML.push({
+                    "started": " " + this.games[i].created,
+                    "gamePlayer1": " " + this.games[i].gamePlayers[0].player.email,
+                    "gamePlayer2": " " + player2Email,
+                    "statusFeedback": " " + feedback,
+                    "gameId": " " + this.games[i].id,
+                    "url": " " + htmlGameUrl,
+                })
             }
-    },
-    //put all gamePlayers in one array
-    fillUpGamePlayersArray(gamePlayersArray, games) {
-        for (i in this.games) {
-            this.gamePlayersArray.push.apply(this.gamePlayersArray, this.games[i].gamePlayers)
-        }
-        console.log(this.gamePlayersArray)
-        this.fillUpUniquePlayerIdArray();
-    },
-    //reduce all gamePlayers to players
-    fillUpUniquePlayerIdArray() {
-        var emptyIntermediatePlayerIdArray = [];
-        for (i in this.gamePlayersArray) {
-            emptyIntermediatePlayerIdArray.push(this.gamePlayersArray[i].player.id)
-        }
-        this.uniquePlayerIdArray = emptyIntermediatePlayerIdArray.filter((item, index) => emptyIntermediatePlayerIdArray.indexOf(item) === index);
-        this.fillUpObjectLeaderboard();
-    },
+            this.addEventListenerOnJoinGameButton()
 
-    fillUpObjectLeaderboard() {
-        console.log("test")
-        var total = [];
-        for (i in this.uniquePlayerIdArray) {
-            var player;
-            var total;
-            var won;
-            var lost;
-            var tied;
-            this.emptyArray = [];
-            totalArray = [];
-            for (j in this.gamePlayersArray) {
-                if (this.uniquePlayerIdArray[i] == this.gamePlayersArray[j].player.id && this.gamePlayersArray[j].score != null) {
-                    player = this.gamePlayersArray[j].player.email
-                    this.emptyArray.push(this.gamePlayersArray[j].score)
+            /* setTimeout(() => {
+                 this.addEventListenerOnJoinGameButton()
+             }, 500);*/
+
+        },
+
+
+
+        signup() {
+            if (this.email && this.passowrd) {
+                this.login = false;
+                this.logout = true;
+            } else {
+                this.feedback = "You must enter all fields"
+            }
+        },
+
+        doLogin() {
+            console.log("login function")
+            if (this.email && this.passowrd) {
+                this.login = false;
+                this.logout = true;
+            } else {
+                this.feedback = "You must enter all fields"
+            }
+        },
+
+        //Adding an event listener to the button, the subsequent event is supposed to help join the game
+      
+        addEventListenerOnJoinGameButton() {
+            for (i in this.games) {
+                console.log("testing joinGameButton")
+                if (!this.games[i].gamePlayers[1]) {
+                    console.log("testing joinGameButton")
+                    document.getElementById(this.games[i].id).onclick = this.joinGame(this.games[i].id)
+                    console.log("testing joinGameButton")
                 }
             }
-            totalArray.push(this.emptyArray.reduce((a, b) => a + b));
+        }, 
 
-            //counting the occurrences of won, lost or tie in a player's array of scores
-            total = totalArray[0];
-            var counts = {};
-            for (k in this.emptyArray) {
-                var num = this.emptyArray[k];
-                counts[num] = counts[num] ? counts[num] + 1 : 1;
-            }
-            won = counts[1.0] ? counts[1.0] : 0;
-            lost = counts[0] ? counts[0] : 0;
-            tied = counts[0.5] ? counts[0.5] : 0;
 
-            //dynamically filling up the object leaderboard
-            this.leaderboard.push({
-                "name": " " + player,
-                "total": " " + total,
-                "won": " " + won,
-                "lost": " " + lost,
-                "tied": " " + tied,
-            })
-        }
     },
-
-    signup() {
-        if (this.email && this.passowrd) {
-            this.login = false;
-            this.logout = true;
-        } else {
-            this.feedback = "You must enter all fields"
-        }
+    created: function () {
+        this.fetchData();
     },
-
-    doLogin() {
-        console.log("login function")
-        if (this.email && this.passowrd) {
-            this.login = false;
-            this.logout = true;
-        } else {
-            this.feedback = "You must enter all fields"
-        }
-    },
-
-
-},
-created: function () {
-    this.fetchData();
-},
 
 })

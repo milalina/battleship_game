@@ -258,21 +258,22 @@ class WebAccessConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
+        http.csrf().disable().authorizeRequests()
+
                 .antMatchers("/web/games.html").permitAll()
                 .antMatchers("/web/games.js").permitAll()
                 .antMatchers("/web/styles.css").permitAll()
                 .antMatchers("/web/game.html/*").hasAuthority("USER")
                 .antMatchers("/api/games").permitAll()
                 .antMatchers("/api/game_view/*").hasAuthority("USER")
-                .antMatchers("/api/game").hasAuthority("USER")
+                .antMatchers("/api/game/*").hasAuthority("USER")
                 .antMatchers("/api/players").permitAll()
                 .antMatchers("/api/login").permitAll()
                 .antMatchers("/api/logout").hasAuthority("USER")
                 .antMatchers("/rest/*").permitAll()
                 .anyRequest().fullyAuthenticated();
         // turn off checking for CSRF tokens
-        http.csrf().disable();
+
         // if user is not authenticated, just send an authentication failure response
         http.exceptionHandling().authenticationEntryPoint((request, response, authentication)
                 -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED));

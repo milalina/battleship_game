@@ -60,6 +60,7 @@ public class AppController {
             Map<String, Object> dto = new LinkedHashMap<String, Object>();
             dto.put("id", playerRepository.findByUserName(authentication.getName()).getId());
             dto.put("name", (authentication.getName()));
+            //dto.put("gpid", playerRepository.findByUserName(authentication.getName()).getGamePlayerForThisGame(game));
             return dto;
         }  return null;
     }
@@ -108,9 +109,24 @@ public class AppController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @RequestMapping(path = "/game/{id}/players", method = RequestMethod.POST)
-    public ResponseEntity<Object> create(@RequestParam Long id, Authentication authentication) {
-        Player currentPlayer = playerRepository.findByUserName(authentication.getName());
+    @RequestMapping(
+            path = {"/game/{gameId}/player"},
+            method = {RequestMethod.POST}
+    )
+    public ResponseEntity<Object> addPlayer(String playerName, @PathVariable Long gameId) {
+        System.out.println(gameId);
+        return new ResponseEntity(HttpStatus.CREATED);
+
+
+
+    }
+    /* @RequestMapping(
+            path = {"/game/{id}/players"},
+            method = {RequestMethod.POST}
+    )
+    public ResponseEntity<String> joinGame(@RequestParam Long id) {
+        System.out.println(id);
+      Player currentPlayer = playerRepository.findByUserName(authentication.getName());
         if (currentPlayer==null) {
             return new ResponseEntity<>("Missing data", HttpStatus.UNAUTHORIZED);
         }
@@ -125,8 +141,13 @@ public class AppController {
         GamePlayer gpTest = new GamePlayer(gameToJoin, currentPlayer, new Date());
         gamePlayerRepository.save(gpTest);
         return new ResponseEntity<>(HttpStatus.CREATED);
-    }
+    }*/
 
+    private Map<String, Object> makeMap(String key, Object value){
+        Map<String, Object> map = new HashMap<>();
+        map.put(key, value);
+        return map;
+    }
 
 
 
