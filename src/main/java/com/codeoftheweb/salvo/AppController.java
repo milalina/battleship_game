@@ -106,42 +106,31 @@ public class AppController {
         gameRepository.save(newGame);
         GamePlayer gpTest = new GamePlayer(newGame, currentPlayer, new Date());
        gamePlayerRepository.save(gpTest);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(newGame.makeGameDTO(),HttpStatus.CREATED);
     }
 
-    @RequestMapping(
-            path = {"/game/{gameId}/player"},
-            method = {RequestMethod.POST}
+     @RequestMapping(
+            path = "/game/{gameId}/player",
+            method = RequestMethod.POST
     )
-    public ResponseEntity<Object> addPlayer(String playerName, @PathVariable Long gameId) {
+    public ResponseEntity<Map<String, Object>> joinGame(@PathVariable Long gameId, Authentication authentication) {
         System.out.println(gameId);
-        return new ResponseEntity(HttpStatus.CREATED);
-
-
-
-    }
-    /* @RequestMapping(
-            path = {"/game/{id}/players"},
-            method = {RequestMethod.POST}
-    )
-    public ResponseEntity<String> joinGame(@RequestParam Long id) {
-        System.out.println(id);
-      Player currentPlayer = playerRepository.findByUserName(authentication.getName());
+        Player currentPlayer = playerRepository.findByUserName(authentication.getName());
         if (currentPlayer==null) {
-            return new ResponseEntity<>("Missing data", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(makeMap("error", "Missing data"), HttpStatus.UNAUTHORIZED);
         }
-        Game gameToJoin = gameRepository.findGameById(id);
+        Game gameToJoin = gameRepository.findGameById(gameId);
         if (gameToJoin==null) {
-            return new ResponseEntity<>("No such game", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(makeMap("error", "No such game"), HttpStatus.FORBIDDEN);
         }
         Set<GamePlayer> gamePlayer = gameToJoin.getGamePlayers();
         if(gamePlayer.size()>1){
-            return new ResponseEntity<>("Game is full", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(makeMap("error", "Game is full"), HttpStatus.FORBIDDEN);
         }
         GamePlayer gpTest = new GamePlayer(gameToJoin, currentPlayer, new Date());
         gamePlayerRepository.save(gpTest);
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }*/
+        return new ResponseEntity<>(makeMap("gpid", gpTest.getId()), HttpStatus.CREATED);
+    }
 
     private Map<String, Object> makeMap(String key, Object value){
         Map<String, Object> map = new HashMap<>();
@@ -221,4 +210,39 @@ public class AppController {
                 .stream()
                 .map(element -> element.makeGameDTO())
                 .collect(Collectors.toList());
+    }*/
+
+
+ /*   @RequestMapping(
+            path = {"/game/{gameId}/player"},
+            method = {RequestMethod.POST}
+    )
+    public ResponseEntity<Object> addPlayer(String playerName, @PathVariable Long gameId) {
+        System.out.println(gameId);
+        return new ResponseEntity(HttpStatus.CREATED);}
+*/
+
+
+
+    /* @RequestMapping(
+            path = {"/game/{gameId}/player"},
+            method = {RequestMethod.POST}
+    )
+    public ResponseEntity<String> joinGame(@RequestParam Long id) {
+        System.out.println(id);
+      Player currentPlayer = playerRepository.findByUserName(authentication.getName());
+        if (currentPlayer==null) {
+            return new ResponseEntity<>("Missing data", HttpStatus.UNAUTHORIZED);
+        }
+        Game gameToJoin = gameRepository.findGameById(id);
+        if (gameToJoin==null) {
+            return new ResponseEntity<>("No such game", HttpStatus.FORBIDDEN);
+        }
+        Set<GamePlayer> gamePlayer = gameToJoin.getGamePlayers();
+        if(gamePlayer.size()>1){
+            return new ResponseEntity<>("Game is full", HttpStatus.FORBIDDEN);
+        }
+        GamePlayer gpTest = new GamePlayer(gameToJoin, currentPlayer, new Date());
+        gamePlayerRepository.save(gpTest);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }*/

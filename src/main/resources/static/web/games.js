@@ -82,6 +82,7 @@ new Vue({
         },
 
         joinGame: function (gameId) {
+            console.log(gameId)
             $.post("/api/game/" + gameId + "/player", {})
                 .then(function (response) {
                     console.log(response);
@@ -250,13 +251,13 @@ new Vue({
                     gp2ID = this.games[i].gamePlayers[1].id
                 }
                 if (this.games[i].gamePlayers[1] && this.games[i].gamePlayers[0].score != null) {
-                    feedback = "Game Over!"
+                    feedback = "Game Over"
                 }
                 if (this.games[i].gamePlayers[1] && this.games[i].gamePlayers[0].score == null) {
-                    feedback = "Game in Progress!"
+                    feedback = "Game in Progress"
                 }
                 if (!this.games[i].gamePlayers[1]) {
-                    feedback = "Join the Game!"
+                    feedback = "Join Game"
                 }
                 if (this.currentPlayer && this.currentPlayer.name == this.games[i].gamePlayers[0].player.email) {
                     htmlGameUrl = "game.html?gp=" + this.games[i].gamePlayers[0].id
@@ -266,25 +267,17 @@ new Vue({
                     htmlGameUrl = "games.html"
                 }
 
-
                 this.gamesObjectForHTML.push({
-                    "started": " " + this.games[i].created,
-                    "gamePlayer1": " " + this.games[i].gamePlayers[0].player.email,
-                    "gamePlayer2": " " + player2Email,
-                    "statusFeedback": " " + feedback,
-                    "gameId": " " + this.games[i].id,
-                    "url": " " + htmlGameUrl,
+                    "started": "" + this.games[i].created,
+                    "gamePlayer1": "" + this.games[i].gamePlayers[0].player.email,
+                    "gamePlayer2": "" + player2Email,
+                    "statusFeedback": "" + feedback,
+                    "gameId": "" + this.games[i].id,
+                    "url": "" + htmlGameUrl,
                 })
             }
             this.addEventListenerOnJoinGameButton()
-
-            /* setTimeout(() => {
-                 this.addEventListenerOnJoinGameButton()
-             }, 500);*/
-
         },
-
-
 
         signup() {
             if (this.email && this.passowrd) {

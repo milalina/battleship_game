@@ -75,7 +75,7 @@ new Vue({
 
         displayShips() {
                 for (i in this.shipLocations) {
-                    document.getElementById(this.shipLocations[i]).style.backgroundColor = "grey";
+                    document.getElementById(this.shipLocations[i]).style.backgroundColor = "thistle";
                 }
                 for (j in this.damagedShipLocations){
                     document.getElementById(this.damagedShipLocations[j]).innerHTML='<i class="glyphicon glyphicon-remove" style="font-size:16px;color:purple;"></i>';   
@@ -106,8 +106,8 @@ new Vue({
         },
         displayMySalvoes(){
             for (i in this.mySalvoes){
-                document.getElementById(this.shipLocations[i]+"s").innerHTML='<i class="glyphicon glyphicon-screenshot" style="font-size:17px;color:purple;background-color:grey;"></i>'; 
-                document.getElementById(this.shipLocations[i]+"s").style.backgroundColor = "grey"; 
+                document.getElementById(this.shipLocations[i]+"s").innerHTML='<i class="glyphicon glyphicon-screenshot" style="font-size:17px;color:purple;background-color:thistle;"></i>'; 
+                document.getElementById(this.shipLocations[i]+"s").style.backgroundColor = "thistle"; 
             }
         }
     },
