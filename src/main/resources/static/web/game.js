@@ -15,11 +15,12 @@ new Vue({
         damagedShipLocations: [],
 
     },
-    methods: {
-
-
+    methods: {        
         fetchData: function () {
-            fetch("http://localhost:8080/api/game_view/1")
+            var parsedUrl = new URL(window.location.href);
+            var gpId= (parsedUrl.searchParams.get("gp"));
+            console.log(gpId);
+            fetch("http://localhost:8080/api/game_view/" + gpId)
                 .then(function (response) {
                     console.log(response);
                     return response.json();

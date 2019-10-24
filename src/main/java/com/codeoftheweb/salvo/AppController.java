@@ -73,7 +73,7 @@ public class AppController {
     }
 
     @RequestMapping("/game_view/{gamePlayerId}")
-    public List<Map<String, Object>> findGame (@PathVariable ("gamePlayerId") long gamePlayerId) {
+    public List<Map<String, Object>> findGame (@PathVariable ("gamePlayerId") long gamePlayerId, Authentication authentication) {
         GamePlayer currentGamePlayer = gamePlayerRepository.findGamePlayerById(gamePlayerId);
         Player currentPlayer = currentGamePlayer.getPlayer();
         List<Map<String, Object>> gameView= new ArrayList<>();
@@ -83,17 +83,17 @@ public class AppController {
     }
 
     @RequestMapping(path = "/players", method = RequestMethod.POST)
-    public ResponseEntity<Object> register(
+    public ResponseEntity<Map<String, Object>> register(
             @RequestParam String email, @RequestParam String password) {
 
         if (email.isEmpty() || password.isEmpty()) {
-            return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(makeMap("error", "Missing data"), HttpStatus.FORBIDDEN);
         }
         if (playerRepository.findOneByUserName(email) !=  null) {
-            return new ResponseEntity<>("Name already in use", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(makeMap("error", "Name already in use"), HttpStatus.FORBIDDEN);
         }
         playerRepository.save(new Player(email, passwordEncoder.encode(password)));
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(makeMap("email", email), HttpStatus.CREATED);
     }
 
     @RequestMapping(path = "/game", method = RequestMethod.POST)
@@ -106,7 +106,7 @@ public class AppController {
         gameRepository.save(newGame);
         GamePlayer gpTest = new GamePlayer(newGame, currentPlayer, new Date());
        gamePlayerRepository.save(gpTest);
-        return new ResponseEntity<>(newGame.makeGameDTO(),HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
      @RequestMapping(
