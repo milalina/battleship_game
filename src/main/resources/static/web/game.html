@@ -5,16 +5,17 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="./styles.css">   
+    <link rel="stylesheet" type="text/css" href="./styles.css">
     <title>Ship Locations!</title>
 </head>
 
 <body>
     <div class="container" id="game">
         <div class="heading" v-if="isLoaded">
-            <span class="player">{{gamePlayerYou}}</span>
-            <span class="vs">vs</span>
-            <span class="player">{{gamePlayerOther}}</span>
+            <span class="player"> {{gamePlayerYou}} </span>
+            <img src="assets/battleship.pur.png" style="height:40px" alt=""> &nbsp; &nbsp;<img
+                src="assets/battleship.gr-ConvertImage.png" style="height:40px" alt="">
+            <span class="player"> {{gamePlayerOther}}</span>
         </div>
         <div class="table shipG">
             <table id="ship_grid">
@@ -22,43 +23,77 @@
                     <th class="cell letter" v-for="tableRow in tableRows" scope="row">{{tableRow}} </th>
                 </tr>
                 <tr v-for="(tableCol, index) in tableCols">
-                    <td class="cell letter" >{{tableCol}} </td>
-                    <td class="empty_cell" v-bind:id="tableCol+'1'" ></td>
-                    <td class="empty_cell" v-bind:id="tableCol+'2'" ></td>
-                    <td class="empty_cell" v-bind:id="tableCol+'3'" ></td>
-                    <td class="empty_cell" v-bind:id="tableCol+'4'" ></td>
-                    <td class="empty_cell" v-bind:id="tableCol+'5'" ></td>
-                    <td class="empty_cell" v-bind:id="tableCol+'6'" ></td>
-                    <td class="empty_cell" v-bind:id="tableCol+'7'" ></td>
-                    <td class="empty_cell" v-bind:id="tableCol+'8'" ></td>
-                    <td class="empty_cell" v-bind:id="tableCol+'9'" ></td>
-                    <td class="empty_cell" v-bind:id="tableCol+'10'" ></td>
+                    <td class="cell letter">{{tableCol}} </td>
+                    <td class="empty_cell" v-bind:id="tableCol+'1'"></td>
+                    <td class="empty_cell" v-bind:id="tableCol+'2'"></td>
+                    <td class="empty_cell" v-bind:id="tableCol+'3'"></td>
+                    <td class="empty_cell" v-bind:id="tableCol+'4'"></td>
+                    <td class="empty_cell" v-bind:id="tableCol+'5'"></td>
+                    <td class="empty_cell" v-bind:id="tableCol+'6'"></td>
+                    <td class="empty_cell" v-bind:id="tableCol+'7'"></td>
+                    <td class="empty_cell" v-bind:id="tableCol+'8'"></td>
+                    <td class="empty_cell" v-bind:id="tableCol+'9'"></td>
+                    <td class="empty_cell" v-bind:id="tableCol+'10'"></td>
                 </tr>
             </table>
         </div>
 
-        <div class="table salvoG">
+        <div v-if="!shipsPlaced" class="ship-placement-table ship-placement">
+            <table >
+                <tr>
+                    <th class="empty_cell cell letter ship-placement-table-cells">Type</th>
+                    <th class="empty_cell cell letter ship-placement-table-cells">Length</th>
+                    <th class="empty_cell cell letter ship-placement-table-cells">Number</th>
+                </tr>
+                <tr>
+                    <td class="empty_cell ship-placement-table-cells"><img src="assets/carrier.pur.png" class="draggable shake" alt=""></td>
+                    <td class="empty_cell cell letter ship-placement-table-cells">5</td>
+                    <td class="empty_cell cell letter ship-placement-table-cells">1</td>
+                </tr>
+                <tr>
+                    <td class="empty_cell cell letter ship-placement-table-cells"><img class="draggable" src="assets/battleship.pur.png" alt=""></td>
+                    <td class="empty_cell cell letter ship-placement-table-cells">4</td>
+                    <td class="empty_cell cell letter ship-placement-table-cells">1</td>
+                </tr>
+                <tr>
+                    <td class="empty_cell cell letter ship-placement-table-cells"> <img src="assets/submarine.pur.png" class="draggable" alt=""></td>
+                    <td class="empty_cell cell letter ship-placement-table-cells">3</td>
+                    <td class="empty_cell cell letter ship-placement-table-cells">1</td>
+                </tr>
+                <tr>
+                    <td class="empty_cell cell letter ship-placement-table-cells"> <img src="assets/destroyer.pur.png" class="draggable" alt=""></td>
+                    <td class="empty_cell cell letter ship-placement-table-cells">3</td>
+                    <td class="empty_cell cell letter ship-placement-table-cells">1</td>
+                </tr>
+                <tr>
+                    <td class="empty_cell cell letter ship-placement-table-cells"><img src="assets/patrol.pur.png" class="draggable" alt=""></td>
+                    <td class="empty_cell cell letter ship-placement-table-cells">2</td>
+                    <td class="empty_cell cell letter ship-placement-table-cells">1</td>
+                </tr>
+            </table>
+
+        </div>
+
+        <div v-if="shipsPlaced" class="table salvoG">
             <table id="salvo_grid">
                 <tr>
                     <th class="cell letter" v-for="tableRow in tableRows" scope="row">{{tableRow}} </th>
                 </tr>
                 <tr v-for="(tableCol, index) in tableCols">
-                    <td class="cell letter" >{{tableCol}} </td>
-                    <td class="empty_cell" v-bind:id="tableCol+'1s'" ></td>
-                    <td class="empty_cell" v-bind:id="tableCol+'2s'" ></td>
-                    <td class="empty_cell" v-bind:id="tableCol+'3s'" ></td>
-                    <td class="empty_cell" v-bind:id="tableCol+'4s'" ></td>
-                    <td class="empty_cell" v-bind:id="tableCol+'5s'" ></td>
-                    <td class="empty_cell" v-bind:id="tableCol+'6s'" ></td>
-                    <td class="empty_cell" v-bind:id="tableCol+'7s'" ></td>
-                    <td class="empty_cell" v-bind:id="tableCol+'8s'" ></td>
-                    <td class="empty_cell" v-bind:id="tableCol+'9s'" ></td>
-                    <td class="empty_cell" v-bind:id="tableCol+'10s'" ></td>
+                    <td class="cell letter">{{tableCol}} </td>
+                    <td class="empty_cell" v-bind:id="tableCol+'1s'"></td>
+                    <td class="empty_cell" v-bind:id="tableCol+'2s'"></td>
+                    <td class="empty_cell" v-bind:id="tableCol+'3s'"></td>
+                    <td class="empty_cell" v-bind:id="tableCol+'4s'"></td>
+                    <td class="empty_cell" v-bind:id="tableCol+'5s'"></td>
+                    <td class="empty_cell" v-bind:id="tableCol+'6s'"></td>
+                    <td class="empty_cell" v-bind:id="tableCol+'7s'"></td>
+                    <td class="empty_cell" v-bind:id="tableCol+'8s'"></td>
+                    <td class="empty_cell" v-bind:id="tableCol+'9s'"></td>
+                    <td class="empty_cell" v-bind:id="tableCol+'10s'"></td>
                 </tr>
             </table>
         </div>
-
-
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>

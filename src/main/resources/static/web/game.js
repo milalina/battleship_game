@@ -9,16 +9,17 @@ new Vue({
         gamePlayerOther: 0,
         shipLocations: [],
         mySalvoesObject: 0,
-        mySalvoes:[],
+        mySalvoes: [],
         enemySalvoesObject: 0,
-        enemySalvoes:[],
+        enemySalvoes: [],
         damagedShipLocations: [],
+        shipsPlaced: true,
 
     },
-    methods: {        
+    methods: {
         fetchData: function () {
             var parsedUrl = new URL(window.location.href);
-            var gpId= (parsedUrl.searchParams.get("gp"));
+            var gpId = (parsedUrl.searchParams.get("gp"));
             console.log(gpId);
             fetch("http://localhost:8080/api/game_view/" + gpId)
                 .then(function (response) {
@@ -52,12 +53,12 @@ new Vue({
                 this.gamePlayerYou = this.game[0].gamePlayers[1].player.email
                 this.gamePlayerOther = this.game[0].gamePlayers[0].player.email
                 this.mySalvoesObject = this.game[0].gamePlayers[1].salvoes
-                this.enemySalvoesObject= this.game[0].gamePlayers[0].salvoes
+                this.enemySalvoesObject = this.game[0].gamePlayers[0].salvoes
             } else {
                 this.gamePlayerYou = this.game[0].gamePlayers[0].player.email
                 this.gamePlayerOther = this.game[0].gamePlayers[1].player.email
                 this.mySalvoesObject = this.game[0].gamePlayers[0].salvoes
-                this.enemySalvoesObject= this.game[0].gamePlayers[1].salvoes
+                this.enemySalvoesObject = this.game[0].gamePlayers[1].salvoes
             }
             this.fillArrMySalvoes()
             this.fillArrEnemySalvoes()
@@ -65,50 +66,62 @@ new Vue({
         },
 
         makeGPShipsArray() {
-            for (j in this.game[0].ships) {
-                for (i in this.game[0].ships[j].locations) {
-                    this.shipLocations.push(this.game[0].ships[j].locations[i])
+            if (this.game[0].ships.length == 0){
+                this.shipsPlaced = false;
+                console.log("no ships")
+            } else {
+                for (j in this.game[0].ships) {
+
+                    for (i in this.game[0].ships[j].locations) {
+                        this.shipLocations.push(this.game[0].ships[j].locations[i])
+                    }
                 }
+                console.log("there are ships")
+                this.fillArrDamagedShipLocations();
+                this.displayMySalvoes();
             }
-            this.fillArrDamagedShipLocations();
-            this.displayMySalvoes();
+
         },
 
         displayShips() {
-                for (i in this.shipLocations) {
-                    document.getElementById(this.shipLocations[i]).style.backgroundColor = "thistle";
-                }
-                for (j in this.damagedShipLocations){
-                    document.getElementById(this.damagedShipLocations[j]).innerHTML='<i class="glyphicon glyphicon-remove" style="font-size:16px;color:purple;"></i>';   
-                }
-        },
-
-        fillArrDamagedShipLocations(){
-           this.shipLocations.forEach(oneShipLocation=>{
-               this.enemySalvoes.map(oneEnemySalvo=>{
-                   if(oneEnemySalvo == oneShipLocation){
-                    this.damagedShipLocations.push(oneShipLocation)
-                   }
-               })
-           })
-           this.displayShips();
-        },
-
-        fillArrMySalvoes(mySalvoes, mySalvoesObject){
-            for (i in this.mySalvoesObject){
-                this.mySalvoes.push.apply(this.mySalvoes,this.mySalvoesObject[i]);
+            for (i in this.shipLocations) {
+                document.getElementById(this.shipLocations[i]).style.backgroundColor = "thistle";
+                var img = document.createElement("img");
+                img.src = "assets/battleship.pur.png";
+                var src = document.getElementById(this.shipLocations[i]);
+                src.appendChild(img);
+            }
+            for (j in this.damagedShipLocations) {
+                document.getElementById(this.damagedShipLocations[j]).innerHTML = '<i class="glyphicon glyphicon-remove" style="font-size:16px;color:purple;"></i>';
             }
         },
 
-        fillArrEnemySalvoes(enemySalvoes, enemySalvoesObject){
-            for (i in this.enemySalvoesObject){
-                this.enemySalvoes.push.apply(this.enemySalvoes,this.enemySalvoesObject[i]);
+        fillArrDamagedShipLocations() {
+            this.shipLocations.forEach(oneShipLocation => {
+                this.enemySalvoes.map(oneEnemySalvo => {
+                    if (oneEnemySalvo == oneShipLocation) {
+                        this.damagedShipLocations.push(oneShipLocation)
+                    }
+                })
+            })
+            this.displayShips();
+        },
+
+        fillArrMySalvoes(mySalvoes, mySalvoesObject) {
+            for (i in this.mySalvoesObject) {
+                this.mySalvoes.push.apply(this.mySalvoes, this.mySalvoesObject[i]);
             }
         },
-        displayMySalvoes(){
-            for (i in this.mySalvoes){
-                document.getElementById(this.shipLocations[i]+"s").innerHTML='<i class="glyphicon glyphicon-screenshot" style="font-size:17px;color:purple;background-color:thistle;"></i>'; 
-                document.getElementById(this.shipLocations[i]+"s").style.backgroundColor = "thistle"; 
+
+        fillArrEnemySalvoes(enemySalvoes, enemySalvoesObject) {
+            for (i in this.enemySalvoesObject) {
+                this.enemySalvoes.push.apply(this.enemySalvoes, this.enemySalvoesObject[i]);
+            }
+        },
+        displayMySalvoes() {
+            for (i in this.mySalvoes) {
+                document.getElementById(this.shipLocations[i] + "s").innerHTML = '<i class="glyphicon glyphicon-screenshot" style="font-size:17px;color:purple;background-color:thistle;"></i>';
+                document.getElementById(this.shipLocations[i] + "s").style.backgroundColor = "thistle";
             }
         }
     },
