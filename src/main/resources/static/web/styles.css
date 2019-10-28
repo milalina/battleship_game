@@ -178,7 +178,20 @@ input{
     background-color: #40E0D0; 
     position: relative;
     border-radius: 15px;
+
 }
+/*.ship{
+    display: none;
+}*/
+/*.fill-ship{
+    background-image: url("assets/battleship.pur.png");
+    width: 6%;
+    height: 6%;
+    background-color: #40E0D0; 
+    position: relative;
+    border-radius: 15px;
+}*/
+
 table{
 width: 100%;   
 }

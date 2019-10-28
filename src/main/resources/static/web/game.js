@@ -14,6 +14,16 @@ new Vue({
         enemySalvoes: [],
         damagedShipLocations: [],
         shipsPlaced: true,
+        carrier:"carrier",
+        battleship:"battleship",
+        submarine:"submarine",
+        destroyer:"destroyer",
+        patrol_boat:"boat",
+        /*carrier:{"type":"carrier", "locations":"[' ', ' ', ' ', ' ', ' ']"},
+        battleship:{"type":"battleship", "locations":"[' ', ' ', ' ', ' ']"},
+        submarine:{"type":"submarine", "locations":"[' ', ' ', ' ']"},
+        destroyer:{"type":"destroyer", "locations":"[' ', ' ', ' ']"},
+        patrol_boat:{"type":"boat", "locations":"[' ', ' ']"},*/
 
     },
     methods: {
@@ -65,8 +75,20 @@ new Vue({
             console.log(this.mySalvoesObject)
         },
 
+        //before ships are placed
+        getShipTypeFromPlacementGrid(shipTypeFromGrid){
+            var shipType=shipTypeFromGrid;
+            console.log(shipType)
+            setTimeout(() => document.getElementById(shipType).style.display="none", 0);
+        },
+
+        dragOver(){
+            console.log("the elemenent is entering")
+        },
+
+        //after ships are placed
         makeGPShipsArray() {
-            if (this.game[0].ships.length == 0){
+            if (this.game[0].ships.length == 0) {
                 this.shipsPlaced = false;
                 console.log("no ships")
             } else {

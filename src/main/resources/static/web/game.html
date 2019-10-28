@@ -17,6 +17,26 @@
                 src="assets/battleship.gr-ConvertImage.png" style="height:40px" alt="">
             <span class="player"> {{gamePlayerOther}}</span>
         </div>
+        <div v-if="!shipsPlaced" class="table shipG">
+            <table id="empty-ship-grid">
+                <tr>
+                    <th class="cell letter" v-for="tableRow in tableRows" scope="row">{{tableRow}} </th>
+                </tr>
+                <tr v-for="(tableCol, index) in tableCols">
+                    <td class="cell letter">{{tableCol}} </td>
+                    <td class="empty_cell" v-bind:id="tableCol+'1ps'"></td>
+                    <td class="empty_cell" v-bind:id="tableCol+'2ps'"></td>
+                    <td class="empty_cell" v-bind:id="tableCol+'3ps'"></td>
+                    <td class="empty_cell" v-bind:id="tableCol+'4ps'"></td>
+                    <td class="empty_cell" v-bind:id="tableCol+'5ps'"></td>
+                    <td class="empty_cell" v-bind:id="tableCol+'6ps'"></td>
+                    <td class="empty_cell" v-bind:id="tableCol+'7ps'"></td>
+                    <td class="empty_cell" v-bind:id="tableCol+'8ps'"></td>
+                    <td class="empty_cell" v-bind:id="tableCol+'9ps'"></td>
+                    <td class="empty_cell" v-bind:id="tableCol+'10ps'"></td>
+                </tr>
+            </table>
+        </div>
         <div class="table shipG">
             <table id="ship_grid">
                 <tr>
@@ -37,7 +57,6 @@
                 </tr>
             </table>
         </div>
-
         <div v-if="!shipsPlaced" class="ship-placement-table ship-placement">
             <table >
                 <tr>
@@ -46,27 +65,29 @@
                     <th class="empty_cell cell letter ship-placement-table-cells">Number</th>
                 </tr>
                 <tr>
-                    <td class="empty_cell ship-placement-table-cells"><img src="assets/carrier.pur.png" class="draggable shake" alt=""></td>
+                    <td class="empty_cell ship-placement-table-cells">
+                        <img @dragstart="getShipTypeFromPlacementGrid(carrier)" id="carrier" class="ship" src="assets/carrier.pur.png" draggable=true alt="">
+                    </td>
                     <td class="empty_cell cell letter ship-placement-table-cells">5</td>
                     <td class="empty_cell cell letter ship-placement-table-cells">1</td>
                 </tr>
                 <tr>
-                    <td class="empty_cell cell letter ship-placement-table-cells"><img class="draggable" src="assets/battleship.pur.png" alt=""></td>
+                    <td class="empty_cell cell letter ship-placement-table-cells"><img @dragstart="getShipTypeFromPlacementGrid(battleship)" id="battleship" draggable=true src="assets/battleship.pur.png" alt=""></td>
                     <td class="empty_cell cell letter ship-placement-table-cells">4</td>
                     <td class="empty_cell cell letter ship-placement-table-cells">1</td>
                 </tr>
                 <tr>
-                    <td class="empty_cell cell letter ship-placement-table-cells"> <img src="assets/submarine.pur.png" class="draggable" alt=""></td>
+                    <td class="empty_cell cell letter ship-placement-table-cells"> <img @dragstart="getShipTypeFromPlacementGrid(submarine)" id="submarine" src="assets/submarine.pur.png" draggable=true alt=""></td>
                     <td class="empty_cell cell letter ship-placement-table-cells">3</td>
                     <td class="empty_cell cell letter ship-placement-table-cells">1</td>
                 </tr>
                 <tr>
-                    <td class="empty_cell cell letter ship-placement-table-cells"> <img src="assets/destroyer.pur.png" class="draggable" alt=""></td>
+                    <td class="empty_cell cell letter ship-placement-table-cells"> <img @dragstart="getShipTypeFromPlacementGrid(destroyer)" id="destroyer" src="assets/destroyer.pur.png" draggable=true alt=""></td>
                     <td class="empty_cell cell letter ship-placement-table-cells">3</td>
                     <td class="empty_cell cell letter ship-placement-table-cells">1</td>
                 </tr>
                 <tr>
-                    <td class="empty_cell cell letter ship-placement-table-cells"><img src="assets/patrol.pur.png" class="draggable" alt=""></td>
+                    <td class="empty_cell cell letter ship-placement-table-cells"><img @dragstart="getShipTypeFromPlacementGrid(patrol_boat)" id="boat" src="assets/patrol.pur.png" draggable=true alt=""></td>
                     <td class="empty_cell cell letter ship-placement-table-cells">2</td>
                     <td class="empty_cell cell letter ship-placement-table-cells">1</td>
                 </tr>
@@ -103,3 +124,7 @@
 </body>
 
 </html>
+
+@dragover.prevent @dragenter="dragEnter(element.id)"
+@dragleave="dragLeave" 
+                @dragend="dragEnd" @drop="dragFinish"
