@@ -14,16 +14,24 @@ new Vue({
         enemySalvoes: [],
         damagedShipLocations: [],
         shipsPlaced: true,
-        carrier:"carrier",
-        battleship:"battleship",
-        submarine:"submarine",
-        destroyer:"destroyer",
-        patrol_boat:"boat",
-        /*carrier:{"type":"carrier", "locations":"[' ', ' ', ' ', ' ', ' ']"},
-        battleship:{"type":"battleship", "locations":"[' ', ' ', ' ', ' ']"},
-        submarine:{"type":"submarine", "locations":"[' ', ' ', ' ']"},
-        destroyer:{"type":"destroyer", "locations":"[' ', ' ', ' ']"},
-        patrol_boat:{"type":"boat", "locations":"[' ', ' ']"},*/
+        selectedShipType: 0,
+        shipLength: 0,
+        carrier: "carrier",
+        battleship: "battleship",
+        submarine: "submarine",
+        destroyer: "destroyer",
+        patrol: "patrol",
+        firstCoordinate: 0,
+        lastCoordinate: 0,
+        letterPointF: 0,
+        numberPointF: 0,
+        letterPointL: 0,
+        numberPointL: 0,
+        /*carrier_obj:{"type":"carrier", "locations":"[' ', ' ', ' ', ' ', ' ']"},
+        battleship_obj:{"type":"battleship", "locations":"[' ', ' ', ' ', ' ']"},
+        submarine_obj:{"type":"submarine", "locations":"[' ', ' ', ' ']"},
+        destroyer_obj:{"type":"destroyer", "locations":"[' ', ' ', ' ']"},
+        patrol_boat_obj:{"type":"boat", "locations":"[' ', ' ']"},*/
 
     },
     methods: {
@@ -76,24 +84,89 @@ new Vue({
         },
 
         //before ships are placed
-        getShipTypeFromPlacementGrid(shipTypeFromGrid){
-            var shipType=shipTypeFromGrid;
-            console.log(shipType)
-            setTimeout(() => document.getElementById(shipType).style.display="none", 0);
+        //this recieves info about what ship's been selected
+        getShipTypeFromPlacementGrid(shipTypeFromGrid, lenght) {
+            this.shipLength = lenght
+            this.selectedShipType = shipTypeFromGrid;
+            console.log(this.selectedShipType, this.shipLength)
+            setTimeout(() => document.getElementById(this.selectedShipType).style.display = "none", 0);
         },
-       
-        sayHi(elementId){
-            console.log("hi"+elementId)
+        //this analyses coordinates from html grid, where the player wants to place a ship. 
+        placeShipInThisCell(elementId) {
+            var mystring;
+            var str
+            var coordinateElements
+            mystring = elementId;
+            mystring = mystring.replace(/ps/g, '');
+            str = mystring;
+            coordinateElements = str.split('');
+            console.log(coordinateElements)
+            if (this.letterPointF == 0) {
+                this.letterPointF = coordinateElements[0];
+                this.numberPointF = coordinateElements[1];
+            } else if (this.letterPointF == coordinateElements[0] || this.numberPointF == coordinateElements[1]) {
+                this.letterPointL = coordinateElements[0];
+                this.numberPointL = coordinateElements[1];
+            } else {
+                alert("no diagonal ship placement")
+                this.letterPointL = 0,
+                this.numberPointL = 0
+            }
+            console.log(this.letterPointF, this.numberPointF, this.letterPointL, this.numberPointL)
+            if (this.firstCoordinate == 0) {
+                this.firstCoordinate = mystring;
+            } else {
+                this.lastCoordinate = mystring
+            }
+            this.displayShipPlacementOptions()
         },
 
-        dragEnd(elementId){
-            console.log("dragend works "+elementId)
+        displayShipPlacementOptions() {
+            var horisontalAxis = [];
+            var temporaryArray1 = [];
+            var temporaryArray2 = [];
+            var verticalAxis = [];
+            console.log(this.numberPointF)
+            var i = this.numberPointF - this.shipLength; // is my ship within the grid?
+            temporaryArray1 = this.tableRows.slice();
+            temporaryArray1.length = this.shipLength;
+            console.log(i)
+            if (i > 0) {
+                for (j in temporaryArray1) {
+                    console.log(this.numberPointF)
+                    horisontalAxis.push(this.letterPointF + this.numberPointF--)
+                }
+                console.log(horisontalAxis)
+                this.numberPointF += this.shipLength;
+            }
+            temporaryArray2 = this.tableCols.slice();
+            temporaryArray2.splice(0, temporaryArray2.indexOf(this.letterPointF + "") + 1);
+            this.shipLength -= 1
+            temporaryArray2.splice(this.shipLength, temporaryArray2.length);
+            if (temporaryArray2.length == this.shipLength) {
+                var k;
+                for (k in temporaryArray2) {
+                    console.log(temporaryArray2[k], this.numberPointF)
+                    verticalAxis.push(temporaryArray2[k] + this.numberPointF)
+                }
+                console.log(verticalAxis)
+            }
+            for (l in verticalAxis) {
+                document.getElementById(verticalAxis[l] + "ps").style.backgroundColor = "thistle";
+                var img = document.createElement("img");
+                img.src = "assets/" + this.selectedShipType + ".pur.png";
+                console.log(verticalAxis[l] + "ps")
+                var src = document.getElementById(verticalAxis[l] + "ps");
+                src.appendChild(img);
+            }
+            for (m in horisontalAxis) {
+                document.getElementById(horisontalAxis[m] + "ps").style.backgroundColor = "thistle";
+                var img = document.createElement("img");
+                img.src = "assets/" + this.selectedShipType + ".pur.png";
+                var src = document.getElementById(horisontalAxis[m] + "ps");
+                src.appendChild(img);
+            }
         },
-
-        dragFinish(message){
-            console.log(message)
-        },
-        
         //after ships are placed
         makeGPShipsArray() {
             if (this.game[0].ships.length == 0) {
