@@ -81,11 +81,19 @@ new Vue({
             console.log(shipType)
             setTimeout(() => document.getElementById(shipType).style.display="none", 0);
         },
-
-        dragOver(){
-            console.log("the elemenent is entering")
+       
+        sayHi(elementId){
+            console.log("hi"+elementId)
         },
 
+        dragEnd(elementId){
+            console.log("dragend works "+elementId)
+        },
+
+        dragFinish(message){
+            console.log(message)
+        },
+        
         //after ships are placed
         makeGPShipsArray() {
             if (this.game[0].ships.length == 0) {
