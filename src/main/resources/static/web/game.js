@@ -16,6 +16,7 @@ new Vue({
         shipsPlaced: true,
         selectedShipType: 0,
         shipLength: 0,
+        shipLength1: 0,
         carrier: "carrier",
         battleship: "battleship",
         submarine: "submarine",
@@ -27,6 +28,9 @@ new Vue({
         numberPointF: 0,
         letterPointL: 0,
         numberPointL: 0,
+        objectForDisplayingSelectedShips: [],
+        horisontalAxis: [],
+        verticalAxis: [],
         /*carrier_obj:{"type":"carrier", "locations":"[' ', ' ', ' ', ' ', ' ']"},
         battleship_obj:{"type":"battleship", "locations":"[' ', ' ', ' ', ' ']"},
         submarine_obj:{"type":"submarine", "locations":"[' ', ' ', ' ']"},
@@ -87,6 +91,7 @@ new Vue({
         //this recieves info about what ship's been selected
         getShipTypeFromPlacementGrid(shipTypeFromGrid, lenght) {
             this.shipLength = lenght
+            this.shipLength1=this.shipLength 
             this.selectedShipType = shipTypeFromGrid;
             console.log(this.selectedShipType, this.shipLength)
             setTimeout(() => document.getElementById(this.selectedShipType).style.display = "none", 0);
@@ -110,63 +115,138 @@ new Vue({
             } else {
                 alert("no diagonal ship placement")
                 this.letterPointL = 0,
-                this.numberPointL = 0
+                    this.numberPointL = 0
             }
             console.log(this.letterPointF, this.numberPointF, this.letterPointL, this.numberPointL)
             if (this.firstCoordinate == 0) {
                 this.firstCoordinate = mystring;
+                this.displayShipPlacementOptions1()
             } else {
                 this.lastCoordinate = mystring
+                this.displayShipPlacementOptions2()
             }
-            this.displayShipPlacementOptions()
-        },
 
-        displayShipPlacementOptions() {
-            var horisontalAxis = [];
+        },
+        //display ship placement options and fill up the this.objectForDisplayingSelectedShips
+        displayShipPlacementOptions1() {
             var temporaryArray1 = [];
             var temporaryArray2 = [];
-            var verticalAxis = [];
+            var manipulableShipLength;
             console.log(this.numberPointF)
             var i = this.numberPointF - this.shipLength; // is my ship within the grid?
-            temporaryArray1 = this.tableRows.slice();
+            temporaryArray1 = this.tableRows.slice(); //horizontal axis
+            temporaryArray2 = this.tableCols.slice(); //vertical axis
+            manipulableShipLength = this.shipLength
+            //horizontal axis
             temporaryArray1.length = this.shipLength;
             console.log(i)
-            if (i > 0) {
+            if (i >= 0) {
                 for (j in temporaryArray1) {
                     console.log(this.numberPointF)
-                    horisontalAxis.push(this.letterPointF + this.numberPointF--)
+                    this.horisontalAxis.push(this.letterPointF + this.numberPointF--)
                 }
-                console.log(horisontalAxis)
+                console.log(this.horisontalAxis)
                 this.numberPointF += this.shipLength;
+                //vertical axis
+                temporaryArray2.splice(0, temporaryArray2.indexOf(this.letterPointF + "") + 1);
+                this.shipLength -= 1
+                console.log(this.shipLength)
+                console.log(manipulableShipLength)
+            } else {
+                temporaryArray2.splice(0, temporaryArray2.indexOf(this.letterPointF + ""));
             }
-            temporaryArray2 = this.tableCols.slice();
-            temporaryArray2.splice(0, temporaryArray2.indexOf(this.letterPointF + "") + 1);
-            this.shipLength -= 1
+            //vertical axis
             temporaryArray2.splice(this.shipLength, temporaryArray2.length);
+            console.log(temporaryArray2)
             if (temporaryArray2.length == this.shipLength) {
                 var k;
                 for (k in temporaryArray2) {
                     console.log(temporaryArray2[k], this.numberPointF)
-                    verticalAxis.push(temporaryArray2[k] + this.numberPointF)
+                    this.verticalAxis.push(temporaryArray2[k] + this.numberPointF)
                 }
-                console.log(verticalAxis)
+                console.log(this.verticalAxis)
             }
-            for (l in verticalAxis) {
-                document.getElementById(verticalAxis[l] + "ps").style.backgroundColor = "thistle";
-                var img = document.createElement("img");
-                img.src = "assets/" + this.selectedShipType + ".pur.png";
-                console.log(verticalAxis[l] + "ps")
-                var src = document.getElementById(verticalAxis[l] + "ps");
-                src.appendChild(img);
-            }
-            for (m in horisontalAxis) {
-                document.getElementById(horisontalAxis[m] + "ps").style.backgroundColor = "thistle";
-                var img = document.createElement("img");
-                img.src = "assets/" + this.selectedShipType + ".pur.png";
-                var src = document.getElementById(horisontalAxis[m] + "ps");
-                src.appendChild(img);
-            }
+            this.displayShipPlacementOptions2()
         },
+        displayShipPlacementOptions2() {
+            for (l in this.verticalAxis) {
+                if (this.lastCoordinate != 0) {
+                    var img = document.createElement("img");
+                    img.id = this.selectedShipType + l + 'vA'
+                    img.src = "assets/" + this.selectedShipType + ".pur.png";
+                    var src = document.getElementById(this.verticalAxis[l] + "ps");
+                    src.classList.remove("shake")
+                    var shipToBeRemoved = document.getElementById(img.id);
+                    shipToBeRemoved.parentNode.removeChild(shipToBeRemoved)
+                    src.style.backgroundColor = "#40E0D0"
+                } else {
+                    document.getElementById(this.verticalAxis[l] + "ps").style.backgroundColor = "thistle";
+                    var img = document.createElement("img");
+                    img.id = this.selectedShipType + l + 'vA'
+                    img.src = "assets/" + this.selectedShipType + ".pur.png";
+                    var src = document.getElementById(this.verticalAxis[l] + "ps");
+                    src.appendChild(img);
+                    src.classList.add("shake")
+                }
+            }
+            for (m in this.horisontalAxis) {
+                if (this.lastCoordinate != 0) {
+                    var img = document.createElement("img");
+                    img.id = this.selectedShipType + m + 'hA'
+                    img.src = "assets/" + this.selectedShipType + ".pur.png";
+                    var src = document.getElementById(this.horisontalAxis[m] + "ps");
+                    src.classList.remove("shake")
+                    var shipToBeRemoved = document.getElementById(img.id);
+                    shipToBeRemoved.parentNode.removeChild(shipToBeRemoved)
+                    console.log("pic removed")
+                    src.style.backgroundColor = "#40E0D0"
+                } else {
+                    document.getElementById(this.horisontalAxis[m] + "ps").style.backgroundColor = "thistle";
+                    var img = document.createElement("img");
+                    img.id = this.selectedShipType + m + 'hA'
+                    img.src = "assets/" + this.selectedShipType + ".pur.png";
+                    var src = document.getElementById(this.horisontalAxis[m] + "ps");
+                    src.appendChild(img);
+                    src.classList.add("shake")
+                }
+            }
+            console.log(this.verticalAxis.length, this.shipLength1)
+            var shipLocationArray = []
+            var verticalAxisReplacementArray=this.verticalAxis.slice();
+            if (verticalAxisReplacementArray.length != this.shipLength1) {
+                var coordinateString = []
+                coordinateString = verticalAxisReplacementArray[0].split('');
+                coordinateString = this.tableCols[this.tableCols.indexOf(coordinateString[0]) - 1] + coordinateString[1]
+                verticalAxisReplacementArray.push(coordinateString)
+            }
+
+            if (this.horisontalAxis.includes(this.lastCoordinate)) {
+                shipLocationArray.push(this.horisontalAxis)
+            } else {
+                shipLocationArray.push(verticalAxisReplacementArray)
+            }
+
+
+            if (this.lastCoordinate != 0) {
+                console.log("this.objectForDisplayingSelectedShips")
+                this.objectForDisplayingSelectedShips.push({
+                    "type": "" + this.selectedShipType,
+                    "locations": "" + shipLocationArray
+                })
+                this.selectedShipType = 0,
+                    this.shipLength = 0,
+                    this.firstCoordinate = 0,
+                    this.lastCoordinate = 0,
+                    this.letterPointF = 0,
+                    this.numberPointF = 0,
+                    this.letterPointL = 0,
+                    this.numberPointL = 0,
+                    this.horisontalAxis = [];
+                this.verticalAxis = [];
+            }
+            console.log(this.objectForDisplayingSelectedShips)
+        },
+
         //after ships are placed
         makeGPShipsArray() {
             if (this.game[0].ships.length == 0) {
