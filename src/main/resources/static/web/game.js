@@ -31,6 +31,8 @@ new Vue({
         objectForDisplayingSelectedShips: [],
         horisontalAxis: [],
         verticalAxis: [],
+        // gpShipsCoordinatesArrayBeforePlacement:[],
+        // gpShipsTypeArrayBeforePlacement:[],
         /*carrier_obj:{"type":"carrier", "locations":"[' ', ' ', ' ', ' ', ' ']"},
         battleship_obj:{"type":"battleship", "locations":"[' ', ' ', ' ', ' ']"},
         submarine_obj:{"type":"submarine", "locations":"[' ', ' ', ' ']"},
@@ -91,7 +93,7 @@ new Vue({
         //this recieves info about what ship's been selected
         getShipTypeFromPlacementGrid(shipTypeFromGrid, lenght) {
             this.shipLength = lenght
-            this.shipLength1=this.shipLength 
+            this.shipLength1 = this.shipLength
             this.selectedShipType = shipTypeFromGrid;
             console.log(this.selectedShipType, this.shipLength)
             setTimeout(() => document.getElementById(this.selectedShipType).style.display = "none", 0);
@@ -212,14 +214,16 @@ new Vue({
             }
             console.log(this.verticalAxis.length, this.shipLength1)
             var shipLocationArray = []
-            var verticalAxisReplacementArray=this.verticalAxis.slice();
+            var verticalAxisReplacementArray = this.verticalAxis.slice();
             if (verticalAxisReplacementArray.length != this.shipLength1) {
                 var coordinateString = []
                 coordinateString = verticalAxisReplacementArray[0].split('');
+                console.log(coordinateString)
                 coordinateString = this.tableCols[this.tableCols.indexOf(coordinateString[0]) - 1] + coordinateString[1]
+                console.log(coordinateString)
                 verticalAxisReplacementArray.push(coordinateString)
             }
-
+            console.log(this.horisontalAxis, verticalAxisReplacementArray)
             if (this.horisontalAxis.includes(this.lastCoordinate)) {
                 shipLocationArray.push(this.horisontalAxis)
             } else {
@@ -231,7 +235,7 @@ new Vue({
                 console.log("this.objectForDisplayingSelectedShips")
                 this.objectForDisplayingSelectedShips.push({
                     "type": "" + this.selectedShipType,
-                    "locations": "" + shipLocationArray
+                    "locations": shipLocationArray
                 })
                 this.selectedShipType = 0,
                     this.shipLength = 0,
@@ -242,9 +246,59 @@ new Vue({
                     this.letterPointL = 0,
                     this.numberPointL = 0,
                     this.horisontalAxis = [];
-                this.verticalAxis = [];
+                    this.verticalAxis = [];
+                    shipLocationArray=[];
+                this.displayShipsBeforePlacement()
             }
             console.log(this.objectForDisplayingSelectedShips)
+        },
+
+        /*  makeGPShipsArrayBeforePlacement() {
+             for (i in this.objectForDisplayingSelectedShips)
+             {this.gpShipsCoordinatesArrayBeforePlacement.push(this.objectForDisplayingSelectedShips[i].locations)
+             this.gpShipsTypeArrayBeforePlacement.push(this.objectForDisplayingSelectedShips[i].type)}
+             console.log(this.gpShipsCoordinatesArrayBeforePlacement, this.gpShipsTypeArrayBeforePlacement)
+             if (this.game[0].ships.length == 0) {
+                 this.shipsPlaced = false;
+                 console.log("no ships")
+             } else {
+                 for (j in this.game[0].ships) {
+
+                     for (i in this.game[0].ships[j].locations) {
+                         this.shipLocations.push(this.game[0].ships[j].locations[i])
+                     }
+                 }
+                 console.log("there are ships")
+                 this.fillArrDamagedShipLocations();
+                 this.displayMySalvoes();
+             }
+             
+         }, */
+
+        displayShipsBeforePlacement() {
+            for (i in this.objectForDisplayingSelectedShips) {
+                var shipLocation = this.objectForDisplayingSelectedShips[i].locations[0]
+                for (j in shipLocation) {
+                    console.log(shipLocation[j])
+                    document.getElementById(shipLocation[j] + "ps").style.backgroundColor = "thistle";
+                    var img = document.createElement("img");
+                    img.src = "assets/" + this.objectForDisplayingSelectedShips[i].type + ".pur.png";
+                    var src = document.getElementById(shipLocation[j] + "ps");
+                    src.appendChild(img);
+                }
+
+            }
+            /*  for (i in this.objectForDisplayingSelectedShips) {
+
+                 document.getElementById(this.shipLocations[i]).style.backgroundColor = "thistle";
+                 var img = document.createElement("img");
+                 img.src = "assets/battleship.pur.png";
+                 var src = document.getElementById(this.shipLocations[i]);
+                 src.appendChild(img);
+             }
+             for (j in this.damagedShipLocations) {
+                 document.getElementById(this.damagedShipLocations[j]).innerHTML = '<i class="glyphicon glyphicon-remove" style="font-size:16px;color:purple;"></i>';
+             } */
         },
 
         //after ships are placed
