@@ -29,6 +29,7 @@ new Vue({
         letterPointL: 0,
         numberPointL: 0,
         objectForDisplayingSelectedShips: [],
+        objectForDisplayingSelectedShipsNoManipulation: [],
         horisontalAxis: [],
         verticalAxis: [],
         // gpShipsCoordinatesArrayBeforePlacement:[],
@@ -237,6 +238,7 @@ new Vue({
                     "type": "" + this.selectedShipType,
                     "locations": shipLocationArray
                 })
+                this.objectForDisplayingSelectedShipsNoManipulation=this.objectForDisplayingSelectedShips
                 this.selectedShipType = 0,
                     this.shipLength = 0,
                     this.firstCoordinate = 0,
@@ -286,7 +288,7 @@ new Vue({
                     var src = document.getElementById(shipLocation[j] + "ps");
                     src.appendChild(img);
                 }
-
+                this.objectForDisplayingSelectedShips=[];
             }
             /*  for (i in this.objectForDisplayingSelectedShips) {
 
