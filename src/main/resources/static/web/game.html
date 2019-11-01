@@ -115,7 +115,9 @@
                     <td class="empty_cell cell letter ship-placement-table-cells">1</td>
                 </tr>
                 <tr>
-                    <td > <button v-if="showClearButton" class="button">Clear ships</button> <button v-if="showConfirmButton" class="button">Confirm ships</button> </td>
+                    <td > <button v-if="showClearButton" class="button">Clear ships</button> 
+                        <button @click="sendShips" v-if="showConfirmButton" class="button">Confirm ships</button> 
+                    </td>
                     <td > </td>
                     <td > </td>
                 </tr>

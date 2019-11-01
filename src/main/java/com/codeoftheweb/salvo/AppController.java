@@ -138,7 +138,25 @@ public class AppController {
         return map;
     }
 
-
+    @RequestMapping(value="/games/player/{gamePlayerId}/ships", method=RequestMethod.POST)
+    public ResponseEntity<String> addShips(@PathVariable long gamePlayerId, @RequestBody Ship ship, Authentication authentication) {
+        GamePlayer gamePlayer = gamePlayerRepository.findById(gamePlayerId).orElse(null);
+        if(authentication.getName()==null){
+            return new ResponseEntity<>("There is no current user logged in", HttpStatus.UNAUTHORIZED);
+        }
+        if (gamePlayer==null) {
+            return new ResponseEntity<>( "There is no game player with the given ID", HttpStatus.UNAUTHORIZED);
+        }
+        if(gamePlayer.getPlayer().getUserName()!=authentication.getName()){
+            return new ResponseEntity<>("The current user is not the game player the ID references", HttpStatus.UNAUTHORIZED);
+        }
+        if(gamePlayer.getShips()!=null){
+            return new ResponseEntity<>("The user already has ships placed", HttpStatus.FORBIDDEN);
+        }
+        ship.setGamePlayer(gamePlayer);
+        shipRepository.save(ship);
+        return new ResponseEntity<>("Ships added", HttpStatus.CREATED);
+    }
 
    /* @RequestMapping("/game_view/{gamePlayerId}")
     public List<Map<String, Object>> findGame (@PathVariable ("gamePlayerId") long gamePlayerId) {

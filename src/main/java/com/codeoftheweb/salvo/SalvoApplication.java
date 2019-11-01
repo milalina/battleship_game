@@ -267,6 +267,7 @@ class WebAccessConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/games").permitAll()
                 .antMatchers("/api/game_view/*").hasAuthority("USER")
                 .antMatchers("/api/game/*").hasAuthority("USER")
+                .antMatchers("/api/games/player/*").hasAuthority("USER")
                 .antMatchers("/api/players").permitAll()
                 .antMatchers("/api/login").permitAll()
                 .antMatchers("/api/logout").hasAuthority("USER")

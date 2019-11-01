@@ -15,7 +15,9 @@ new Vue({
         damagedShipLocations: [],
         shipsPlaced: true,
         selectedShipType: 0,
+        //manipulated:
         shipLength: 0,
+        //non-manipulated:
         shipLength1: 0,
         carrier: "carrier",
         battleship: "battleship",
@@ -44,7 +46,6 @@ new Vue({
         fetchData: function () {
             var parsedUrl = new URL(window.location.href);
             var gpId = (parsedUrl.searchParams.get("gp"));
-            console.log(gpId);
             fetch("http://localhost:8080/api/game_view/" + gpId)
                 .then(function (response) {
                     console.log(response);
@@ -86,16 +87,14 @@ new Vue({
             }
             this.fillArrMySalvoes()
             this.fillArrEnemySalvoes()
-            console.log(this.mySalvoesObject)
         },
 
         //before ships are placed
-        //this recieves info about what ship's been selected
+        //this recieves info about what ship's been selected from the ship table
         getShipTypeFromPlacementGrid(shipTypeFromGrid, lenght) {
             this.shipLength = lenght
             this.shipLength1 = this.shipLength
             this.selectedShipType = shipTypeFromGrid;
-            console.log(this.selectedShipType, this.shipLength)
             setTimeout(() => document.getElementById(this.selectedShipType).style.display = "none", 0);
         },
         //this analyses coordinates from html grid, where the player wants to place a ship. 
@@ -107,19 +106,19 @@ new Vue({
             mystring = mystring.replace(/ps/g, '');
             str = mystring;
             coordinateElements = str.split('');
-            console.log(coordinateElements)
             if (this.letterPointF == 0) {
                 this.letterPointF = coordinateElements[0];
                 this.numberPointF = coordinateElements[1];
             } else if (this.letterPointF == coordinateElements[0] || this.numberPointF == coordinateElements[1]) {
+                //this condition aims at preventing invalid ship placement
                 this.letterPointL = coordinateElements[0];
                 this.numberPointL = coordinateElements[1];
             } else {
-                alert("no diagonal ship placement")
+                alert("invalid ship placement")
                 this.letterPointL = 0,
                     this.numberPointL = 0
             }
-            console.log(this.letterPointF, this.numberPointF, this.letterPointL, this.numberPointL)
+
             if (this.firstCoordinate == 0) {
                 this.firstCoordinate = mystring;
                 this.displayShipPlacementOptions1()
@@ -133,67 +132,100 @@ new Vue({
         displayShipPlacementOptions1() {
             var temporaryArray1 = [];
             var temporaryArray2 = [];
-            var manipulableShipLength;
-            console.log(this.numberPointF)
             var i = this.numberPointF - this.shipLength; // is my ship within the grid?
             temporaryArray1 = this.tableRows.slice(); //horizontal axis
             temporaryArray2 = this.tableCols.slice(); //vertical axis
             manipulableShipLength = this.shipLength
+            temporaryArray2ValidityCheck = false;
+
+            if (temporaryArray2.length - temporaryArray2.indexOf(this.letterPointF + "") > this.shipLength1) {
+                temporaryArray2ValidityCheck = true;
+            } else {
+                temporaryArray2ValidityCheck = false;
+            }
+
+
+
             //horizontal axis
             temporaryArray1.length = this.shipLength;
-            console.log(i)
             if (i >= 0) {
                 for (j in temporaryArray1) {
-                    console.log(this.numberPointF)
                     this.horisontalAxis.push(this.letterPointF + this.numberPointF--)
                 }
-                console.log(this.horisontalAxis)
-                this.numberPointF += this.shipLength;
-                //vertical axis
-                temporaryArray2.splice(0, temporaryArray2.indexOf(this.letterPointF + "") + 1);
-                this.shipLength -= 1
-                console.log(this.shipLength)
-                console.log(manipulableShipLength)
-            } else {
-                temporaryArray2.splice(0, temporaryArray2.indexOf(this.letterPointF + ""));
+                this.numberPointF += this.shipLength
             }
             //vertical axis
+            if (i >= 0 && temporaryArray2ValidityCheck == true) {
+                temporaryArray2.splice(0, temporaryArray2.indexOf(this.letterPointF + "") + 1);
+                this.shipLength -= 1
+            } else if (temporaryArray2ValidityCheck == true) {
+                temporaryArray2.splice(0, temporaryArray2.indexOf(this.letterPointF + ""));
+            } else(temporaryArray2 = [])
+            //vertical axis
             temporaryArray2.splice(this.shipLength, temporaryArray2.length);
-            console.log(temporaryArray2)
             if (temporaryArray2.length == this.shipLength) {
                 var k;
                 for (k in temporaryArray2) {
-                    console.log(temporaryArray2[k], this.numberPointF)
                     this.verticalAxis.push(temporaryArray2[k] + this.numberPointF)
                 }
-                console.log(this.verticalAxis)
             }
-            this.displayShipPlacementOptions2()
-        },
-        displayShipPlacementOptions2() {
-            //checking if there are intersections in placed ships and displayed options
+            //checking if there are intersections in placed ships and displayed options 
+
+            for (q in this.objectForDisplayingSelectedShipsNoManipulation){
+                this.shipLocationsAsOneArray.push(this.objectForDisplayingSelectedShipsNoManipulation[q].locations[0])
+            }
+            console.log(this.shipLocationsAsOneArray, this.selectedShipType)
+
+            for (l in this.verticalAxis) {
+                if (this.shipLocationsAsOneArray.includes(this.verticalAxis[l])) {
+                    console.log(this.shipLocationsAsOneArray)
+                    this.verticalIntersection = true;
+                } else {
+                    this.verticalIntersection = false;
+                }
+            }
+            for (m in this.horisontalAxis) {
+                if (this.shipLocationsAsOneArray.includes(this.horisontalAxis[m])) {
+                    this.horizontalIntersection = true;
+                } else {
+                    this.horizontalIntersection = false;
+                }
+            }
+           /*this.shipLocationsAsOneArray.push(this.horisontalAxis[0])
+            this.shipLocationsAsOneArray.push(this.verticalAxis[0]) 
+           
+           for (l in this.verticalAxis) {
+                if (this.shipLocationsAsOneArray.includes(this.verticalAxis[l])) {
+                    console.log(this.shipLocationsAsOneArray)
+                    this.verticalIntersection = true;
+                } else {
+                    this.verticalIntersection = false;
+                }
+            }
+            for (m in this.horisontalAxis) {
+                if (this.shipLocationsAsOneArray.includes(this.horisontalAxis[m])) {
+                    this.horizontalIntersection = true;
+                } else {
+                    this.horizontalIntersection = false;
+                }
+            }
+
             for (i in this.objectForDisplayingSelectedShipsNoManipulation) {
                 var shipLocation = this.objectForDisplayingSelectedShipsNoManipulation[i].locations[0]
                 for (j in shipLocation) {
                     this.shipLocationsAsOneArray.push(shipLocation[j])
                 }
             }
-            console.log(this.shipLocationsAsOneArray, this.selectedShipType)
+            console.log(this.shipLocationsAsOneArray, this.selectedShipType)*/
 
-            for (l in this.verticalAxis){
-                if(this.shipLocationsAsOneArray.includes(this.verticalAxis[l])){
-                    console.log(this.shipLocationsAsOneArray)
-                    this.verticalIntersection=true;
-                }else{this.verticalIntersection=false;}
-            }
-            for (m in this.horisontalAxis){
-                if(this.shipLocationsAsOneArray.includes(this.horisontalAxis[m])){
-                    this.horizontalIntersection=true;
-                }else{this.horizontalIntersection=false;}
-            }
-    
-            for (l in this.verticalAxis) {
-                if (this.lastCoordinate != 0 && this.verticalIntersection==false) {
+
+            this.displayShipPlacementOptions2()
+        },
+        displayShipPlacementOptions2() {
+
+            if (this.verticalIntersection == false) {
+                for (l in this.verticalAxis) {
+                    if (this.lastCoordinate != 0) {
                         var img = document.createElement("img");
                         img.id = this.selectedShipType + l + 'vA'
                         img.src = "assets/" + this.selectedShipType + ".pur.png";
@@ -202,49 +234,49 @@ new Vue({
                         var shipToBeRemoved = document.getElementById(img.id);
                         shipToBeRemoved.parentNode.removeChild(shipToBeRemoved)
                         src.style.backgroundColor = "#40E0D0"
-                } else {
-                    document.getElementById(this.verticalAxis[l] + "ps").style.backgroundColor = "thistle";
-                    var img = document.createElement("img");
-                    img.id = this.selectedShipType + l + 'vA'
-                    img.src = "assets/" + this.selectedShipType + ".pur.png";
-                    var src = document.getElementById(this.verticalAxis[l] + "ps");
-                    src.appendChild(img);
-                    src.classList.add("shake")
+                    } else {
+                        document.getElementById(this.verticalAxis[l] + "ps").style.backgroundColor = "thistle";
+                        var img = document.createElement("img");
+                        img.id = this.selectedShipType + l + 'vA'
+                        img.src = "assets/" + this.selectedShipType + ".pur.png";
+                        var src = document.getElementById(this.verticalAxis[l] + "ps");
+                        src.appendChild(img);
+                        src.classList.add("shake")
+                    }
                 }
             }
-            for (m in this.horisontalAxis) {
-                if (this.lastCoordinate != 0 && this.horizontalIntersection==false) {
-                    var img = document.createElement("img");
-                    img.id = this.selectedShipType + m + 'hA'
-                    img.src = "assets/" + this.selectedShipType + ".pur.png";
-                    var src = document.getElementById(this.horisontalAxis[m] + "ps");
-                    src.classList.remove("shake")
-                    var shipToBeRemoved = document.getElementById(img.id);
-                    shipToBeRemoved.parentNode.removeChild(shipToBeRemoved)
-                    console.log("pic removed")
-                    src.style.backgroundColor = "#40E0D0"
-                } else {
-                    document.getElementById(this.horisontalAxis[m] + "ps").style.backgroundColor = "thistle";
-                    var img = document.createElement("img");
-                    img.id = this.selectedShipType + m + 'hA'
-                    img.src = "assets/" + this.selectedShipType + ".pur.png";
-                    var src = document.getElementById(this.horisontalAxis[m] + "ps");
-                    src.appendChild(img);
-                    src.classList.add("shake")
+
+            if (this.horizontalIntersection == false) {
+                for (m in this.horisontalAxis) {
+                    if (this.lastCoordinate != 0) {
+                        var img = document.createElement("img");
+                        img.id = this.selectedShipType + m + 'hA'
+                        img.src = "assets/" + this.selectedShipType + ".pur.png";
+                        var src = document.getElementById(this.horisontalAxis[m] + "ps");
+                        src.classList.remove("shake")
+                        var shipToBeRemoved = document.getElementById(img.id);
+                        shipToBeRemoved.parentNode.removeChild(shipToBeRemoved)
+                        src.style.backgroundColor = "#40E0D0"
+                    } else {
+                        document.getElementById(this.horisontalAxis[m] + "ps").style.backgroundColor = "thistle";
+                        var img = document.createElement("img");
+                        img.id = this.selectedShipType + m + 'hA'
+                        img.src = "assets/" + this.selectedShipType + ".pur.png";
+                        var src = document.getElementById(this.horisontalAxis[m] + "ps");
+                        src.appendChild(img);
+                        src.classList.add("shake")
+                    }
                 }
             }
-            console.log(this.verticalAxis.length, this.shipLength1)
+
             var shipLocationArray = []
             var verticalAxisReplacementArray = this.verticalAxis.slice();
-            if (verticalAxisReplacementArray.length != this.shipLength1) {
+            if (verticalAxisReplacementArray.length != this.shipLength1 && verticalAxisReplacementArray.length != 0) {
                 var coordinateString = []
                 coordinateString = verticalAxisReplacementArray[0].split('');
-                console.log(coordinateString)
                 coordinateString = this.tableCols[this.tableCols.indexOf(coordinateString[0]) - 1] + coordinateString[1]
-                console.log(coordinateString)
                 verticalAxisReplacementArray.push(coordinateString)
             }
-            console.log(this.horisontalAxis, verticalAxisReplacementArray)
             if (this.horisontalAxis.includes(this.lastCoordinate)) {
                 shipLocationArray.push(this.horisontalAxis)
             } else {
@@ -253,21 +285,23 @@ new Vue({
 
 
             if (this.lastCoordinate != 0) {
-                console.log("this.objectForDisplayingSelectedShips")
                 this.objectForDisplayingSelectedShips.push({
                     "type": "" + this.selectedShipType,
                     "locations": shipLocationArray
                 })
-                this.objectForDisplayingSelectedShipsNoManipulation=this.objectForDisplayingSelectedShips
+                this.objectForDisplayingSelectedShipsNoManipulation.push(this.objectForDisplayingSelectedShips[0])
                 this.counter++;
-                console.log(this.counter)
-                if (this.counter>4){
-                    this.showConfirmButton=true;
-                }else{this.showConfirmButton=false;}
+                if (this.counter > 4) {
+                    this.showConfirmButton = true;
+                } else {
+                    this.showConfirmButton = false;
+                }
 
-                if (this.counter>=1){
-                    this.showClearButton=true;
-                }else{this.showClearButton=false;}
+                if (this.counter >= 1) {
+                    this.showClearButton = true;
+                } else {
+                    this.showClearButton = false;
+                }
 
                 this.selectedShipType = 0,
                     this.shipLength = 0,
@@ -282,15 +316,13 @@ new Vue({
                 shipLocationArray = [];
                 this.displayShipsBeforePlacement()
             }
-            console.log(this.objectForDisplayingSelectedShips)
-            
+            console.log(this.objectForDisplayingSelectedShipsNoManipulation)
         },
 
         displayShipsBeforePlacement() {
             for (i in this.objectForDisplayingSelectedShips) {
                 var shipLocation = this.objectForDisplayingSelectedShips[i].locations[0]
                 for (j in shipLocation) {
-                    console.log(shipLocation[j])
                     document.getElementById(shipLocation[j] + "ps").style.backgroundColor = "thistle";
                     var img = document.createElement("img");
                     img.src = "assets/" + this.objectForDisplayingSelectedShips[i].type + ".pur.png";
@@ -301,11 +333,34 @@ new Vue({
             }
         },
 
+        sendShips() {
+            var objectTypeLocation=[]
+            for(i in this.objectForDisplayingSelectedShipsNoManipulation){
+                objectTypeLocation.push({
+                    type: this.objectForDisplayingSelectedShipsNoManipulation[i].type,
+                    locations: this.objectForDisplayingSelectedShipsNoManipulation[i].locations[0]
+                })
+            }
+            console.log(objectTypeLocation)
+            $.post({
+                    url: "/games/player/" + this.gamePlayerId + "/ships",
+                    data: JSON.stringify(objectTypeLocation[0]),
+                    dataType: "text",
+                    contentType: "application/json"
+                })
+                .done(function (response, status, jqXHR) {
+                    alert("Ships added: " + response);
+                    this.fetchData()
+                })
+                .fail(function (jqXHR, status, httpError) {
+                    alert("Failed to add ships: " + textStatus + " " + httpError);
+                })
+        },
+
         //after ships are placed
         makeGPShipsArray() {
             if (this.game[0].ships.length == 0) {
                 this.shipsPlaced = false;
-                console.log("no ships")
             } else {
                 for (j in this.game[0].ships) {
 
@@ -313,24 +368,9 @@ new Vue({
                         this.shipLocations.push(this.game[0].ships[j].locations[i])
                     }
                 }
-                console.log("there are ships")
                 this.fillArrDamagedShipLocations();
-                this.displayMySalvoes();
             }
 
-        },
-
-        displayShips() {
-            for (i in this.shipLocations) {
-                document.getElementById(this.shipLocations[i]).style.backgroundColor = "thistle";
-                var img = document.createElement("img");
-                img.src = "assets/battleship.pur.png";
-                var src = document.getElementById(this.shipLocations[i]);
-                src.appendChild(img);
-            }
-            for (j in this.damagedShipLocations) {
-                document.getElementById(this.damagedShipLocations[j]).innerHTML = '<i class="glyphicon glyphicon-remove" style="font-size:16px;color:purple;"></i>';
-            }
         },
 
         fillArrDamagedShipLocations() {
@@ -342,6 +382,21 @@ new Vue({
                 })
             })
             this.displayShips();
+        },
+
+        displayShips() {
+            this.shipsPlaced = false;
+            this.displayMySalvoes();
+            for (i in this.shipLocations) {
+                document.getElementById(this.shipLocations[i]).style.backgroundColor = "thistle";
+                var img = document.createElement("img");
+                img.src = "assets/battleship.pur.png";
+                var src = document.getElementById(this.shipLocations[i]);
+                src.appendChild(img);
+            }
+            for (j in this.damagedShipLocations) {
+                document.getElementById(this.damagedShipLocations[j]).innerHTML = '<i class="glyphicon glyphicon-remove" style="font-size:16px;color:purple;"></i>';
+            }
         },
 
         fillArrMySalvoes(mySalvoes, mySalvoesObject) {
