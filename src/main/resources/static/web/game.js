@@ -343,8 +343,8 @@ new Vue({
             }
             console.log(objectTypeLocation)
             $.post({
-                    url: "/games/player/" + this.gamePlayerId + "/ships",
-                    data: JSON.stringify(objectTypeLocation[0]),
+                    url: "/api/games/player/" + this.gamePlayerId + "/ships",
+                    data: JSON.stringify(objectTypeLocation),
                     dataType: "text",
                     contentType: "application/json"
                 })

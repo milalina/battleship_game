@@ -2,6 +2,7 @@ package com.codeoftheweb.salvo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -138,8 +139,8 @@ public class AppController {
         return map;
     }
 
-    @RequestMapping(value="/games/player/{gamePlayerId}/ships", method=RequestMethod.POST)
-    public ResponseEntity<String> addShips(@PathVariable long gamePlayerId, @RequestBody Ship ship, Authentication authentication) {
+    @RequestMapping(value="/games/player/{gamePlayerId}/ships", method=RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> addShips(@PathVariable ("gamePlayerId")  long gamePlayerId, @RequestBody List<ShipDto> shipDtos, Authentication authentication) {
         GamePlayer gamePlayer = gamePlayerRepository.findById(gamePlayerId).orElse(null);
         if(authentication.getName()==null){
             return new ResponseEntity<>("There is no current user logged in", HttpStatus.UNAUTHORIZED);
@@ -150,11 +151,15 @@ public class AppController {
         if(gamePlayer.getPlayer().getUserName()!=authentication.getName()){
             return new ResponseEntity<>("The current user is not the game player the ID references", HttpStatus.UNAUTHORIZED);
         }
-        if(gamePlayer.getShips()!=null){
+        if(gamePlayer.getShips() != null && gamePlayer.getShips().size() > 0 ){
             return new ResponseEntity<>("The user already has ships placed", HttpStatus.FORBIDDEN);
         }
+        for(ShipDto shipDto : shipDtos){
+        String shipType=shipDto.getType();
+        List<String> shipLocations=shipDto.getLocations();
+        Ship ship=new Ship(shipType, shipLocations);
         ship.setGamePlayer(gamePlayer);
-        shipRepository.save(ship);
+        shipRepository.save(ship);}
         return new ResponseEntity<>("Ships added", HttpStatus.CREATED);
     }
 
