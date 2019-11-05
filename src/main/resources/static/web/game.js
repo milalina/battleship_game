@@ -40,6 +40,9 @@ new Vue({
         counter: 0,
         verticalIntersection: false,
         horizontalIntersection: false,
+        salvoesInThisTurn: [],
+        turns: 0,
+        showConfirmSalvoesButton: false,
 
     },
     methods: {
@@ -105,7 +108,8 @@ new Vue({
             mystring = elementId;
             mystring = mystring.replace(/ps/g, '');
             str = mystring;
-            coordinateElements = str.split('');
+            coordinateElements = str.split(/(\d+)/);
+            console.log(coordinateElements)
             if (this.letterPointF == 0) {
                 this.letterPointF = coordinateElements[0];
                 this.numberPointF = coordinateElements[1];
@@ -171,7 +175,7 @@ new Vue({
             }
             //checking if there are intersections in placed ships and displayed options 
 
-            for (q in this.objectForDisplayingSelectedShipsNoManipulation){
+            for (q in this.objectForDisplayingSelectedShipsNoManipulation) {
                 this.shipLocationsAsOneArray.push(this.objectForDisplayingSelectedShipsNoManipulation[q].locations[0])
             }
             console.log(this.shipLocationsAsOneArray, this.selectedShipType)
@@ -191,33 +195,6 @@ new Vue({
                     this.horizontalIntersection = false;
                 }
             }
-           /*this.shipLocationsAsOneArray.push(this.horisontalAxis[0])
-            this.shipLocationsAsOneArray.push(this.verticalAxis[0]) 
-           
-           for (l in this.verticalAxis) {
-                if (this.shipLocationsAsOneArray.includes(this.verticalAxis[l])) {
-                    console.log(this.shipLocationsAsOneArray)
-                    this.verticalIntersection = true;
-                } else {
-                    this.verticalIntersection = false;
-                }
-            }
-            for (m in this.horisontalAxis) {
-                if (this.shipLocationsAsOneArray.includes(this.horisontalAxis[m])) {
-                    this.horizontalIntersection = true;
-                } else {
-                    this.horizontalIntersection = false;
-                }
-            }
-
-            for (i in this.objectForDisplayingSelectedShipsNoManipulation) {
-                var shipLocation = this.objectForDisplayingSelectedShipsNoManipulation[i].locations[0]
-                for (j in shipLocation) {
-                    this.shipLocationsAsOneArray.push(shipLocation[j])
-                }
-            }
-            console.log(this.shipLocationsAsOneArray, this.selectedShipType)*/
-
 
             this.displayShipPlacementOptions2()
         },
@@ -273,7 +250,7 @@ new Vue({
             var verticalAxisReplacementArray = this.verticalAxis.slice();
             if (verticalAxisReplacementArray.length != this.shipLength1 && verticalAxisReplacementArray.length != 0) {
                 var coordinateString = []
-                coordinateString = verticalAxisReplacementArray[0].split('');
+                coordinateString = verticalAxisReplacementArray[0].split(/(\d+)/);
                 coordinateString = this.tableCols[this.tableCols.indexOf(coordinateString[0]) - 1] + coordinateString[1]
                 verticalAxisReplacementArray.push(coordinateString)
             }
@@ -334,8 +311,8 @@ new Vue({
         },
 
         sendShips() {
-            var objectTypeLocation=[]
-            for(i in this.objectForDisplayingSelectedShipsNoManipulation){
+            var objectTypeLocation = []
+            for (i in this.objectForDisplayingSelectedShipsNoManipulation) {
                 objectTypeLocation.push({
                     type: this.objectForDisplayingSelectedShipsNoManipulation[i].type,
                     locations: this.objectForDisplayingSelectedShipsNoManipulation[i].locations[0]
@@ -348,13 +325,15 @@ new Vue({
                     dataType: "text",
                     contentType: "application/json"
                 })
-                .done(function (response, status, jqXHR) {
-                    alert("Ships added: " + response);
-                    this.fetchData()
+                .done((response, status, jqXHR) => {
+                    alert(response);
+                    this.fetchData();
+
                 })
                 .fail(function (jqXHR, status, httpError) {
                     alert("Failed to add ships: " + textStatus + " " + httpError);
                 })
+            console.log("shipsSent")
         },
 
         //after ships are placed
@@ -362,6 +341,7 @@ new Vue({
             if (this.game[0].ships.length == 0) {
                 this.shipsPlaced = false;
             } else {
+                this.shipsPlaced = true;
                 for (j in this.game[0].ships) {
 
                     for (i in this.game[0].ships[j].locations) {
@@ -381,12 +361,13 @@ new Vue({
                     }
                 })
             })
+            this.shipsPlaced = true;
             this.displayShips();
         },
 
         displayShips() {
-            this.shipsPlaced = false;
             this.displayMySalvoes();
+            console.log(this.shipLocations)
             for (i in this.shipLocations) {
                 document.getElementById(this.shipLocations[i]).style.backgroundColor = "thistle";
                 var img = document.createElement("img");
@@ -399,6 +380,53 @@ new Vue({
             }
         },
 
+        placeSalvoInThisCell(elementId) {
+            var mystring;
+            var coordinateElements
+            mystring = elementId;
+            mystring = mystring.replace(/s/g, '');
+            coordinateElements = mystring;
+            if (this.salvoesInThisTurn.length < 5) {
+                if(this.salvoesInThisTurn.includes(coordinateElements)){
+                   this.salvoesInThisTurn=this.salvoesInThisTurn.filter(oneCoordinate=>oneCoordinate != coordinateElements) 
+                    console.log(this.salvoesInThisTurn)
+                    document.getElementById(coordinateElements+ "s").innerHTML = "";
+                    document.getElementById(coordinateElements+ "s").style.backgroundColor = "#40E0D0"; 
+                }else{this.salvoesInThisTurn.push(coordinateElements)
+                    console.log(this.salvoesInThisTurn)}
+                this.displayFiredSalvoesInThisTurn()
+            } else {
+                alert("You've fired all salvoes")
+            }
+            if(this.salvoesInThisTurn.length==5){
+                this.showConfirmSalvoesButton=true;
+            }
+        },
+
+        displayFiredSalvoesInThisTurn(){
+            for(i in this.salvoesInThisTurn){
+            document.getElementById(this.salvoesInThisTurn[i]+ "s").innerHTML = '<i class="glyphicon glyphicon-screenshot" style="font-size:17px;color:purple;background-color:thistle;"></i>';
+            document.getElementById(this.salvoesInThisTurn[i] + "s").style.backgroundColor = "thistle";   
+        }
+        },
+
+        sendSalvoes(){
+            for(i in this.salvoesInThisTurn){
+                document.getElementById(this.salvoesInThisTurn[i]+ "s").innerHTML = "";
+                document.getElementById(this.salvoesInThisTurn[i] + "s").style.backgroundColor = "#40E0D0"; 
+            }
+            this.showConfirmSalvoesButton=false;
+            this.salvoesInThisTurn=[] 
+
+        },
+
+        clearSalvoes(){
+            for(i in this.salvoesInThisTurn){
+                document.getElementById(this.salvoesInThisTurn[i]+ "s").innerHTML = "";
+                document.getElementById(this.salvoesInThisTurn[i] + "s").style.backgroundColor = "#40E0D0"; 
+            }
+            this.salvoesInThisTurn=[]
+        }, 
         fillArrMySalvoes(mySalvoes, mySalvoesObject) {
             for (i in this.mySalvoesObject) {
                 this.mySalvoes.push.apply(this.mySalvoes, this.mySalvoesObject[i]);

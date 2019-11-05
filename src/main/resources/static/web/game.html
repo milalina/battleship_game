@@ -17,26 +17,6 @@
                 src="assets/battleship.gr-ConvertImage.png" style="height:40px" alt="">
             <span class="player"> {{gamePlayerOther}}</span>
         </div>
-        <div v-if="!shipsPlaced" class="table shipG">
-            <table id="empty-ship-grid">
-                <tr>
-                    <th class="cell letter" v-for="tableRow in tableRows" scope="row">{{tableRow}} </th>
-                </tr>
-                <tr v-for="(tableCol, index) in tableCols">
-                    <td class="cell letter">{{tableCol}} </td>
-                    <td class="empty_cell" v-bind:id="tableCol+'1ps'" @click="placeShipInThisCell(tableCol+'1ps')"> </td>
-                    <td class="empty_cell" v-bind:id="tableCol+'2ps'" @click="placeShipInThisCell(tableCol+'2ps')"></td>
-                    <td class="empty_cell" v-bind:id="tableCol+'3ps'" @click="placeShipInThisCell(tableCol+'3ps')"></td>
-                    <td class="empty_cell" v-bind:id="tableCol+'4ps'" @click="placeShipInThisCell(tableCol+'4ps')"></td>
-                    <td class="empty_cell" v-bind:id="tableCol+'5ps'" @click="placeShipInThisCell(tableCol+'5ps')"> </td>
-                    <td class="empty_cell" v-bind:id="tableCol+'6ps'" @click="placeShipInThisCell(tableCol+'6ps')"> </td>
-                    <td class="empty_cell" v-bind:id="tableCol+'7ps'" @click="placeShipInThisCell(tableCol+'7ps')"> </td>
-                    <td class="empty_cell" v-bind:id="tableCol+'8ps'" @click="placeShipInThisCell(tableCol+'8ps')"> </td>
-                    <td class="empty_cell" v-bind:id="tableCol+'9ps'" @click="placeShipInThisCell(tableCol+'9ps')"> </td>
-                    <td class="empty_cell" v-bind:id="tableCol+'10ps'" @click="placeShipInThisCell(tableCol+'10ps')"> </td>
-                </tr>
-            </table>
-        </div>
         <div v-if="shipsPlaced" class="table shipG">
             <table id="ship_grid">
                 <tr>
@@ -54,6 +34,48 @@
                     <td class="empty_cell" v-bind:id="tableCol+'8'"></td>
                     <td class="empty_cell" v-bind:id="tableCol+'9'"></td>
                     <td class="empty_cell" v-bind:id="tableCol+'10'"></td>
+                </tr>
+            </table>
+        </div>
+        <div v-if="shipsPlaced" class="table salvoG">
+            <table id="salvo_grid">
+                <tr>
+                    <th class="cell letter" v-for="tableRow in tableRows" scope="row">{{tableRow}} </th>
+                </tr>
+                <tr v-for="(tableCol, index) in tableCols">
+                    <td class="cell letter">{{tableCol}} </td>
+                    <td class="empty_cell" v-bind:id="tableCol+'1s'" @click="placeSalvoInThisCell(tableCol+'1s')"></td>
+                    <td class="empty_cell" v-bind:id="tableCol+'2s'" @click="placeSalvoInThisCell(tableCol+'2s')"></td>
+                    <td class="empty_cell" v-bind:id="tableCol+'3s'" @click="placeSalvoInThisCell(tableCol+'3s')"></td>
+                    <td class="empty_cell" v-bind:id="tableCol+'4s'" @click="placeSalvoInThisCell(tableCol+'4s')"></td>
+                    <td class="empty_cell" v-bind:id="tableCol+'5s'" @click="placeSalvoInThisCell(tableCol+'5s')"></td>
+                    <td class="empty_cell" v-bind:id="tableCol+'6s'" @click="placeSalvoInThisCell(tableCol+'6s')"></td>
+                    <td class="empty_cell" v-bind:id="tableCol+'7s'" @click="placeSalvoInThisCell(tableCol+'7s')"></td>
+                    <td class="empty_cell" v-bind:id="tableCol+'8s'" @click="placeSalvoInThisCell(tableCol+'8s')"></td>
+                    <td class="empty_cell" v-bind:id="tableCol+'9s'" @click="placeSalvoInThisCell(tableCol+'9s')"></td>
+                    <td class="empty_cell" v-bind:id="tableCol+'10s'" @click="placeSalvoInThisCell(tableCol+'10s')"></td>
+                </tr>
+            </table>
+            <button v-if="showConfirmSalvoesButton" @click="sendSalvoes"class="button"> Confirm salvos</button>
+            <button v-if="showConfirmSalvoesButton" @click="clearSalvoes"class="button"> Clear salvos</button>
+        </div>
+        <div v-if="!shipsPlaced" class="table shipG">
+            <table id="empty-ship-grid">
+                <tr>
+                    <th class="cell letter" v-for="tableRow in tableRows" scope="row">{{tableRow}} </th>
+                </tr>
+                <tr v-for="(tableCol, index) in tableCols">
+                    <td class="cell letter">{{tableCol}} </td>
+                    <td class="empty_cell" v-bind:id="tableCol+'1ps'" @click="placeShipInThisCell(tableCol+'1ps')"> </td>
+                    <td class="empty_cell" v-bind:id="tableCol+'2ps'" @click="placeShipInThisCell(tableCol+'2ps')"></td>
+                    <td class="empty_cell" v-bind:id="tableCol+'3ps'" @click="placeShipInThisCell(tableCol+'3ps')"></td>
+                    <td class="empty_cell" v-bind:id="tableCol+'4ps'" @click="placeShipInThisCell(tableCol+'4ps')"></td>
+                    <td class="empty_cell" v-bind:id="tableCol+'5ps'" @click="placeShipInThisCell(tableCol+'5ps')"> </td>
+                    <td class="empty_cell" v-bind:id="tableCol+'6ps'" @click="placeShipInThisCell(tableCol+'6ps')"> </td>
+                    <td class="empty_cell" v-bind:id="tableCol+'7ps'" @click="placeShipInThisCell(tableCol+'7ps')"> </td>
+                    <td class="empty_cell" v-bind:id="tableCol+'8ps'" @click="placeShipInThisCell(tableCol+'8ps')"> </td>
+                    <td class="empty_cell" v-bind:id="tableCol+'9ps'" @click="placeShipInThisCell(tableCol+'9ps')"> </td>
+                    <td class="empty_cell" v-bind:id="tableCol+'10ps'" @click="placeShipInThisCell(tableCol+'10ps')"> </td>
                 </tr>
             </table>
         </div>
@@ -116,32 +138,11 @@
                 </tr>
                 <tr>
                     <td > <button v-if="showClearButton" class="button">Clear ships</button> 
-                        <button @click="sendShips" v-if="showConfirmButton" class="button">Confirm ships</button> 
+                        <button @click="sendShips" 
+                        v-if="showConfirmButton" class="button">Confirm ships</button> 
                     </td>
                     <td > </td>
                     <td > </td>
-                </tr>
-            </table>
-
-        </div>
-
-        <div v-if="shipsPlaced" class="table salvoG">
-            <table id="salvo_grid">
-                <tr>
-                    <th class="cell letter" v-for="tableRow in tableRows" scope="row">{{tableRow}} </th>
-                </tr>
-                <tr v-for="(tableCol, index) in tableCols">
-                    <td class="cell letter">{{tableCol}} </td>
-                    <td class="empty_cell" v-bind:id="tableCol+'1s'"></td>
-                    <td class="empty_cell" v-bind:id="tableCol+'2s'"></td>
-                    <td class="empty_cell" v-bind:id="tableCol+'3s'"></td>
-                    <td class="empty_cell" v-bind:id="tableCol+'4s'"></td>
-                    <td class="empty_cell" v-bind:id="tableCol+'5s'"></td>
-                    <td class="empty_cell" v-bind:id="tableCol+'6s'"></td>
-                    <td class="empty_cell" v-bind:id="tableCol+'7s'"></td>
-                    <td class="empty_cell" v-bind:id="tableCol+'8s'"></td>
-                    <td class="empty_cell" v-bind:id="tableCol+'9s'"></td>
-                    <td class="empty_cell" v-bind:id="tableCol+'10s'"></td>
                 </tr>
             </table>
         </div>
