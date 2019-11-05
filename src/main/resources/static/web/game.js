@@ -226,6 +226,8 @@ new Vue({
             if (this.horizontalIntersection == false) {
                 for (m in this.horisontalAxis) {
                     if (this.lastCoordinate != 0) {
+                        /*document.getElementById(this.horisontalAxis[m] + "ps").innerHTML=""
+                        document.getElementById(this.horisontalAxis[m] + "ps").style.backgroundColor = "#40E0D0"*/
                         var img = document.createElement("img");
                         img.id = this.selectedShipType + m + 'hA'
                         img.src = "assets/" + this.selectedShipType + ".pur.png";
@@ -234,6 +236,7 @@ new Vue({
                         var shipToBeRemoved = document.getElementById(img.id);
                         shipToBeRemoved.parentNode.removeChild(shipToBeRemoved)
                         src.style.backgroundColor = "#40E0D0"
+
                     } else {
                         document.getElementById(this.horisontalAxis[m] + "ps").style.backgroundColor = "thistle";
                         var img = document.createElement("img");
@@ -361,16 +364,21 @@ new Vue({
                     }
                 })
             })
-            this.shipsPlaced = true;
-            this.displayShips();
+            this.clearDisplayedShips()
+        },
+        
+        clearDisplayedShips(){
+            for (i in this.shipLocations) {
+                document.getElementById(this.shipLocations[i]).innerHTML = "";
+                document.getElementById(this.shipLocations).style.backgroundColor = "#40E0D0"
+
+            }
+            this.displayShips()
         },
 
         displayShips() {
             this.displayMySalvoes();
             console.log(this.shipLocations)
-            for (i in this.shipLocations) {
-                document.getElementById(this.shipLocations[i]).innerHTML = " ";
-            }
             for (i in this.shipLocations) {
                 document.getElementById(this.shipLocations[i]).style.backgroundColor = "thistle";
                 var img = document.createElement("img");
