@@ -369,6 +369,9 @@ new Vue({
             this.displayMySalvoes();
             console.log(this.shipLocations)
             for (i in this.shipLocations) {
+                document.getElementById(this.shipLocations[i]).innerHTML = " ";
+            }
+            for (i in this.shipLocations) {
                 document.getElementById(this.shipLocations[i]).style.backgroundColor = "thistle";
                 var img = document.createElement("img");
                 img.src = "assets/battleship.pur.png";
@@ -415,6 +418,21 @@ new Vue({
                 document.getElementById(this.salvoesInThisTurn[i]+ "s").innerHTML = "";
                 document.getElementById(this.salvoesInThisTurn[i] + "s").style.backgroundColor = "#40E0D0"; 
             }
+            var turn=1;
+            $.post({
+                url: "/api/games/player/" + this.gamePlayerId + "/salvoes",
+                data: JSON.stringify({locations: this.salvoesInThisTurn}),
+                dataType: "text",
+                contentType: "application/json"
+            })
+            .done((response, status, jqXHR) => {
+                alert(response);
+                this.fetchData();
+
+            })
+            .fail(function (jqXHR, status, httpError) {
+                alert("Failed to add ships: " + textStatus + " " + httpError);
+            })
             this.showConfirmSalvoesButton=false;
             this.salvoesInThisTurn=[] 
 
@@ -431,6 +449,7 @@ new Vue({
             for (i in this.mySalvoesObject) {
                 this.mySalvoes.push.apply(this.mySalvoes, this.mySalvoesObject[i]);
             }
+            console.log(this.mySalvoes)
         },
 
         fillArrEnemySalvoes(enemySalvoes, enemySalvoesObject) {
@@ -440,8 +459,8 @@ new Vue({
         },
         displayMySalvoes() {
             for (i in this.mySalvoes) {
-                document.getElementById(this.shipLocations[i] + "s").innerHTML = '<i class="glyphicon glyphicon-screenshot" style="font-size:17px;color:purple;background-color:thistle;"></i>';
-                document.getElementById(this.shipLocations[i] + "s").style.backgroundColor = "thistle";
+                document.getElementById(this.mySalvoes[i] + "s").innerHTML = '<i class="glyphicon glyphicon-screenshot" style="font-size:17px;color:purple;background-color:thistle;"></i>';
+                document.getElementById(this.mySalvoes[i] + "s").style.backgroundColor = "thistle";
             }
         }
     },

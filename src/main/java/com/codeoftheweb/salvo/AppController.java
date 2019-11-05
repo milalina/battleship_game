@@ -115,7 +115,6 @@ public class AppController {
             method = RequestMethod.POST
     )
     public ResponseEntity<Map<String, Object>> joinGame(@PathVariable Long gameId, Authentication authentication) {
-        System.out.println(gameId);
         Player currentPlayer = playerRepository.findByUserName(authentication.getName());
         if (currentPlayer==null) {
             return new ResponseEntity<>(makeMap("error", "Missing data"), HttpStatus.UNAUTHORIZED);
@@ -163,7 +162,56 @@ public class AppController {
         return new ResponseEntity<>("Ships added", HttpStatus.CREATED);
     }
 
-   /* @RequestMapping("/game_view/{gamePlayerId}")
+    @RequestMapping(value="/games/player/{gamePlayerId}/salvoes", method=RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> addSalvoes(@PathVariable ("gamePlayerId")  long gamePlayerId, @RequestBody SalvoDto salvoDto, Authentication authentication) {
+        GamePlayer gamePlayer = gamePlayerRepository.findById(gamePlayerId).orElse(null);
+        System.out.println(gamePlayer);
+        if(authentication.getName()==null){
+            return new ResponseEntity<>("There is no current user logged in", HttpStatus.UNAUTHORIZED);
+        }
+        if (gamePlayer==null) {
+            return new ResponseEntity<>( "There is no game player with the given ID", HttpStatus.UNAUTHORIZED);
+        }
+        if(gamePlayer.getPlayer().getUserName()!=authentication.getName()){
+            return new ResponseEntity<>("The current user is not the game player the ID references", HttpStatus.UNAUTHORIZED);
+        }
+       /* if(gamePlayer.getSalvoes() != null ){
+            System.out.println("forbidden");
+            return new ResponseEntity<>("The user already has salvoes fired", HttpStatus.FORBIDDEN);
+        }*/
+
+        System.out.println(salvoDto);
+        List <String>  salvoLocations = salvoDto.getLocations();
+        Salvo salvo=new Salvo(salvoLocations);
+        salvo.setGamePlayer(gamePlayer);
+        salvoRepository.save(salvo);
+        return new ResponseEntity<>("Salvoes added", HttpStatus.CREATED);
+    }
+
+   /*
+    @RequestMapping(value="/games/player/{gamePlayerId}/salvoes", method=RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> addSalvoes(@PathVariable ("gamePlayerId")  long gamePlayerId, @RequestBody SalvoDto salvoDto, Authentication authentication) {
+        GamePlayer gamePlayer = gamePlayerRepository.findById(gamePlayerId).orElse(null);
+        if(authentication.getName()==null){
+            return new ResponseEntity<>("There is no current user logged in", HttpStatus.UNAUTHORIZED);
+        }
+        if (gamePlayer==null) {
+            return new ResponseEntity<>( "There is no game player with the given ID", HttpStatus.UNAUTHORIZED);
+        }
+        if(gamePlayer.getPlayer().getUserName()!=authentication.getName()){
+            return new ResponseEntity<>("The current user is not the game player the ID references", HttpStatus.UNAUTHORIZED);
+        }
+        if(gamePlayer.getShips() != null && gamePlayer.getShips().size() > 0 ){
+            return new ResponseEntity<>("The user already has salvoes fired", HttpStatus.FORBIDDEN);
+        }
+            List salvoLocations = salvoDto.getLocations();
+            Salvo salvo=new Salvo(salvoLocations);
+            salvo.setGamePlayer(gamePlayer);
+            salvoRepository.save(salvo);
+        return new ResponseEntity<>("Salvoes added", HttpStatus.CREATED);
+    }
+
+    @RequestMapping("/game_view/{gamePlayerId}")
     public List<Map<String, Object>> findGame (@PathVariable ("gamePlayerId") long gamePlayerId) {
         GamePlayer currentGamePlayer = gamePlayerRepository.findGamePlayerById(gamePlayerId);
         Game currentGame = currentGamePlayer.getGame();

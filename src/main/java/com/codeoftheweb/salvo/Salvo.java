@@ -28,9 +28,13 @@ public class Salvo {
         this.salvoLocations = new ArrayList<>();
     }
 
-    public Salvo(/*GamePlayer gamePlayer,*/ Date turn, List<String> salvoLocations) {
+    public Salvo(/*GamePlayer gamePlayer*/ Date turn, List<String> salvoLocations) {
         //this.gamePlayer = gamePlayer;
         this.turn = turn;
+        this.salvoLocations = salvoLocations;
+    }
+
+    public Salvo(List<String> salvoLocations) {
         this.salvoLocations = salvoLocations;
     }
 
