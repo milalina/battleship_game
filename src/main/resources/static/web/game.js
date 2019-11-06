@@ -13,7 +13,7 @@ new Vue({
         enemySalvoesObject: 0,
         enemySalvoes: [],
         damagedShipLocations: [],
-        shipsPlaced: true,
+        shipsPlaced: false,
         selectedShipType: 0,
         //manipulated:
         shipLength: 0,
@@ -331,7 +331,7 @@ new Vue({
                 .done((response, status, jqXHR) => {
                     alert(response);
                     this.fetchData();
-
+                    this.shipsPlaced = true;
                 })
                 .fail(function (jqXHR, status, httpError) {
                     alert("Failed to add ships: " + textStatus + " " + httpError);
@@ -346,11 +346,11 @@ new Vue({
             } else {
                 this.shipsPlaced = true;
                 for (j in this.game[0].ships) {
-
                     for (i in this.game[0].ships[j].locations) {
                         this.shipLocations.push(this.game[0].ships[j].locations[i])
                     }
                 }
+               // this.clearDisplayedShips()
                 this.fillArrDamagedShipLocations();
             }
 
@@ -364,22 +364,26 @@ new Vue({
                     }
                 })
             })
-            this.clearDisplayedShips()
+            console.log("displayShips is called")
+            setTimeout( () => this.clearDisplayedShips(), 50)
+            setTimeout( () => this.displayShips(), 100)
+           
         },
         
         clearDisplayedShips(){
+            console.log(this.shipLocations)
             for (i in this.shipLocations) {
+                console.log(document.getElementById(this.shipLocations[i]))
                 document.getElementById(this.shipLocations[i]).innerHTML = "";
-                document.getElementById(this.shipLocations).style.backgroundColor = "#40E0D0"
-
-            }
-            this.displayShips()
-        },
+                document.getElementById(this.shipLocations[i]).style.backgroundColor = "#40E0D0"
+            }  
+        }, 
 
         displayShips() {
             this.displayMySalvoes();
             console.log(this.shipLocations)
             for (i in this.shipLocations) {
+                console.log(document.getElementById(this.shipLocations[i].toString()))
                 document.getElementById(this.shipLocations[i]).style.backgroundColor = "thistle";
                 var img = document.createElement("img");
                 img.src = "assets/battleship.pur.png";
@@ -436,7 +440,6 @@ new Vue({
             .done((response, status, jqXHR) => {
                 alert(response);
                 this.fetchData();
-
             })
             .fail(function (jqXHR, status, httpError) {
                 alert("Failed to add ships: " + textStatus + " " + httpError);
