@@ -18,6 +18,18 @@
             <span class="player"> {{gamePlayerOther}}</span>
         </div>
         <div v-if="shipsPlaced" class="table shipG">
+            <table>
+                <thead>
+                <tr>
+                    <th class="cell letter" scope="row"></th>
+                    <th class="cell letter" scope="row" v-for="(turn, index) in hitsAndSinksObject">{{index}} </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr id="hitsAndSinks">
+                </tr>
+            </tbody>
+            </table>
             <table id="ship_grid">
                 <tr>
                     <th class="cell letter" v-for="tableRow in tableRows" scope="row">{{tableRow}} </th>

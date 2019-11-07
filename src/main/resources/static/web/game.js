@@ -44,6 +44,114 @@ new Vue({
         salvoesInThisTurn: [],
         turns: 0,
         showConfirmSalvoesButton: false,
+        images:["assets/carrier.pur.png","assets/battleship.pur.png", "assets/submarine.pur.png", "assets/destroyer.pur.png", "assets/patrol.pur.png" ],
+        hitsAndSinksObject: {
+            "1": [{
+                "type":"carrier",
+                "status":[{
+                    "hits": "1",
+                    "sinks": null
+                }],
+                "type":"battleship",
+                "status": [{
+                    "hits": "1",
+                    "sinks": null
+                }],
+                "type": "submarine",
+                "status": [{
+                    "hits": "1",
+                    "sinks": null
+                }],
+                "type":"destroyer",
+                "status": [{
+                    "hits": "1",
+                    "sinks": null
+                }],
+                "type":"patrol",
+                "status": [{
+                    "hits": "1",
+                    "sinks": null
+                }]
+            }],
+            "2": [{
+                "type":"carrier",
+                "status": [{
+                    "hits": "1",
+                    "sinks": null
+                }],
+                "type": "battleship",
+                "status": [{
+                    "hits": "1",
+                    "sinks": null
+                }],
+                "type": "submarine",
+                "status": [{
+                    "hits": "1",
+                    "sinks": null
+                }],
+                "type":"destroyer",
+                "status": [{
+                    "hits": "1",
+                    "sinks": null
+                }],
+                "type": "patrol",
+                "status": [{
+                    "hits": "1",
+                    "sinks": "1"
+                }]
+            }],
+            "3": [{
+                "type":"carrier",
+                "status": [{
+                    "hits": "1",
+                    "sinks": null
+                }],
+                "type": "battleship",
+                "status": [{
+                    "hits": "1",
+                    "sinks": null
+                }],
+                "type": "submarine",
+                "status": [{
+                    "hits": "1",
+                    "sinks": "1"
+                }],
+                "type":"destroyer",
+                "status": [{
+                    "hits": "1",
+                    "sinks": "1"
+                }],
+                "type": "patrol",
+                "status": null
+            }],
+            "3": [{
+                "type":"carrier",
+                "status": [{
+                    "hits": "1",
+                    "sinks": null
+                }],
+                "type": "battleship",
+                "status": [{
+                    "hits": "1",
+                    "sinks": null
+                }],
+                "type": "submarine",
+                "status": [{
+                    "hits":  null,
+                    "sinks": null
+                }],
+                "type": "destroyer",
+                "status": [{
+                    "hits":  null,
+                    "sinks": null
+                }],
+                "type": "patrol",
+                "status": [{
+                    "hits":  null,
+                    "sinks": null
+                }]
+            }]
+        }
 
     },
     methods: {
@@ -306,7 +414,7 @@ new Vue({
                 for (j in shipLocation) {
                     document.getElementById(shipLocation[j] + "ps").style.backgroundColor = "thistle";
                     var img = document.createElement("img");
-                    img.id= (shipLocation[j] + "psShipPic")
+                    img.id = (shipLocation[j] + "psShipPic")
                     img.src = "assets/" + this.objectForDisplayingSelectedShips[i].type + ".pur.png";
                     var src = document.getElementById(shipLocation[j] + "ps");
                     src.appendChild(img);
@@ -322,8 +430,8 @@ new Vue({
                     type: this.objectForDisplayingSelectedShipsNoManipulation[i].type,
                     locations: this.objectForDisplayingSelectedShipsNoManipulation[i].locations[0]
                 })
-               //document.getElementById(this.objectForDisplayingSelectedShipsNoManipulation[i]).innerHTML = "";
-               //document.getElementById(this.objectForDisplayingSelectedShipsNoManipulation[i]).style.backgroundColor = "#40E0D0"
+                //document.getElementById(this.objectForDisplayingSelectedShipsNoManipulation[i]).innerHTML = "";
+                //document.getElementById(this.objectForDisplayingSelectedShipsNoManipulation[i]).style.backgroundColor = "#40E0D0"
             }
             console.log(objectTypeLocation)
             $.post({
@@ -334,7 +442,7 @@ new Vue({
                 })
                 .done((response, status, jqXHR) => {
                     alert(response);
-                   // this.fetchData();
+                    // this.fetchData();
                     this.removeShipOptionsTable = true;
 
                 })
@@ -348,14 +456,16 @@ new Vue({
         makeGPShipsArray() {
             if (this.game[0].ships.length == 0) {
                 this.shipsPlaced = false;
-            } else {
+            }
+            if (this.game[0].ships.length != 0 && this.mySalvoes.length > 0) {
                 this.shipsPlaced = true;
+                this.removeShipOptionsTable = true;
                 for (j in this.game[0].ships) {
                     for (i in this.game[0].ships[j].locations) {
                         this.shipLocations.push(this.game[0].ships[j].locations[i])
                     }
                 }
-               // this.clearDisplayedShips()
+                // this.clearDisplayedShips()
                 this.fillArrDamagedShipLocations();
             }
 
@@ -371,66 +481,60 @@ new Vue({
             })
             console.log("displayShips is called")
             //setTimeout( () => this.clearDisplayedShips(), 50)
-           // setTimeout( () => this.displayShips(), 100)
-           this.displayShips()
+            // setTimeout( () => this.displayShips(), 100)
+            this.displayShips()
         },
-        
-       /*  clearDisplayedShips(){
-            console.log(this.shipLocations)
-            for (i in this.shipLocations) {
-                document.getElementById(this.shipLocations[i]).innerHTML = "";
-                document.getElementById(this.shipLocations[i]).style.backgroundColor = "#40E0D0"
-            }  
-        },  */
+
+        /*  clearDisplayedShips(){
+             console.log(this.shipLocations)
+             for (i in this.shipLocations) {
+                 document.getElementById(this.shipLocations[i]).innerHTML = "";
+                 document.getElementById(this.shipLocations[i]).style.backgroundColor = "#40E0D0"
+             }  
+         },  */
 
         displayShips() {
             this.displayMySalvoes();
-            console.log(this.shipLocations)
+
+            //function for displaying different icons of ships
+            /* console.log(this.shipLocations)
+            var shipDisplayArrayTypeLocation = []
+            for (l in this.game[0].ships) {
+                shipDisplayArrayTypeLocation.push(this.game[0].ships[l].type, this.game[0].ships[l].locations)
+                console.log(shipDisplayArrayTypeLocation)
+            }
+            var shipLocationArrayFromTypeLocationsArray = []
+            var shipTypeFromTypeLocationsArray
+            for (m in shipDisplayArrayTypeLocation) {
+
+                if (m % 2 == 1) {
+                    shipLocationArrayFromTypeLocationsArray = shipDisplayArrayTypeLocation[m]
+                }
+                if (m % 2 == 0) {
+                    shipTypeFromTypeLocationsArray = shipDisplayArrayTypeLocation[m]}
+                    for (g in shipLocationArrayFromTypeLocationsArray) {
+                        document.getElementById(shipLocationArrayFromTypeLocationsArray[g]).style.backgroundColor = "thistle";
+                        var img = document.createElement("img");
+                        img.id = shipTypeFromTypeLocationsArray + shipLocationArrayFromTypeLocationsArray[g]
+                        img.src = "assets/" + shipTypeFromTypeLocationsArray + ".pur.png";
+                        var src = document.getElementById(shipLocationArrayFromTypeLocationsArray[g]);
+                        src.appendChild(img);
+                        console.log(shipLocationArrayFromTypeLocationsArray[g], shipTypeFromTypeLocationsArray)
+                    }
+                
+            } */
             for (i in this.shipLocations) {
-               document.getElementById(this.shipLocations[i]).style.backgroundColor = "thistle";
+                document.getElementById(this.shipLocations[i]).style.backgroundColor = "thistle";
                 var img = document.createElement("img");
                 img.src = "assets/battleship.pur.png";
                 var src = document.getElementById(this.shipLocations[i]);
                 src.appendChild(img);
-                img.id= (this.shipLocations[i] + "psShipPic")
+                img.id = (this.shipLocations[i] + "psShipPic")
                 var shipToBeRemoved = document.getElementById(img.id);
                 shipToBeRemoved.parentNode.removeChild(shipToBeRemoved)
-               
+
             }
-             /* var shipDisplayArrayTypeLocation=[]
-            for (l in this.game[0].ships) {
-                    shipDisplayArrayTypeLocation.push(this.game[0].ships[l].type, this.game[0].ships[l].locations)
-                console.log(shipDisplayArrayTypeLocation)
-            }
-            var shipLocationArrayFromTypeLocationsArray =[]
-            var shipTypeFromTypeLocationsArray
-            for (m in shipDisplayArrayTypeLocation){
-                
-                if (m %2 == 1)
-                {shipLocationArrayFromTypeLocationsArray=shipDisplayArrayTypeLocation[m]}
-                if(m %2 == 0){
-                    shipTypeFromTypeLocationsArray=shipDisplayArrayTypeLocation[m]
-                    for (g in shipLocationArrayFromTypeLocationsArray){
-                        document.getElementById(shipLocationArrayFromTypeLocationsArray[g]).style.backgroundColor = "thistle";
-                        var img = document.createElement("img");
-                        img.id = shipTypeFromTypeLocationsArray+shipLocationArrayFromTypeLocationsArray[g]
-                        img.src = "assets/"+ shipTypeFromTypeLocationsArray+".pur.png";
-                        var src = document.getElementById(shipLocationArrayFromTypeLocationsArray[g]);
-                        src.appendChild(img);
-                    }
-                }
-                console.log(shipTypeFromTypeLocationsArray, shipLocationArrayFromTypeLocationsArray, )
-               console.log(shipDisplayArrayTypeLocation[0])
-                console.log(shipDisplayArrayTypeLocation[1])
-                console.log(shipDisplayArrayTypeLocation[2])
-                console.log(shipDisplayArrayTypeLocation[3])
-                console.log(shipDisplayArrayTypeLocation[4])
-                console.log(shipDisplayArrayTypeLocation[5])
-                console.log(shipDisplayArrayTypeLocation[6])
-                console.log(shipDisplayArrayTypeLocation[7])
-                console.log(shipDisplayArrayTypeLocation[8])
-                console.log(shipDisplayArrayTypeLocation[9]) 
-            }*/
+
             for (j in this.damagedShipLocations) {
                 document.getElementById(this.damagedShipLocations[j]).innerHTML = '<i class="glyphicon glyphicon-remove" style="font-size:16px;color:purple;"></i>';
             }
@@ -444,61 +548,65 @@ new Vue({
             mystring = mystring.replace(/s/g, '');
             coordinateElements = mystring;
             if (this.salvoesInThisTurn.length < 5) {
-                if(this.salvoesInThisTurn.includes(coordinateElements)){
-                   this.salvoesInThisTurn=this.salvoesInThisTurn.filter(oneCoordinate=>oneCoordinate != coordinateElements) 
+                if (this.salvoesInThisTurn.includes(coordinateElements)) {
+                    this.salvoesInThisTurn = this.salvoesInThisTurn.filter(oneCoordinate => oneCoordinate != coordinateElements)
                     console.log(this.salvoesInThisTurn)
-                    document.getElementById(coordinateElements+ "s").innerHTML = "";
-                    document.getElementById(coordinateElements+ "s").style.backgroundColor = "#40E0D0"; 
-                }else{this.salvoesInThisTurn.push(coordinateElements)
-                    console.log(this.salvoesInThisTurn)}
+                    document.getElementById(coordinateElements + "s").innerHTML = "";
+                    document.getElementById(coordinateElements + "s").style.backgroundColor = "#40E0D0";
+                } else {
+                    this.salvoesInThisTurn.push(coordinateElements)
+                    console.log(this.salvoesInThisTurn)
+                }
                 this.displayFiredSalvoesInThisTurn()
             } else {
                 alert("You've fired all salvoes")
             }
-            if(this.salvoesInThisTurn.length==5){
-                this.showConfirmSalvoesButton=true;
+            if (this.salvoesInThisTurn.length == 5) {
+                this.showConfirmSalvoesButton = true;
             }
         },
 
-        displayFiredSalvoesInThisTurn(){
-            for(i in this.salvoesInThisTurn){
-            document.getElementById(this.salvoesInThisTurn[i]+ "s").innerHTML = '<i class="glyphicon glyphicon-screenshot" style="font-size:17px;color:purple;background-color:thistle;"></i>';
-            document.getElementById(this.salvoesInThisTurn[i] + "s").style.backgroundColor = "thistle";   
-        }
+        displayFiredSalvoesInThisTurn() {
+            for (i in this.salvoesInThisTurn) {
+                document.getElementById(this.salvoesInThisTurn[i] + "s").innerHTML = '<i class="glyphicon glyphicon-screenshot" style="font-size:17px;color:purple;background-color:thistle;"></i>';
+                document.getElementById(this.salvoesInThisTurn[i] + "s").style.backgroundColor = "thistle";
+            }
         },
 
-        sendSalvoes(){
-            for(i in this.salvoesInThisTurn){
-                document.getElementById(this.salvoesInThisTurn[i]+ "s").innerHTML = "";
-                document.getElementById(this.salvoesInThisTurn[i] + "s").style.backgroundColor = "#40E0D0"; 
+        sendSalvoes() {
+            for (i in this.salvoesInThisTurn) {
+                document.getElementById(this.salvoesInThisTurn[i] + "s").innerHTML = "";
+                document.getElementById(this.salvoesInThisTurn[i] + "s").style.backgroundColor = "#40E0D0";
             }
-            var turn=1;
+            var turn = 1;
             $.post({
-                url: "/api/games/player/" + this.gamePlayerId + "/salvoes",
-                data: JSON.stringify({locations: this.salvoesInThisTurn}),
-                dataType: "text",
-                contentType: "application/json"
-            })
-            .done((response, status, jqXHR) => {
-                alert(response);
-                this.shipsPlaced=true;
-                this.fetchData();
-            })
-            .fail(function (jqXHR, status, httpError) {
-                alert("Failed to add ships: " + textStatus + " " + httpError);
-            })
-            this.showConfirmSalvoesButton=false;
-            this.salvoesInThisTurn=[] 
+                    url: "/api/games/player/" + this.gamePlayerId + "/salvoes",
+                    data: JSON.stringify({
+                        locations: this.salvoesInThisTurn
+                    }),
+                    dataType: "text",
+                    contentType: "application/json"
+                })
+                .done((response, status, jqXHR) => {
+                    alert(response);
+                    this.shipsPlaced = true;
+                    this.fetchData();
+                })
+                .fail(function (jqXHR, status, httpError) {
+                    alert("Failed to add ships: " + textStatus + " " + httpError);
+                })
+            this.showConfirmSalvoesButton = false;
+            this.salvoesInThisTurn = []
 
         },
 
-        clearSalvoes(){
-            for(i in this.salvoesInThisTurn){
-                document.getElementById(this.salvoesInThisTurn[i]+ "s").innerHTML = "";
-                document.getElementById(this.salvoesInThisTurn[i] + "s").style.backgroundColor = "#40E0D0"; 
+        clearSalvoes() {
+            for (i in this.salvoesInThisTurn) {
+                document.getElementById(this.salvoesInThisTurn[i] + "s").innerHTML = "";
+                document.getElementById(this.salvoesInThisTurn[i] + "s").style.backgroundColor = "#40E0D0";
             }
-            this.salvoesInThisTurn=[]
-        }, 
+            this.salvoesInThisTurn = []
+        },
         fillArrMySalvoes(mySalvoes, mySalvoesObject) {
             for (i in this.mySalvoesObject) {
                 this.mySalvoes.push.apply(this.mySalvoes, this.mySalvoesObject[i]);
