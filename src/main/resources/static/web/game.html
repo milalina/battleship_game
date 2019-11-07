@@ -37,7 +37,27 @@
                 </tr>
             </table>
         </div>
-        <div v-if="shipsPlaced" class="table salvoG">
+        <div v-if="!shipsPlaced" class="table shipG">
+            <table id="empty-ship-grid">
+                <tr>
+                    <th class="cell letter" v-for="tableRow in tableRows" scope="row">{{tableRow}} </th>
+                </tr>
+                <tr v-for="(tableCol, index) in tableCols">
+                    <td class="cell letter">{{tableCol}} </td>
+                    <td class="empty_cell" v-bind:id="tableCol+'1ps'" @click="placeShipInThisCell(tableCol+'1ps')"> </td>
+                    <td class="empty_cell" v-bind:id="tableCol+'2ps'" @click="placeShipInThisCell(tableCol+'2ps')"></td>
+                    <td class="empty_cell" v-bind:id="tableCol+'3ps'" @click="placeShipInThisCell(tableCol+'3ps')"></td>
+                    <td class="empty_cell" v-bind:id="tableCol+'4ps'" @click="placeShipInThisCell(tableCol+'4ps')"></td>
+                    <td class="empty_cell" v-bind:id="tableCol+'5ps'" @click="placeShipInThisCell(tableCol+'5ps')"> </td>
+                    <td class="empty_cell" v-bind:id="tableCol+'6ps'" @click="placeShipInThisCell(tableCol+'6ps')"> </td>
+                    <td class="empty_cell" v-bind:id="tableCol+'7ps'" @click="placeShipInThisCell(tableCol+'7ps')"> </td>
+                    <td class="empty_cell" v-bind:id="tableCol+'8ps'" @click="placeShipInThisCell(tableCol+'8ps')"> </td>
+                    <td class="empty_cell" v-bind:id="tableCol+'9ps'" @click="placeShipInThisCell(tableCol+'9ps')"> </td>
+                    <td class="empty_cell" v-bind:id="tableCol+'10ps'" @click="placeShipInThisCell(tableCol+'10ps')"> </td>
+                </tr>
+            </table>
+        </div>
+        <div v-if="removeShipOptionsTable" class="table salvoG">
             <table id="salvo_grid">
                 <tr>
                     <th class="cell letter" v-for="tableRow in tableRows" scope="row">{{tableRow}} </th>
@@ -59,27 +79,7 @@
             <button v-if="showConfirmSalvoesButton" @click="sendSalvoes"class="button"> Confirm salvos</button>
             <button v-if="showConfirmSalvoesButton" @click="clearSalvoes"class="button"> Clear salvos</button>
         </div>
-        <div v-if="!shipsPlaced" class="table shipG">
-            <table id="empty-ship-grid">
-                <tr>
-                    <th class="cell letter" v-for="tableRow in tableRows" scope="row">{{tableRow}} </th>
-                </tr>
-                <tr v-for="(tableCol, index) in tableCols">
-                    <td class="cell letter">{{tableCol}} </td>
-                    <td class="empty_cell" v-bind:id="tableCol+'1ps'" @click="placeShipInThisCell(tableCol+'1ps')"> </td>
-                    <td class="empty_cell" v-bind:id="tableCol+'2ps'" @click="placeShipInThisCell(tableCol+'2ps')"></td>
-                    <td class="empty_cell" v-bind:id="tableCol+'3ps'" @click="placeShipInThisCell(tableCol+'3ps')"></td>
-                    <td class="empty_cell" v-bind:id="tableCol+'4ps'" @click="placeShipInThisCell(tableCol+'4ps')"></td>
-                    <td class="empty_cell" v-bind:id="tableCol+'5ps'" @click="placeShipInThisCell(tableCol+'5ps')"> </td>
-                    <td class="empty_cell" v-bind:id="tableCol+'6ps'" @click="placeShipInThisCell(tableCol+'6ps')"> </td>
-                    <td class="empty_cell" v-bind:id="tableCol+'7ps'" @click="placeShipInThisCell(tableCol+'7ps')"> </td>
-                    <td class="empty_cell" v-bind:id="tableCol+'8ps'" @click="placeShipInThisCell(tableCol+'8ps')"> </td>
-                    <td class="empty_cell" v-bind:id="tableCol+'9ps'" @click="placeShipInThisCell(tableCol+'9ps')"> </td>
-                    <td class="empty_cell" v-bind:id="tableCol+'10ps'" @click="placeShipInThisCell(tableCol+'10ps')"> </td>
-                </tr>
-            </table>
-        </div>
-        <div v-if="!shipsPlaced" class="ship-placement-table ship-placement">
+        <div v-if="!removeShipOptionsTable" class="ship-placement-table ship-placement">
             <table>
                 <tr>
                     <th class="empty_cell cell letter ship-placement-table-cells">Type</th>

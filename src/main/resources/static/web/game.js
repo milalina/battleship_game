@@ -24,6 +24,7 @@ new Vue({
         submarine: "submarine",
         destroyer: "destroyer",
         patrol: "patrol",
+        removeShipOptionsTable: false,
         firstCoordinate: 0,
         lastCoordinate: 0,
         letterPointF: 0,
@@ -305,6 +306,7 @@ new Vue({
                 for (j in shipLocation) {
                     document.getElementById(shipLocation[j] + "ps").style.backgroundColor = "thistle";
                     var img = document.createElement("img");
+                    img.id= (shipLocation[j] + "psShipPic")
                     img.src = "assets/" + this.objectForDisplayingSelectedShips[i].type + ".pur.png";
                     var src = document.getElementById(shipLocation[j] + "ps");
                     src.appendChild(img);
@@ -320,6 +322,8 @@ new Vue({
                     type: this.objectForDisplayingSelectedShipsNoManipulation[i].type,
                     locations: this.objectForDisplayingSelectedShipsNoManipulation[i].locations[0]
                 })
+               //document.getElementById(this.objectForDisplayingSelectedShipsNoManipulation[i]).innerHTML = "";
+               //document.getElementById(this.objectForDisplayingSelectedShipsNoManipulation[i]).style.backgroundColor = "#40E0D0"
             }
             console.log(objectTypeLocation)
             $.post({
@@ -330,8 +334,9 @@ new Vue({
                 })
                 .done((response, status, jqXHR) => {
                     alert(response);
-                    this.fetchData();
-                    this.shipsPlaced = true;
+                   // this.fetchData();
+                    this.removeShipOptionsTable = true;
+
                 })
                 .fail(function (jqXHR, status, httpError) {
                     alert("Failed to add ships: " + textStatus + " " + httpError);
@@ -365,34 +370,71 @@ new Vue({
                 })
             })
             console.log("displayShips is called")
-            setTimeout( () => this.clearDisplayedShips(), 50)
-            setTimeout( () => this.displayShips(), 100)
-           
+            //setTimeout( () => this.clearDisplayedShips(), 50)
+           // setTimeout( () => this.displayShips(), 100)
+           this.displayShips()
         },
         
-        clearDisplayedShips(){
+       /*  clearDisplayedShips(){
             console.log(this.shipLocations)
             for (i in this.shipLocations) {
-                console.log(document.getElementById(this.shipLocations[i]))
                 document.getElementById(this.shipLocations[i]).innerHTML = "";
                 document.getElementById(this.shipLocations[i]).style.backgroundColor = "#40E0D0"
             }  
-        }, 
+        },  */
 
         displayShips() {
             this.displayMySalvoes();
             console.log(this.shipLocations)
             for (i in this.shipLocations) {
-                console.log(document.getElementById(this.shipLocations[i].toString()))
-                document.getElementById(this.shipLocations[i]).style.backgroundColor = "thistle";
+               document.getElementById(this.shipLocations[i]).style.backgroundColor = "thistle";
                 var img = document.createElement("img");
                 img.src = "assets/battleship.pur.png";
                 var src = document.getElementById(this.shipLocations[i]);
                 src.appendChild(img);
+                img.id= (this.shipLocations[i] + "psShipPic")
+                var shipToBeRemoved = document.getElementById(img.id);
+                shipToBeRemoved.parentNode.removeChild(shipToBeRemoved)
+               
             }
+             /* var shipDisplayArrayTypeLocation=[]
+            for (l in this.game[0].ships) {
+                    shipDisplayArrayTypeLocation.push(this.game[0].ships[l].type, this.game[0].ships[l].locations)
+                console.log(shipDisplayArrayTypeLocation)
+            }
+            var shipLocationArrayFromTypeLocationsArray =[]
+            var shipTypeFromTypeLocationsArray
+            for (m in shipDisplayArrayTypeLocation){
+                
+                if (m %2 == 1)
+                {shipLocationArrayFromTypeLocationsArray=shipDisplayArrayTypeLocation[m]}
+                if(m %2 == 0){
+                    shipTypeFromTypeLocationsArray=shipDisplayArrayTypeLocation[m]
+                    for (g in shipLocationArrayFromTypeLocationsArray){
+                        document.getElementById(shipLocationArrayFromTypeLocationsArray[g]).style.backgroundColor = "thistle";
+                        var img = document.createElement("img");
+                        img.id = shipTypeFromTypeLocationsArray+shipLocationArrayFromTypeLocationsArray[g]
+                        img.src = "assets/"+ shipTypeFromTypeLocationsArray+".pur.png";
+                        var src = document.getElementById(shipLocationArrayFromTypeLocationsArray[g]);
+                        src.appendChild(img);
+                    }
+                }
+                console.log(shipTypeFromTypeLocationsArray, shipLocationArrayFromTypeLocationsArray, )
+               console.log(shipDisplayArrayTypeLocation[0])
+                console.log(shipDisplayArrayTypeLocation[1])
+                console.log(shipDisplayArrayTypeLocation[2])
+                console.log(shipDisplayArrayTypeLocation[3])
+                console.log(shipDisplayArrayTypeLocation[4])
+                console.log(shipDisplayArrayTypeLocation[5])
+                console.log(shipDisplayArrayTypeLocation[6])
+                console.log(shipDisplayArrayTypeLocation[7])
+                console.log(shipDisplayArrayTypeLocation[8])
+                console.log(shipDisplayArrayTypeLocation[9]) 
+            }*/
             for (j in this.damagedShipLocations) {
                 document.getElementById(this.damagedShipLocations[j]).innerHTML = '<i class="glyphicon glyphicon-remove" style="font-size:16px;color:purple;"></i>';
             }
+            console.log(this.shipLocations)
         },
 
         placeSalvoInThisCell(elementId) {
@@ -439,6 +481,7 @@ new Vue({
             })
             .done((response, status, jqXHR) => {
                 alert(response);
+                this.shipsPlaced=true;
                 this.fetchData();
             })
             .fail(function (jqXHR, status, httpError) {
