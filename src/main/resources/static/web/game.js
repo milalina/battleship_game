@@ -70,8 +70,8 @@ new Vue({
             },
             "2": {
                 "carrier": {
-                    "hits": "0",
-                    "sinks": "sink"
+                    "hits": "1",
+                    "sinks": null
                 },
                 "battleship": {
                     "hits": "1",
@@ -92,8 +92,8 @@ new Vue({
             },
             "3": {
                 "carrier": {
-                    "hits": "0",
-                    "sinks": "sink"
+                    "hits": "1",
+                    "sinks": null
                 },
                 "battleship": {
                     "hits": "1",
@@ -136,11 +136,11 @@ new Vue({
         },
             "5": {
                 "carrier": {
-                    "hits": "1",
-                    "sinks": null
+                    "hits": "0",
+                    "sinks": "1"
                 },
                 "battleship": {
-                    "hits": "1",
+                    "hits": "0",
                     "sinks": null
                 },
                 "submarine": {
@@ -159,7 +159,7 @@ new Vue({
             "6": {
                 "carrier": {
                     "hits": "0",
-                    "sinks": "sink"
+                    "sinks": null
                 },
                 "battleship": {
                     "hits": "1",
@@ -181,7 +181,7 @@ new Vue({
             "7": {
                 "carrier": {
                     "hits": "0",
-                    "sinks": "sink"
+                    "sinks": null
                 },
                 "battleship": {
                     "hits": "1",
@@ -202,7 +202,7 @@ new Vue({
             },
             "8": {
                 "carrier": {
-                    "hits": "1",
+                    "hits": "0",
                     "sinks": null
                 },
                 "battleship": {

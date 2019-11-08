@@ -50,13 +50,14 @@
                         <td class="empty_cell" scope="col">
                             <img src="assets/carrier.pur.png" alt="">
                         </td>
-                        <td v-for="(turn, index) in hitsAndSinksObject" class="empty_cell" class="cell letter"
-                            v-if="turn.carrier.hits =='1'">
+                        <td class="empty_cell" class="cell letter"  v-for="(turn, index) in hitsAndSinksObject"
+                            v-if="turn.carrier.hits =='1' && turn.carrier.sinks !='1'">
                             <i class="glyphicon glyphicon-screenshot" style="font-size:17px;color:#B272A6;"></i>
                         </td>
-                        <td class="empty_cell" class="cell letter" v-else="">
+                        <td class="empty_cell" class="cell letter" v-else-if="turn.carrier.sinks =='1'">
                             <i class="glyphicon glyphicon-remove" style="font-size:16px;color:#B272A6;"></i>
                         </td>
+                        <td class="empty_cell" class="cell letter" v-else></td>
                     </tr>
                     <tr>
                         <td class="empty_cell" scope="col">
