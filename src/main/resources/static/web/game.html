@@ -20,15 +20,21 @@
         <div v-if="shipsPlaced" class="table shipG">
             <table>
                 <thead>
-                <tr>
-                    <th class="cell letter" scope="row"></th>
-                    <th class="cell letter" scope="row" v-for="(turn, index) in hitsAndSinksObject">{{index}} </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr id="hitsAndSinks">
-                </tr>
-            </tbody>
+                    <tr>
+                        <th class="cell letter" scope="row"></th>
+                        <th class="empty_cell" scope="row" v-for="(turn, index) in hitsAndSinksObject">{{index}} </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="image in images">
+                        <td  class="empty_cell" scope="col" >
+                            <img :src="image" alt="">
+                        </td>
+                        <td class="empty_cell" class="cell letter" v-for="turn in hitsAndSinksObject">
+                            {{turn.status}}
+                        </td>
+                    </tr>
+                </tbody>
             </table>
             <table id="ship_grid">
                 <tr>
@@ -56,16 +62,23 @@
                 </tr>
                 <tr v-for="(tableCol, index) in tableCols">
                     <td class="cell letter">{{tableCol}} </td>
-                    <td class="empty_cell" v-bind:id="tableCol+'1ps'" @click="placeShipInThisCell(tableCol+'1ps')"> </td>
+                    <td class="empty_cell" v-bind:id="tableCol+'1ps'" @click="placeShipInThisCell(tableCol+'1ps')">
+                    </td>
                     <td class="empty_cell" v-bind:id="tableCol+'2ps'" @click="placeShipInThisCell(tableCol+'2ps')"></td>
                     <td class="empty_cell" v-bind:id="tableCol+'3ps'" @click="placeShipInThisCell(tableCol+'3ps')"></td>
                     <td class="empty_cell" v-bind:id="tableCol+'4ps'" @click="placeShipInThisCell(tableCol+'4ps')"></td>
-                    <td class="empty_cell" v-bind:id="tableCol+'5ps'" @click="placeShipInThisCell(tableCol+'5ps')"> </td>
-                    <td class="empty_cell" v-bind:id="tableCol+'6ps'" @click="placeShipInThisCell(tableCol+'6ps')"> </td>
-                    <td class="empty_cell" v-bind:id="tableCol+'7ps'" @click="placeShipInThisCell(tableCol+'7ps')"> </td>
-                    <td class="empty_cell" v-bind:id="tableCol+'8ps'" @click="placeShipInThisCell(tableCol+'8ps')"> </td>
-                    <td class="empty_cell" v-bind:id="tableCol+'9ps'" @click="placeShipInThisCell(tableCol+'9ps')"> </td>
-                    <td class="empty_cell" v-bind:id="tableCol+'10ps'" @click="placeShipInThisCell(tableCol+'10ps')"> </td>
+                    <td class="empty_cell" v-bind:id="tableCol+'5ps'" @click="placeShipInThisCell(tableCol+'5ps')">
+                    </td>
+                    <td class="empty_cell" v-bind:id="tableCol+'6ps'" @click="placeShipInThisCell(tableCol+'6ps')">
+                    </td>
+                    <td class="empty_cell" v-bind:id="tableCol+'7ps'" @click="placeShipInThisCell(tableCol+'7ps')">
+                    </td>
+                    <td class="empty_cell" v-bind:id="tableCol+'8ps'" @click="placeShipInThisCell(tableCol+'8ps')">
+                    </td>
+                    <td class="empty_cell" v-bind:id="tableCol+'9ps'" @click="placeShipInThisCell(tableCol+'9ps')">
+                    </td>
+                    <td class="empty_cell" v-bind:id="tableCol+'10ps'" @click="placeShipInThisCell(tableCol+'10ps')">
+                    </td>
                 </tr>
             </table>
         </div>
@@ -85,11 +98,12 @@
                     <td class="empty_cell" v-bind:id="tableCol+'7s'" @click="placeSalvoInThisCell(tableCol+'7s')"></td>
                     <td class="empty_cell" v-bind:id="tableCol+'8s'" @click="placeSalvoInThisCell(tableCol+'8s')"></td>
                     <td class="empty_cell" v-bind:id="tableCol+'9s'" @click="placeSalvoInThisCell(tableCol+'9s')"></td>
-                    <td class="empty_cell" v-bind:id="tableCol+'10s'" @click="placeSalvoInThisCell(tableCol+'10s')"></td>
+                    <td class="empty_cell" v-bind:id="tableCol+'10s'" @click="placeSalvoInThisCell(tableCol+'10s')">
+                    </td>
                 </tr>
             </table>
-            <button v-if="showConfirmSalvoesButton" @click="sendSalvoes"class="button"> Confirm salvos</button>
-            <button v-if="showConfirmSalvoesButton" @click="clearSalvoes"class="button"> Clear salvos</button>
+            <button v-if="showConfirmSalvoesButton" @click="sendSalvoes" class="button"> Confirm salvos</button>
+            <button v-if="showConfirmSalvoesButton" @click="clearSalvoes" class="button"> Clear salvos</button>
         </div>
         <div v-if="!removeShipOptionsTable" class="ship-placement-table ship-placement">
             <table>
@@ -100,61 +114,60 @@
                 </tr>
                 <tr>
                     <td class="empty_cell ship-placement-table-cells">
-                        
-                            <img @click="getShipTypeFromPlacementGrid(carrier, 5)" id="carrier" class="ship"
-                                src="assets/carrier.pur.png" draggable=true alt="">
-                       
+
+                        <img @click="getShipTypeFromPlacementGrid(carrier, 5)" id="carrier" class="ship"
+                            src="assets/carrier.pur.png" draggable=true alt="">
+
                     </td>
                     <td class="empty_cell cell letter ship-placement-table-cells">5</td>
                     <td class="empty_cell cell letter ship-placement-table-cells">1</td>
                 </tr>
                 <tr>
                     <td class="empty_cell cell letter ship-placement-table-cells">
-                       
-                            <img @click="getShipTypeFromPlacementGrid(battleship, 4)" id="battleship" draggable=true
-                                src="assets/battleship.pur.png" alt="" >
-                      
+
+                        <img @click="getShipTypeFromPlacementGrid(battleship, 4)" id="battleship" draggable=true
+                            src="assets/battleship.pur.png" alt="">
+
                     </td>
                     <td class="empty_cell cell letter ship-placement-table-cells">4</td>
                     <td class="empty_cell cell letter ship-placement-table-cells">1</td>
                 </tr>
                 <tr>
                     <td class="empty_cell cell letter ship-placement-table-cells">
-                       
-                            <img @click="getShipTypeFromPlacementGrid(submarine, 3)" id="submarine"
-                                src="assets/submarine.pur.png" draggable=true alt="" >
-                       
+
+                        <img @click="getShipTypeFromPlacementGrid(submarine, 3)" id="submarine"
+                            src="assets/submarine.pur.png" draggable=true alt="">
+
                     </td>
                     <td class="empty_cell cell letter ship-placement-table-cells">3</td>
                     <td class="empty_cell cell letter ship-placement-table-cells">1</td>
                 </tr>
                 <tr>
                     <td class="empty_cell cell letter ship-placement-table-cells">
-                      
-                            <img @click="getShipTypeFromPlacementGrid(destroyer, 3)" id="destroyer"
-                                src="assets/destroyer.pur.png" draggable=true alt="" >
-                      
+
+                        <img @click="getShipTypeFromPlacementGrid(destroyer, 3)" id="destroyer"
+                            src="assets/destroyer.pur.png" draggable=true alt="">
+
                     </td>
                     <td class="empty_cell cell letter ship-placement-table-cells">3</td>
                     <td class="empty_cell cell letter ship-placement-table-cells">1</td>
                 </tr>
                 <tr>
                     <td class="empty_cell cell letter ship-placement-table-cells">
-                    
-                            <img @click="getShipTypeFromPlacementGrid(patrol, 2)" id="patrol"
-                                src="assets/patrol.pur.png" draggable=true alt="">
-                      
+
+                        <img @click="getShipTypeFromPlacementGrid(patrol, 2)" id="patrol" src="assets/patrol.pur.png"
+                            draggable=true alt="">
+
                     </td>
                     <td class="empty_cell cell letter ship-placement-table-cells">2</td>
                     <td class="empty_cell cell letter ship-placement-table-cells">1</td>
                 </tr>
                 <tr>
-                    <td > <button v-if="showClearButton" class="button">Clear ships</button> 
-                        <button @click="sendShips" 
-                        v-if="showConfirmButton" class="button">Confirm ships</button> 
+                    <td> <button v-if="showClearButton" class="button">Clear ships</button>
+                        <button @click="sendShips" v-if="showConfirmButton" class="button">Confirm ships</button>
                     </td>
-                    <td > </td>
-                    <td > </td>
+                    <td> </td>
+                    <td> </td>
                 </tr>
             </table>
         </div>
