@@ -46,120 +46,94 @@ new Vue({
         showConfirmSalvoesButton: false,
         images: ["assets/carrier.pur.png", "assets/battleship.pur.png", "assets/submarine.pur.png", "assets/destroyer.pur.png", "assets/patrol.pur.png"],
         hitsAndSinksObject: {
-            "1": [{
-                    "type": "carrier",
-                    "status": {
-                        "hits": "1",
-                        "sinks": null
-                    }
-                },
-                {
-                    "type": "battleship",
-                    "status": {
-                        "hits": "1",
-                        "sinks": null
-                    }
-                },
-                {
-                    "type": "submarine",
-                    "status": {
-                        "hits": "1",
-                        "sinks": null
-                    }
-                },
-                {
-                    "type": "destroyer",
-                    "status": {
-                        "hits": "1",
-                        "sinks": null
-                    }
-                },
-                {
-                    "type": "patrol",
-                    "status": {
-                        "hits": "1",
-                        "sinks": null
-                    }
-                }
-            ],
-            "2": [{
-                "type": "carrier",
-                "status": {
+            "1": {
+                "carrier": {
                     "hits": "1",
                     "sinks": null
                 },
-                "type": "battleship",
-                "status": {
+                "battleship": {
                     "hits": "1",
                     "sinks": null
                 },
-                "type": "submarine",
-                "status": {
+                "submarine": {
                     "hits": "1",
                     "sinks": null
                 },
-                "type": "destroyer",
-                "status": {
+                "destroyer": {
                     "hits": "1",
                     "sinks": null
                 },
-                "type": "patrol",
-                "status": {
+                "patrol": {
                     "hits": "1",
-                    "sinks": "1"
-                }
-            }],
-            "3": [{
-                "type": "carrier",
-                "status": {
-                    "hits": "boo",
-                    "sinks": null
-                },
-                "type": "battleship",
-                "status": {
-                    "hits": "1",
-                    "sinks": null
-                },
-                "type": "submarine",
-                "status": {
-                    "hits": "1",
-                    "sinks": "1"
-                },
-                "type": "destroyer",
-                "status": {
-                    "hits": "1",
-                    "sinks": "1"
-                },
-                "type": "patrol",
-                "status": null
-            }],
-            "4": [{
-                "type": "carrier",
-                "status": {
-                    "hits": "1",
-                    "sinks": null
-                },
-                "type": "battleship",
-                "status": {
-                    "hits": "1",
-                    "sinks": null
-                },
-                "type": "submarine",
-                "status": {
-                    "hits": null,
-                    "sinks": null
-                },
-                "type": "destroyer",
-                "status": {
-                    "hits": null,
-                    "sinks": null
-                },
-                "type": "patrol",
-                "status": {
-                    "hits": null,
                     "sinks": null
                 }
-            }]
+            },
+            "2": {
+                "carrier": {
+                    "hits": "1",
+                    "sinks": null
+                },
+                "battleship": {
+                    "hits": "1",
+                    "sinks": null
+                },
+                "submarine": {
+                    "hits": "1",
+                    "sinks": null
+                },
+                "destroyer": {
+                    "hits": "1",
+                    "sinks": null
+                },
+                "patrol": {
+                    "hits": "1",
+                    "sinks": null
+                }
+            },
+            "3": {
+                "carrier": {
+                    "hits": "1",
+                    "sinks": null
+                },
+                "battleship": {
+                    "hits": "1",
+                    "sinks": null
+                },
+                "submarine": {
+                    "hits": "1",
+                    "sinks": null
+                },
+                "destroyer": {
+                    "hits": "1",
+                    "sinks": null
+                },
+                "patrol": {
+                    "hits": "1",
+                    "sinks": null
+                }
+            },
+            "4": {
+                "carrier": {
+                    "hits": "1",
+                    "sinks": null
+                },
+                "battleship": {
+                    "hits": "1",
+                    "sinks": null
+                },
+                "submarine": {
+                    "hits": "1",
+                    "sinks": null
+                },
+                "destroyer": {
+                    "hits": "1",
+                    "sinks": null
+                },
+                "patrol": {
+                    "hits": "1",
+                    "sinks": null
+                }
+            }
         }
 
     },
@@ -176,7 +150,7 @@ new Vue({
                     console.log(data);
                     console.log("hello")
                     console.log(this.hitsAndSinksObject)
-                    console.log(this.hitsAndSinksObject[1].status.sinks)
+                    console.log(this.hitsAndSinksObject[1].battleship.hits)
                     //console.log(this.hitsAndSinksObject[0])
                     this.game = data;
                     this.isLoaded();
@@ -645,3 +619,81 @@ new Vue({
         this.fetchData();
     },
 })
+
+/*  "2": [{
+                "type": "carrier",
+                "status": {
+                    "hits": "1",
+                    "sinks": null
+                },
+                "type": "battleship",
+                "status": {
+                    "hits": "1",
+                    "sinks": null
+                },
+                "type": "submarine",
+                "status": {
+                    "hits": "1",
+                    "sinks": null
+                },
+                "type": "destroyer",
+                "status": {
+                    "hits": "1",
+                    "sinks": null
+                },
+                "type": "patrol",
+                "status": {
+                    "hits": "1",
+                    "sinks": "1"
+                }
+            }],
+            "3": [{
+                "type": "carrier",
+                "status": {
+                    "hits": "boo",
+                    "sinks": null
+                },
+                "type": "battleship",
+                "status": {
+                    "hits": "1",
+                    "sinks": null
+                },
+                "type": "submarine",
+                "status": {
+                    "hits": "1",
+                    "sinks": "1"
+                },
+                "type": "destroyer",
+                "status": {
+                    "hits": "1",
+                    "sinks": "1"
+                },
+                "type": "patrol",
+                "status": null
+            }],
+            "4": [{
+                "type": "carrier",
+                "status": {
+                    "hits": "1",
+                    "sinks": null
+                },
+                "type": "battleship",
+                "status": {
+                    "hits": "1",
+                    "sinks": null
+                },
+                "type": "submarine",
+                "status": {
+                    "hits": null,
+                    "sinks": null
+                },
+                "type": "destroyer",
+                "status": {
+                    "hits": null,
+                    "sinks": null
+                },
+                "type": "patrol",
+                "status": {
+                    "hits": null,
+                    "sinks": null
+                } */

@@ -26,12 +26,25 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="image in images">
-                        <td  class="empty_cell" scope="col" >
+                    <tr v-for="image in images" v-for="turn in hitsAndSinksObject">
+                        <td class="empty_cell" scope="col">
                             <img :src="image" alt="">
                         </td>
-                        <td class="empty_cell" class="cell letter" v-for="turn in hitsAndSinksObject">
-                            {{turn.status}}
+                    </tr>
+                        <td class="empty_cell" class="cell letter">
+                            {{turn.carrier.hits}}
+                        </td>
+                        <td class="empty_cell" class="cell letter">
+                            {{turn.battleship.hits}}
+                        </td>
+                        <td class="empty_cell" class="cell letter">
+                            {{turn.submarine.hits}}
+                        </td>
+                        <td class="empty_cell" class="cell letter">
+                            {{turn.destroyer.hits}}
+                        </td>
+                        <td class="empty_cell" class="cell letter">
+                            {{turn.patrol.hits}}
                         </td>
                     </tr>
                 </tbody>
