@@ -22,7 +22,7 @@ background-size: 20px 20px;
 .container{
     display: grid;
     grid-template-columns: 0% 50% 5% 45% 0%;
-    grid-template-rows: 30% 48% 5% 10% 7%;
+    grid-template-rows: 20% 10% 48% 5% 10% 7%;
 }
 /*ALL GAMES*/
 
@@ -118,8 +118,8 @@ input{
 #games-overview{
     grid-column-start: 2;
     grid-column-end: 5;
-    grid-row-start: 2;
-    grid-row-end: 3;
+    grid-row-start: 3;
+    grid-row-end: 4;
     text-align: center; 
     padding-top: 30px;   
 }
@@ -141,13 +141,30 @@ input{
     grid-row-start: 2;
     grid-row-end: 3;
     text-align: center;
-    padding-top: 30px;
 }
 .salvoG{
     grid-column-start: 4;
     grid-column-end: 5;
     grid-row-start: 2;
     grid-row-end: 3;
+    text-align: center;
+    padding-top: 30px;
+}
+
+.hits-and-sinks-table-you{
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 4;
+    grid-row-end: 5;
+    text-align: center;
+    padding-top: 30px;
+}
+
+.hits-and-sinks-table-opponent{
+    grid-column-start: 4;
+    grid-column-end: 5;
+    grid-row-start: 4;
+    grid-row-end: 5;
     text-align: center;
     padding-top: 30px;
 }
