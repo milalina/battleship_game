@@ -60,7 +60,7 @@ new Vue({
                     "sinks": null,
                 },
                 "destroyer": {
-                    "hits": "1",
+                    "hits": "0",
                     "sinks": null,
                 },
                 "patrol": {
@@ -136,7 +136,7 @@ new Vue({
         },
             "5": {
                 "carrier": {
-                    "hits": "0",
+                    "hits": "1",
                     "sinks": "1"
                 },
                 "battleship": {
@@ -237,8 +237,6 @@ methods: {
             .then((data) => {
                 console.log(data);
                 console.log("hello")
-                console.log(this.hitsAndSinksObject)
-                console.log(this.hitsAndSinksObject[1].battleship.hits)
                 //console.log(this.hitsAndSinksObject[0])
                 this.game = data;
                 this.isLoaded();

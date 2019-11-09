@@ -21,8 +21,9 @@ background-size: 20px 20px;
 
 .container{
     display: grid;
-    grid-template-columns: 0% 50% 5% 45% 0%;
-    grid-template-rows: 20% 10% 48% 5% 10% 7%;
+    grid-template-columns: 0% 50% 0% 50% 0%;
+    grid-template-rows: 10% 10% 10% 30% 3% 30% 7%;
+    
 }
 /*ALL GAMES*/
 
@@ -76,11 +77,13 @@ button{
     width: 90px;
     margin-bottom: 10px;
 }
+
 .button-in-the-table{
     background-color: grey;
     color: #40E0D0;
     border: none;
 }
+
 .new-game-button{
     /*text-align: start;*/
     background-color: #40E0D0;
@@ -118,10 +121,11 @@ input{
 #games-overview{
     grid-column-start: 2;
     grid-column-end: 5;
-    grid-row-start: 3;
-    grid-row-end: 4;
+    grid-row-start: 4;
+    grid-row-end: 5;
     text-align: center; 
-    padding-top: 30px;   
+    padding-top: 30px;  
+    justify-self: center;
 }
 
 #leaderboard{
@@ -141,6 +145,7 @@ input{
     grid-row-start: 2;
     grid-row-end: 3;
     text-align: center;
+    justify-self: center;
 }
 .salvoG{
     grid-column-start: 4;
@@ -148,39 +153,44 @@ input{
     grid-row-start: 2;
     grid-row-end: 3;
     text-align: center;
-    padding-top: 30px;
+    justify-self: center;
 }
 
 .hits-and-sinks-table-you{
     grid-column-start: 2;
     grid-column-end: 3;
-    grid-row-start: 4;
-    grid-row-end: 5;
+    grid-row-start: 5;
+    grid-row-end: 6;
     text-align: center;
     padding-top: 30px;
+    justify-self: center;
+    margin-top: 20px;
 }
 
 .hits-and-sinks-table-opponent{
     grid-column-start: 4;
     grid-column-end: 5;
-    grid-row-start: 4;
-    grid-row-end: 5;
+    grid-row-start: 5;
+    grid-row-end: 6;
     text-align: center;
     padding-top: 30px;
+    justify-self: center;
+    margin-top: 20px;
 }
 
 .ship-placement{
     grid-column-start: 4;
     grid-column-end: 5;
-    grid-row-start: 2;
-    grid-row-end: 3;
+    grid-row-start: 3;
+    grid-row-end: 4;
     text-align: center;
     padding-top: 30px;
+    justify-self: center;
 }
 .ship-placement-table{
     margin: 0px;
     padding: 0px;
-    width: 100%;
+    /*width: 100%;*/
     border-collapse: separate;
     border-spacing: 3px;
 }
@@ -188,13 +198,14 @@ input{
 .table{
     margin: 0px;
     padding: 0px;
-    width: 100%;
+   /* width: 100%;*/
     border-collapse: separate;
     border-spacing: 3px;
+    justify-self: center;
 }
 .ship-placement-table-cells{
-    width: 6%;
-    height: 6%;
+    width: 35px;
+    height: 35px;
     background-color: #40E0D0; 
     position: relative;
     border-radius: 15px;
@@ -213,7 +224,8 @@ input{
 }*/
 
 table{
-width: 100%;
+/*width: 100%;*/
+justify-self: center;
 }
 td,th {border: none !important;
     text-align: center;
@@ -238,19 +250,29 @@ color: gray;
    border-radius: 15px;
    
 }
+
+.player-modified{
+    font-size: 1em;
+    padding-left: 10px;
+   padding-right: 10px;
+   background-color: #40E0D0 !important;
+   color: grey !important;
+   border-radius: 15px;
+   
+}
 .vs{
     font-size: 2em;   
 }
 .cell{
-    width: 6%;
-    height: 6%;
+    width: 35px;
+    height: 35px;
     background-color: #40E0D0; 
     position: relative;
     border-radius: 15px;
 }
 .empty_cell{
-    width: 6%;
-    height: 6%;
+    width: 35px;
+    height: 35px;
     background-color: #40E0D0;
     position: relative;
     border-radius: 15px;
