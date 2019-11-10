@@ -41,7 +41,7 @@
             <table class="ship-placement-table ship-placement">
                 <thead>
                     <tr>
-                        <!--th class="cell letter" scope="row"></th>
+                        <!--th v-for="item in hitsAndSinksTableHeader" class="empty_cell" scope="row">{{item}}</th>
                         <th class="empty_cell" scope="row" v-for="(turn, index) in hitsAndSinksObject">{{index}} </th-->
                     </tr>
                 </thead>
@@ -52,10 +52,10 @@
                         </td>
                         <td class="empty_cell" class="cell letter"  v-for="(turn, index) in hitsAndSinksObject"
                             v-if="turn.carrier.hits =='1' && turn.carrier.sinks !='1'">
-                            <i class="glyphicon glyphicon-screenshot" style="font-size:13px;color:#B272A6;"></i>
+                            <i class="glyphicon glyphicon-screenshot" style="font-size:13px;color:purple;"></i>
                         </td>
                         <td class="empty_cell" class="cell letter" v-else-if="turn.carrier.sinks =='1'">
-                            <i class="glyphicon glyphicon-remove" style="font-size:12px;color:#B272A6;"></i>
+                            <i class="glyphicon glyphicon-remove" style="font-size:12px;color: purple;"></i>
                         </td>
                         <td class="empty_cell" class="cell letter" v-else></td>
                     </tr>
