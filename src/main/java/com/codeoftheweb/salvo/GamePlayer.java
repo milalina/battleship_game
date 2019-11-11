@@ -5,6 +5,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.*;
+import java.util.stream.Stream;
 
 @Entity
 public class GamePlayer {
@@ -112,7 +113,56 @@ public class GamePlayer {
         dto.put("player", this.getPlayer().makePlayerDTO(game));
         dto.put("salvoes", this.makeGPSalvoDTO());
         dto.put("score", this.getScore());
+        dto.put("hits", this.getHits());
+       // dto.put("status", );
         return dto;
+    }
+
+    //where the opponent places salvoes
+
+    public List<String> getOpponentSalvoes (){
+        List<String> opponentSalvoes = new ArrayList<>();
+        List <Salvo> allSalvoes = this.getOpponent().getSalvoes();
+        for (Salvo salvo: allSalvoes){
+            opponentSalvoes.addAll(salvo.getSalvoLocations());
+        }
+        return opponentSalvoes;
+    }
+    // where gp ship locations are
+    public List<String> getGPShipLocations (){
+        List<String> shipLocations = new ArrayList<>();
+        for (Ship ship: ships){
+            shipLocations.addAll(ship.getShipLocations());
+        }
+        return shipLocations;
+    }
+
+// where gp ships are hit by the opponent
+public List<String> getHits(){
+    List<String> shipLocations = this.getGPShipLocations ();
+    List<String> opponentSalvoes =this.getOpponentSalvoes();
+    List<String> hits = new ArrayList<>();
+    for (String opponentSalvo: opponentSalvoes){
+        shipLocations.stream().filter(location->location == opponentSalvo);
+        hits=shipLocations;
+       /* if (shipLocations.size()>0){
+            hits=shipLocations;
+        }else{return null;}*/
+    }
+    return hits;
+}
+
+// sinks
+
+public Map<String, Object> makeShipTypeSinkDto(){
+    Map<String, Object> shipTypeSinkDto = new LinkedHashMap<String, Object>();
+        for (Ship ship: ships){
+            Map<String, Object> sinkStatus = new LinkedHashMap<String, Object>();
+        ship.getShipType();
+        ship.getShipLocations();
+    }
+
+    return shipTypeSinkDto;
     }
 
     public List<Map<String, Object>> makeShipDtoList() {
