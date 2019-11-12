@@ -114,7 +114,7 @@ public class GamePlayer {
         dto.put("salvoes", this.makeGPSalvoDTO());
         dto.put("score", this.getScore());
         dto.put("hits", this.getHits());
-       // dto.put("status", );
+        dto.put("status", this.makeShipTypeSinkDtoInAllTurns());
         return dto;
     }
 
@@ -137,33 +137,47 @@ public class GamePlayer {
         return shipLocations;
     }
 
-// where gp ships are hit by the opponent
+// where gp ships are hit by the opponent in this turn
 public List<String> getHits(){
     List<String> shipLocations = this.getGPShipLocations ();
-    List<String> opponentSalvoes =this.getOpponentSalvoes();
-    List<String> hits = new ArrayList<>();
+    if(shipLocations.size()<0 ){
+    List<String> opponentSalvoes =this.getOpponentSalvoes().subList(this.getOpponentSalvoes().size()-0, this.getOpponentSalvoes().size());
     for (String opponentSalvo: opponentSalvoes){
         shipLocations.stream().filter(location->location == opponentSalvo);
-        hits=shipLocations;
-       /* if (shipLocations.size()>0){
-            hits=shipLocations;
-        }else{return null;}*/
-    }
-    return hits;
+    }} else{return null;}
+    return shipLocations;
 }
 
-// sinks
+// sink in a ship type
 
-public Map<String, Object> makeShipTypeSinkDto(){
-    Map<String, Object> shipTypeSinkDto = new LinkedHashMap<String, Object>();
+ public Map<String, Object> makeShipTypeSinkDto(){
+  Map<String, Object> shipTypeSinkDto = new LinkedHashMap<String, Object>();
+  Map<String, Object> sinkStatus = new LinkedHashMap<String, Object>();
         for (Ship ship: ships){
-            Map<String, Object> sinkStatus = new LinkedHashMap<String, Object>();
-        ship.getShipType();
-        ship.getShipLocations();
+            for(String oneSalvo: this.getOpponentSalvoes()){
+                List<String> oneShipLocations=ship.getShipLocations();
+                oneShipLocations.stream().filter(oneLocation -> oneLocation == oneSalvo);
+                if (oneShipLocations.size()==0){
+                    sinkStatus.put("sink","1");
+                }else{sinkStatus.put("sink", null);}
+            }
+            shipTypeSinkDto.put(ship.getShipType(), sinkStatus);
     }
 
     return shipTypeSinkDto;
     }
+// sink in a ship type in different turns
+
+    public Map<Integer, Object>makeShipTypeSinkDtoInAllTurns(){
+        Map<Integer, Object> shipTypeSinkDtoInAllTurns = new LinkedHashMap<Integer, Object>();
+        int turnNumber = 1;
+        for (Salvo salvo: salvoes){
+            shipTypeSinkDtoInAllTurns.put(turnNumber, this.makeShipTypeSinkDto());
+            turnNumber+=1;
+        }
+        return shipTypeSinkDtoInAllTurns;
+    }
+
 
     public List<Map<String, Object>> makeShipDtoList() {
         List<Map<String, Object>> myGamePlayerShipDtoList= new ArrayList<>();

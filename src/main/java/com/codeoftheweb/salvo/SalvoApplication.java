@@ -94,6 +94,9 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			List<String> shipLocations7 = Arrays.asList("C6", "C7");
 			List<String> shipLocations8 = Arrays.asList("A2", "A3", "A4");
 			List<String> shipLocations9 = Arrays.asList("G6", "H6");
+            List<String> shipLocations10 = Arrays.asList("H2", "H3", "H4");
+            List<String> shipLocations11 = Arrays.asList("E1", "F1", "G1");
+            List<String> shipLocations12 = Arrays.asList("B4", "B5");
 
 
 			Ship ship1 = new Ship("Destroyer", shipLocations1);
@@ -105,6 +108,9 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			Ship ship7 = new Ship("Patrol Boat", shipLocations7);
 			Ship ship8 = new Ship("Destroyer", shipLocations8);
 			Ship ship9 = new Ship("Patrol Boat", shipLocations9);
+            Ship ship10 = new Ship("Destroyer", shipLocations10);
+            Ship ship11 = new Ship("Submarine", shipLocations11);
+            Ship ship12 = new Ship("Patrol Boat", shipLocations12);
 
 			gamePlayer1.addShip(ship1);
 			gamePlayer1.addShip(ship2);
@@ -115,6 +121,9 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			gamePlayer3.addShip(ship7);
 			gamePlayer4.addShip(ship8);
 			gamePlayer4.addShip(ship9);
+			gamePlayer9.addShip(ship10);
+            gamePlayer9.addShip(ship11);
+            gamePlayer9.addShip(ship12);
 
 			Date turn1 = new Date();
 			Date turn2 = new Date();
@@ -123,16 +132,19 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			List<String> salvoLocations2=Arrays.asList("B4", "B5", "B6");
 			List<String> salvoLocations3=Arrays.asList("F2", "D5");
 			List<String> salvoLocations4=Arrays.asList("E1", "H3", "A2");
+            List<String> salvoLocations5=Arrays.asList("E1", "H3", "A2");
 
 			Salvo salvo1= new Salvo(turn1, salvoLocations1);
 			Salvo salvo2= new Salvo(turn1, salvoLocations2);
 			Salvo salvo3= new Salvo(turn2, salvoLocations3);
 			Salvo salvo4= new Salvo(turn2, salvoLocations4);
+            Salvo salvo5= new Salvo(turn1, salvoLocations5);
 
 			gamePlayer1.addSalvo(salvo1);
 			gamePlayer1.addSalvo(salvo3);
 			gamePlayer2.addSalvo(salvo2);
 			gamePlayer2.addSalvo(salvo4);
+            gamePlayer9.addSalvo(salvo5);
 
 			Date finishDate1 = new Date(System.currentTimeMillis() - 1800 * 1000);
 			Date finishDate2 = new Date(System.currentTimeMillis() - 5400 * 1000);
@@ -206,6 +218,9 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			repositoryShip.save(ship7);
 			repositoryShip.save(ship8);
 			repositoryShip.save(ship9);
+            repositoryShip.save(ship10);
+            repositoryShip.save(ship11);
+            repositoryShip.save(ship12);
 
 			repositorySalvo.save(salvo1);
 			repositorySalvo.save(salvo2);

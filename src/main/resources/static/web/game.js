@@ -505,6 +505,14 @@ new Vue({
 
         },
 
+        slowingTheOnsetOfFunctions(){
+            window.addEventListener('load', (event) => {
+                this.displayMySalvoes();
+                this.displayShips();
+            console.log('page is fully loaded');
+          });
+           },
+
         fillArrDamagedShipLocations() {
             this.shipLocations.forEach(oneShipLocation => {
                 this.enemySalvoes.map(oneEnemySalvo => {
@@ -517,6 +525,7 @@ new Vue({
             //setTimeout( () => this.clearDisplayedShips(), 50)
             // setTimeout( () => this.displayShips(), 100)
             this.displayShips()
+            this.displayMySalvoes();
         },
 
         /*  clearDisplayedShips(){
@@ -528,8 +537,7 @@ new Vue({
          },  */
 
         displayShips() {
-            this.displayMySalvoes();
-
+           
             //function for displaying different icons of ships
             /* console.log(this.shipLocations)
             var shipDisplayArrayTypeLocation = []
@@ -663,6 +671,7 @@ new Vue({
 
     created: function () {
         this.fetchData();
+        this.slowingTheOnsetOfFunctions();
     },
 })
 
