@@ -5,6 +5,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Entity
@@ -16,17 +17,17 @@ public class GamePlayer {
     private Date joinDate = new Date();
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="game_id")
+    @JoinColumn(name = "game_id")
     private Game game;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="player_id")
+    @JoinColumn(name = "player_id")
     private Player player;
 
-    @OneToMany(mappedBy="gamePlayer", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "gamePlayer", fetch = FetchType.EAGER)
     Set<Ship> ships = new HashSet<>();
 
-    @OneToMany(mappedBy="gamePlayer", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "gamePlayer", fetch = FetchType.LAZY)
     List<Salvo> salvoes = new ArrayList<>();
 
     public GamePlayer() {
@@ -50,12 +51,12 @@ public class GamePlayer {
         return salvoes;
     }
 
-   public void addShip(Ship ship){
+    public void addShip(Ship ship) {
         ship.setGamePlayer(this);
         ships.add(ship);
-   }
+    }
 
-    public void addSalvo(Salvo salvo){
+    public void addSalvo(Salvo salvo) {
         salvo.setGamePlayer(this);
         salvoes.add(salvo);
     }
@@ -84,20 +85,21 @@ public class GamePlayer {
         this.joinDate = joinDate;
     }
 
-    public String toString(){
-        return "Player= " + this.player +" and game = " + this.game.getId();
+    public String toString() {
+        return "Player= " + this.player + " and game = " + this.game.getId();
     }
 
     public long getId() {
         return id;
     }
 
-   public Double getScore(){
-       Score playerScore = this.getPlayer().getScore(game);
-       if (playerScore != null && playerScore.getFinishDate()!=null){
-       return playerScore.getPlayerScore();}
-       return null;
-   }
+    public Double getScore() {
+        Score playerScore = this.getPlayer().getScore(game);
+        if (playerScore != null && playerScore.getFinishDate() != null) {
+            return playerScore.getPlayerScore();
+        }
+        return null;
+    }
 
     public Map<String, Object> makeGameDTOForGamePlayer() {
         Map<String, Object> gameDTOForGamePlayerMap = new LinkedHashMap<String, Object>();
@@ -118,85 +120,96 @@ public class GamePlayer {
         return dto;
     }
 
+    //where the opponent places salvoes chronologically
+
+    public List<Salvo> getOpponentSalvoesByTurn(int turn) {
+        return this.getOpponent().getSalvoes().subList(0, turn);
+    }
     //where the opponent places salvoes
 
-    public List<String> getOpponentSalvoes (){
+    public List<String> getOpponentSalvoes(List<Salvo> opponentSalvoesByTurn) {
         List<String> opponentSalvoes = new ArrayList<>();
-        List <Salvo> allSalvoes = this.getOpponent().getSalvoes();
-        for (Salvo salvo: allSalvoes){
+        List<Salvo> allSalvoes = opponentSalvoesByTurn;
+        for (Salvo salvo : allSalvoes) {
             opponentSalvoes.addAll(salvo.getSalvoLocations());
         }
         return opponentSalvoes;
     }
+
+
     // where gp ship locations are
-    public List<String> getGPShipLocations (){
+    public List<String> getGPShipLocations() {
         List<String> shipLocations = new ArrayList<>();
-        for (Ship ship: ships){
+        for (Ship ship : ships) {
             shipLocations.addAll(ship.getShipLocations());
         }
         return shipLocations;
     }
 
-// where gp ships are hit by the opponent in this turn
-public List<String> getHits(){
-    List<String> shipLocations = this.getGPShipLocations ();
-    if(shipLocations.size()<0 ){
-    List<String> opponentSalvoes =this.getOpponentSalvoes().subList(this.getOpponentSalvoes().size()-0, this.getOpponentSalvoes().size());
-    for (String opponentSalvo: opponentSalvoes){
-        shipLocations.stream().filter(location->location == opponentSalvo);
-    }} else{return null;}
-    return shipLocations;
-}
+    // where gp ships are hit by the opponent in this turn
+    public List<String> getHits() {
+        List<String> shipLocations = this.getGPShipLocations();
+        if(shipLocations.size() == 0){
+            return null;
+        }
+        List<String> oponentSalvoes = this.getOpponentSalvoes(this.getOpponent().salvoes);
+
+        oponentSalvoes.retainAll(shipLocations);
+
+        return oponentSalvoes;
+    }
 
 // sink in a ship type
 
- public Map<String, Object> makeShipTypeSinkDto(){
-  Map<String, Object> shipTypeSinkDto = new LinkedHashMap<String, Object>();
-  Map<String, Object> sinkStatus = new LinkedHashMap<String, Object>();
-        for (Ship ship: ships){
-            for(String oneSalvo: this.getOpponentSalvoes()){
-                List<String> oneShipLocations=ship.getShipLocations();
-                oneShipLocations.stream().filter(oneLocation -> oneLocation == oneSalvo);
-                if (oneShipLocations.size()==0){
-                    sinkStatus.put("sink","1");
-                }else{sinkStatus.put("sink", null);}
-            }
-            shipTypeSinkDto.put(ship.getShipType(), sinkStatus);
-    }
+    public Map<String, Object> makeShipTypeSinkDto(List<String> salvoesToPassAsAParam) {
+        Map<String, Object> shipTypeSinkDto = new LinkedHashMap<String, Object>();
+        for (Ship ship : ships) {
+            Map<String, Object> sinkStatus = new LinkedHashMap<String, Object>();
 
-    return shipTypeSinkDto;
+            List<String> oneShipLocations = ship.getShipLocations();
+
+            if(salvoesToPassAsAParam.containsAll(oneShipLocations)){
+                sinkStatus.put("sink", "1");
+            }else {
+                sinkStatus.put("sink", null);
+            }
+
+            shipTypeSinkDto.put(ship.getShipType(), sinkStatus);
+        }
+
+        return shipTypeSinkDto;
     }
 // sink in a ship type in different turns
 
-    public Map<Integer, Object>makeShipTypeSinkDtoInAllTurns(){
+    public Map<Integer, Object> makeShipTypeSinkDtoInAllTurns() {
         Map<Integer, Object> shipTypeSinkDtoInAllTurns = new LinkedHashMap<Integer, Object>();
-        int turnNumber = 1;
-        for (Salvo salvo: salvoes){
-            shipTypeSinkDtoInAllTurns.put(turnNumber, this.makeShipTypeSinkDto());
-            turnNumber+=1;
-        }
+        if (this.getOpponent()!= null){
+        List<Salvo> salvoes = this.getOpponent().getSalvoes();
+        for (int turnNumber = 1; turnNumber < salvoes.size()+1; turnNumber++) {
+            List<String> salvoesToPassAsAParam = getOpponentSalvoes(getOpponentSalvoesByTurn(turnNumber));
+            shipTypeSinkDtoInAllTurns.put(turnNumber, this.makeShipTypeSinkDto(salvoesToPassAsAParam));
+        }}
         return shipTypeSinkDtoInAllTurns;
     }
 
 
     public List<Map<String, Object>> makeShipDtoList() {
-        List<Map<String, Object>> myGamePlayerShipDtoList= new ArrayList<>();
+        List<Map<String, Object>> myGamePlayerShipDtoList = new ArrayList<>();
         Set<Ship> ships = this.getShips();
-        for (Ship ship: ships){
+        for (Ship ship : ships) {
             myGamePlayerShipDtoList.add(ship.makeShipDTOMap());
         }
         return myGamePlayerShipDtoList;
     }
 
 
-
     public Map<Integer, Object> makeGPSalvoDTO() {
         Map<Integer, Object> salvoDto = new LinkedHashMap<Integer, Object>();
         List<Salvo> salvos = this.getSalvoes();
         int turnNumber = 1;
-        for (Salvo salvo: salvoes) {
+        for (Salvo salvo : salvoes) {
             salvoDto.put(turnNumber, salvo.getSalvoLocations());
-            turnNumber+=1;
+            turnNumber += 1;
         }
         return salvoDto;
     }
@@ -210,15 +223,15 @@ public List<String> getHits(){
     }*/
 
     @JsonIgnore
-    public GamePlayer getOpponent(){
+    public GamePlayer getOpponent() {
         Set<GamePlayer> gamePlayers = this.getGame().getGamePlayers();
         final GamePlayer[] opponent = new GamePlayer[1];
         gamePlayers.forEach(e -> {
-            if(e.getId() != this.getId()){
+            if (e.getId() != this.getId()) {
                 opponent[0] = e;
             }
         });
-        return  opponent[0];
+        return opponent[0];
     }
 }
 
