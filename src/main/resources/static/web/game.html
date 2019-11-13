@@ -13,7 +13,7 @@
     <div class="container" id="game">
         <div v-if="isLoaded" class="left">
             <button class="player"> {{gamePlayerYou}}</button>
-          <img class="moving-ship-you" src="assets/battleship.pur.png" style="height:40px" alt="">
+            <img class="moving-ship-you" src="assets/battleship.pur.png" style="height:40px" alt="">
         </div>
         <div v-if="isLoaded" class="right">
             <img class="moving-ship-enemy" src="assets/battleship.gr-ConvertImage.png" style="height:40px" alt="">
@@ -44,7 +44,7 @@
                 <thead>
                     <tr>
                         <!--th v-for="item in hitsAndSinksTableHeader" class="empty_cell" scope="row">{{item}}</th>
-                        <th class="empty_cell" scope="row" v-for="(turn, index) in hitsAndSinksObject">{{index}} </th-->
+                        <th class="empty_cell" scope="row" v-for="(turn, index) in hitsAndSinksObjectYou">{{index}} </th-->
                     </tr>
                 </thead>
                 <tbody>
@@ -52,61 +52,50 @@
                         <td class="empty_cell" scope="col">
                             <img src="assets/carrier.pur.png" alt="">
                         </td>
-                        <td class="empty_cell" class="cell letter" v-for="(turn, index) in hitsAndSinksObject"
-                            v-if="turn.carrier.hits =='1' && turn.carrier.sinks !='1'">
-                            <i class="glyphicon glyphicon-screenshot" style="font-size:13px;color:purple;"></i>
+                        <td v-for="(turn, index) in hitsAndSinksObjectYou" class="empty_cell" class="cell letter"
+                            v-if="turn.carrier.sink !='1'">
                         </td>
-                        <td class="empty_cell" class="cell letter" v-else-if="turn.carrier.sinks =='1'">
-                            <i class="glyphicon glyphicon-remove" style="font-size:12px;color: purple;"></i>
+                        <td class="empty_cell_sunk_ship" class="" v-else="">
                         </td>
-                        <td class="empty_cell" class="cell letter" v-else></td>
                     </tr>
                     <tr>
                         <td class="empty_cell" scope="col">
                             <img src="assets/battleship.pur.png" alt="">
                         </td>
-                        <td v-for="(turn, index) in hitsAndSinksObject" class="empty_cell" class="cell letter"
-                            v-if="turn.battleship.hits =='1'">
-                            <i class="glyphicon glyphicon-screenshot" style="font-size:13px;color:#B272A6;"></i>
+                        <td v-for="(turn, index) in hitsAndSinksObjectYou" class="empty_cell" class="cell letter"
+                            v-if="turn.battleship.sink !='1'">
                         </td>
-                        <td class="empty_cell" class="cell letter" v-else="">
-                            <i class="glyphicon glyphicon-remove" style="font-size:12px;color:#B272A6;"></i>
+                        <td class="empty_cell_sunk_ship" class="" v-else="">
                         </td>
                     </tr>
                     <tr>
                         <td class="empty_cell" scope="col">
                             <img src="assets/submarine.pur.png" alt="">
                         </td>
-                        <<td v-for="(turn, index) in hitsAndSinksObject" class="empty_cell" class="cell letter"
-                            v-if="turn.submarine.hits =='1'">
-                            <i class="glyphicon glyphicon-screenshot" style="font-size:13px;color:#B272A6;"></i>
-                            </td>
-                            <td class="empty_cell" class="cell letter" v-else="">
-                                <i class="glyphicon glyphicon-remove" style="font-size:12px;color:#B272A6;"></i>
-                            </td>
+                        <td v-for="(turn, index) in hitsAndSinksObjectYou" class="empty_cell" class="cell letter"
+                            v-if="turn.submarine.sink !='1'">
+                        </td>
+                        <td class="empty_cell_sunk_ship" class="" v-else="">
+                        </td>
                     </tr>
                     <tr>
                         <td class="empty_cell" scope="col">
                             <img src="assets/destroyer.pur.png" alt="">
                         </td>
-                        <td v-for="(turn, index) in hitsAndSinksObject" class="empty_cell" class="cell letter"
-                            v-if="turn.destroyer.hits =='1'">
-                            <i class="glyphicon glyphicon-screenshot" style="font-size:13px;color:#B272A6;"></i>
+                        <td v-for="(turn, index) in hitsAndSinksObjectYou" class="empty_cell" class="cell letter"
+                            v-if="turn.destroyer.sink !='1'">
                         </td>
-                        <td class="empty_cell" class="cell letter" v-else="">
-                            <i class="glyphicon glyphicon-remove" style="font-size:12px;color:#B272A6;"></i>
+                        <td class="empty_cell_sunk_ship" class="" v-else="">
                         </td>
                     </tr>
                     <tr>
                         <td class="empty_cell" scope="col">
                             <img src="assets/patrol.pur.png" alt="">
                         </td>
-                        <td v-for="(turn, index) in hitsAndSinksObject" class="empty_cell" class="cell letter"
-                            v-if="turn.patrol.hits =='1'">
-                            <i class="glyphicon glyphicon-screenshot" style="font-size:13px;color:#B272A6;"></i>
+                        <td v-for="(turn, index) in hitsAndSinksObjectYou" class="empty_cell" class="cell letter"
+                            v-if="turn.patrol.sink !='1'">
                         </td>
-                        <td class="empty_cell" class="cell letter" v-else="">
-                            <i class="glyphicon glyphicon-remove" style="font-size:12px;color:#B272A6;"></i>
+                        <td class="empty_cell_sunk_ship" class="" v-else="">
                         </td>
                     </tr>
                 </tbody>
@@ -158,74 +147,64 @@
         </div>
         <div class="hits-and-sinks-table-opponent" v-if="shipsPlaced">
             <table class="ship-placement-table ship-placement">
-                <!--thead>
-                        <tr>
-                            <th class="cell letter" scope="row"></th>
-                            <th class="empty_cell" scope="row" v-for="(turn, index) in hitsAndSinksObject">{{index}} </th>
-                        </tr>
-                    </thead>
-                    <tbody-->
-                <tr>
-                    <td class="empty_cell" scope="col">
-                        <img src="assets/carrier.pur.png" alt="">
-                    </td>
-                    <td v-for="(turn, index) in hitsAndSinksObject" class="empty_cell" class="cell letter"
-                        v-if="turn.carrier.hits =='1'">
-                        <i class="glyphicon glyphicon-screenshot" style="font-size:13px;color:	darkslategrey;"></i>
-                    </td>
-                    <td class="empty_cell" class="cell letter" v-else="">
-                        <i class="glyphicon glyphicon-remove" style="font-size:12px;color:darkslategrey;"></i>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="empty_cell" scope="col">
-                        <img src="assets/battleship.pur.png" alt="">
-                    </td>
-                    <td v-for="(turn, index) in hitsAndSinksObject" class="empty_cell" class="cell letter"
-                        v-if="turn.battleship.hits =='1'">
-                        <i class="glyphicon glyphicon-screenshot" style="font-size:13px;color:darkslategrey;"></i>
-                    </td>
-                    <td class="empty_cell" class="cell letter" v-else="">
-                        <i class="glyphicon glyphicon-remove" style="font-size:12px;color: darkslategrey"></i>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="empty_cell" scope="col">
-                        <img src="assets/submarine.pur.png" alt="">
-                    </td>
-                    <<td v-for="(turn, index) in hitsAndSinksObject" class="empty_cell" class="cell letter"
-                        v-if="turn.submarine.hits =='1'">
-                        <i class="glyphicon glyphicon-screenshot" style="font-size:13px;color:darkslategrey;"></i>
+                <thead>
+                    <tr>
+                        <!--th class="cell letter" scope="row"></th>
+                            <th class="empty_cell" scope="row" v-for="(turn, index) in hitsAndSinksObjectOpponent">{{index}} </th-->
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="empty_cell" scope="col">
+                            <img src="assets/carrier.pur.png" alt="">
                         </td>
-                        <td class="empty_cell" class="cell letter" v-else="">
-                            <i class="glyphicon glyphicon-remove" style="font-size:12px;color:darkslategrey;"></i>
+                        <td v-for="(turnOp, index) in hitsAndSinksObjectOpponent" class="empty_cell" class="cell letter"
+                            v-if="turnOp.carrier.sink !='1'">
                         </td>
-                </tr>
-                <tr>
-                    <td class="empty_cell" scope="col">
-                        <img src="assets/destroyer.pur.png" alt="">
-                    </td>
-                    <td v-for="(turn, index) in hitsAndSinksObject" class="empty_cell" class="cell letter"
-                        v-if="turn.destroyer.hits =='1'">
-                        <i class="glyphicon glyphicon-screenshot" style="font-size:13px;color:darkslategrey;"></i>
-                    </td>
-                    <td class="empty_cell" class="cell letter" v-else="">
-                        <i class="glyphicon glyphicon-remove" style="font-size:12px;color:darkslategrey;"></i>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="empty_cell" scope="col">
-                        <img src="assets/patrol.pur.png" alt="">
-                    </td>
-                    <td v-for="(turn, index) in hitsAndSinksObject" class="empty_cell" class="cell letter"
-                        v-if="turn.patrol.hits =='1'">
-                        <i class="glyphicon glyphicon-screenshot" style="font-size:13px;color:darkslategrey;"></i>
-                    </td>
-                    <td class="empty_cell" class="cell letter" v-else="">
-                        <i class="glyphicon glyphicon-remove" style="font-size:12px;color:darkslategrey;"></i>
-                    </td>
-                </tr>
-                <!--/tbody-->
+                        <td class="empty_cell_sunk_ship" class="" v-else="">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="empty_cell" scope="col">
+                            <img src="assets/battleship.pur.png" alt="">
+                        </td>
+                        <td v-for="(turnOp, index) in hitsAndSinksObjectOpponent" class="empty_cell" class="cell letter"
+                            v-if="turnOp.battleship.sink !='1'">
+                        </td>
+                        <td class="empty_cell_sunk_ship" class="" v-else="">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="empty_cell" scope="col">
+                            <img src="assets/submarine.pur.png" alt="">
+                        </td>
+                        <td v-for="(turnOp, index) in hitsAndSinksObjectOpponent" class="empty_cell" class="cell letter"
+                            v-if="turnOp.submarine.sink !='1'">
+                        </td>
+                        <td class="empty_cell_sunk_ship" class="" v-else="">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="empty_cell" scope="col">
+                            <img src="assets/destroyer.pur.png" alt="">
+                        </td>
+                        <td v-for="(turnOp, index) in hitsAndSinksObjectOpponent" class="empty_cell" class="cell letter"
+                            v-if="turnOp.destroyer.sink !='1'">
+                        </td>
+                        <td class="empty_cell_sunk_ship" class="" v-else="">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="empty_cell" scope="col">
+                            <img src="assets/patrol.pur.png" alt="">
+                        </td>
+                        <td v-for="(turnOp, index) in hitsAndSinksObjectOpponent" class="empty_cell" class="cell letter"
+                            v-if="turnOp.patrol.sink !='1'">
+                        </td>
+                        <td class="empty_cell_sunk_ship" class="" v-else="">
+                        </td>
+                    </tr>
+                </tbody>
             </table>
         </div>
         <div v-if="!removeShipOptionsTable" class="ship-placement-table ship-placement">

@@ -165,7 +165,7 @@ input{
     text-align: center;
     padding-top: 30px;
     justify-self: center;
-    margin-top: 20px;
+    margin-top: 30px;
 }
 
 .hits-and-sinks-table-opponent{
@@ -176,7 +176,7 @@ input{
     text-align: center;
     padding-top: 30px;
     justify-self: center;
-    margin-top: 20px;
+    margin-top: 30px;
 }
 
 .ship-placement{
@@ -278,6 +278,14 @@ color: gray;
     position: relative;
     border-radius: 15px;
 }
+.empty_cell_sunk_ship{
+    width: 35px;
+    height: 35px;
+    background-color: grey;
+    position: relative;
+    border-radius: 15px;
+}
+
 .left{
     grid-column-start: 2;
     grid-column-end: 3;

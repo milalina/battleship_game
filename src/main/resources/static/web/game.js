@@ -45,145 +45,9 @@ new Vue({
         turns: 0,
         showConfirmSalvoesButton: false,
         images: ["assets/carrier.pur.png", "assets/battleship.pur.png", "assets/submarine.pur.png", "assets/destroyer.pur.png", "assets/patrol.pur.png"],
-        hitsAndSinksObject: {
-            "1": {
-                "carrier": {
-                    "sinks": null
-                },
-                "battleship": {
-                    "sinks": null
-                },
-                "submarine": {
-                    "sinks": null,
-                },
-                "destroyer": {
-                    "sinks": null,
-                },
-                "patrol": {
-                    "sinks": null
-                }
-            },
-            "2": {
-                "carrier": {
-                    "sinks": null
-                },
-                "battleship": {
-                    "sinks": null
-                },
-                "submarine": {
-                    "sinks": null
-                },
-                "destroyer": {
-                    "sinks": null
-                },
-                "patrol": {
-                    "sinks": null
-                }
-            },
-            "3": {
-                "carrier": {
-                    "sinks": null
-                },
-                "battleship": {
-                    "sinks": null
-                },
-                "submarine": {
-                    "sinks": null
-                },
-                "destroyer": {
-                    "sinks": null
-                },
-                "patrol": {
-                    "sinks": null
-                }
-            },
-            "4": {
-                "carrier": {
-                    "sinks": null
-                },
-                "battleship": {
-                    "sinks": null
-                },
-                "submarine": {
-                    "sinks": null
-                },
-                "destroyer": {
-                    "sinks": null
-                },
-                "patrol": {
-                    "sinks": null
-                }
-            },
-            "5": {
-                "carrier": {
-                    "sinks": "1"
-                },
-                "battleship": {
-                    "sinks": null
-                },
-                "submarine": {
-                    "sinks": null,
-                },
-                "destroyer": {
-                    "sinks": null,
-                },
-                "patrol": {
-                    "sinks": null
-                }
-            },
-            "6": {
-                "carrier": {
-                    "sinks": null
-                },
-                "battleship": {
-                    "sinks": null
-                },
-                "submarine": {
-                    "sinks": null
-                },
-                "destroyer": {
-                    "sinks": null
-                },
-                "patrol": {
-                    "sinks": null
-                }
-            },
-            "7": {
-                "carrier": {
-                    "sinks": null
-                },
-                "battleship": {
-                    "sinks": null
-                },
-                "submarine": {
-                    "sinks": null
-                },
-                "destroyer": {
-                    "sinks": null
-                },
-                "patrol": {
-                    "sinks": null
-                }
-            },
-            "8": {
-                "carrier": {
-                    "sinks": null
-                },
-                "battleship": {
-                    "sinks": null
-                },
-                "submarine": {
-                    "sinks": null
-                },
-                "destroyer": {
-                    "sinks": null
-                },
-                "patrol": {
-                    "sinks": null
-                }
-            }
-        }
-
+        hitsAndSinksObjectYou:{},
+        hitsAndSinksObjectOpponent:{}, 
+        hitsOther:[],   
     },
     methods: {
         fetchData: function () {
@@ -225,12 +89,21 @@ new Vue({
                 this.gamePlayerOther = this.game[0].gamePlayers[0].player.email
                 this.mySalvoesObject = this.game[0].gamePlayers[1].salvoes
                 this.enemySalvoesObject = this.game[0].gamePlayers[0].salvoes
+                this.hitsAndSinksObjectYou=this.game[0].gamePlayers[1].status
+                this.hitsAndSinksObjectOpponent=this.game[0].gamePlayers[0].status
+                this.hitsOther=this.game[0].gamePlayers[0].hits
             } else {
                 this.gamePlayerYou = this.game[0].gamePlayers[0].player.email
                 this.gamePlayerOther = this.game[0].gamePlayers[1].player.email
                 this.mySalvoesObject = this.game[0].gamePlayers[0].salvoes
                 this.enemySalvoesObject = this.game[0].gamePlayers[1].salvoes
+                this.hitsAndSinksObjectYou=this.game[0].gamePlayers[0].status
+                this.hitsAndSinksObjectOpponent=this.game[0].gamePlayers[1].status
+                this.hitsOther=this.game[0].gamePlayers[1].hits
             }
+            console.log(this.hitsAndSinksObjectYou)
+            console.log(this.hitsOther)
+            this.displayWhereYouHitYourOpponent();
             this.fillArrMySalvoes()
             this.fillArrEnemySalvoes()
         },
@@ -663,9 +536,19 @@ new Vue({
         },
         displayMySalvoes() {
             for (i in this.mySalvoes) {
-                document.getElementById(this.mySalvoes[i] + "s").innerHTML = '<i class="glyphicon glyphicon-screenshot" style="font-size:17px;color:purple;background-color:thistle;"></i>';
                 document.getElementById(this.mySalvoes[i] + "s").style.backgroundColor = "thistle";
             }
+
+            for (j in this.hitsOther){
+                document.getElementById(this.hitsOther[j] + "s").innerHTML = '<i class="glyphicon glyphicon-screenshot" style="font-size:17px;color:purple;background-color:thistle;"></i>';
+            }
+        },
+
+        displayWhereYouHitYourOpponent(){
+            console.log(this.mySalvoes)
+            console.log(this.hitsOther)
+            var arrayWhereYourOpponentIsHit=[]
+         
         }
     },
 
@@ -674,71 +557,3 @@ new Vue({
         this.slowingTheOnsetOfFunctions();
     },
 })
-
-/*  "2": [{
-                "type": "carrier",
-                "status": {
-                    "sinks": null
-                },
-                "type": "battleship",
-                "status": {
-                    "sinks": null
-                },
-                "type": "submarine",
-                "status": {
-                    "sinks": null
-                },
-                "type": "destroyer",
-                "status": {
-                    "sinks": null
-                },
-                "type": "patrol",
-                "status": {
-                    "sinks": "1"
-                }
-            }],
-            "3": [{
-                "type": "carrier",
-                "status": {
-                    "hits": "boo",
-                    "sinks": null
-                },
-                "type": "battleship",
-                "status": {
-                    "sinks": null
-                },
-                "type": "submarine",
-                "status": {
-                    "sinks": "1"
-                },
-                "type": "destroyer",
-                "status": {
-                    "sinks": "1"
-                },
-                "type": "patrol",
-                "status": null
-            }],
-            "4": [{
-                "type": "carrier",
-                "status": {
-                    "sinks": null
-                },
-                "type": "battleship",
-                "status": {
-                    "sinks": null
-                },
-                "type": "submarine",
-                "status": {
-                    "hits": null,
-                    "sinks": null
-                },
-                "type": "destroyer",
-                "status": {
-                    "hits": null,
-                    "sinks": null
-                },
-                "type": "patrol",
-                "status": {
-                    "hits": null,
-                    "sinks": null
-                } */
