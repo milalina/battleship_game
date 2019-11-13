@@ -249,8 +249,8 @@ color: gray;
    background-color: #40E0D0 !important;
    color: grey !important;
    border-radius: 15px;
-   
 }
+
 
 .player-modified{
     font-size: 1em;
@@ -278,7 +278,24 @@ color: gray;
     position: relative;
     border-radius: 15px;
 }
-.heading{
+.left{
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    justify-self: end;
+    padding-top: 10px;
+    margin-right: 10px;
+}
+.right{
+    grid-column-start: 4;
+    grid-column-end: 5;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    padding-top: 10px;
+    margin-left: 10px;
+}
+/* .heading{
     grid-column-start: 2;
     grid-column-end: 5;
     grid-row-start: 1;
@@ -286,8 +303,63 @@ color: gray;
     justify-self: center;
     color:#40E0D0;
     padding-top: 20px;
+} */
+.moving-ship-you{
+   position: relative;
+   animation-name: example-you;
+   animation-duration: 20s;
 }
 
+@keyframes example-you {
+    0%   {left:0px; top:0px;}
+    25%  {left:0px; top:485px;}
+    50%  {left:0px; top:0px;}
+    75%  {left:0px; top:485px;}
+    100% {left:0px; top:0px;}
+  }
+
+  .moving-ship-enemy{
+    position: relative;
+    animation-name: example-enemy;
+    animation-duration: 20s;
+ }
+ 
+ @keyframes example-enemy {
+     0%   {right:0px; top: 0px;}
+     25%  {right:0px; top:485px;}
+     50%  {right:0px; top:0px;}
+     75%  {right:0px; top:485px;}
+     100% {right:0px; top:0px;}
+   }
+
+   /*.moving-ship-you{
+    position: relative;
+    animation-name: example-you;
+    animation-duration: 20s;
+ }
+ 
+ @keyframes example-you {
+     0%   {left:0px; top:20px;}
+     25%  {left:550px; top:20px;}
+     50%  {left:550px; top:485px;}
+     75%  {left:0px; top:485px;}
+     100% {left:0px; top:20px;}
+   }
+ 
+   .moving-ship-enemy{
+     position: relative;
+     animation-name: example-enemy;
+     animation-duration: 20s;
+  }
+  
+  @keyframes example-enemy {
+      0%   {right:0px; top:20px;}
+      25%  {right:550px; top:20px;}
+      50%  {right:550px; top:485px;}
+      75%  {right:0px; top:485px;}
+      100% {right:0px; top:20px;}
+    }*/
+ 
 
 
 @-webkit-keyframes spaceboots {

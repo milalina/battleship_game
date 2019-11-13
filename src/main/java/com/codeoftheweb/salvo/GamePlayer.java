@@ -153,9 +153,7 @@ public class GamePlayer {
             return null;
         }
         List<String> oponentSalvoes = this.getOpponentSalvoes(this.getOpponent().salvoes);
-
         oponentSalvoes.retainAll(shipLocations);
-
         return oponentSalvoes;
     }
 

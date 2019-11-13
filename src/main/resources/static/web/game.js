@@ -491,7 +491,7 @@ new Vue({
             if (this.game[0].ships.length == 0) {
                 this.shipsPlaced = false;
             }
-            if (this.game[0].ships.length != 0 && this.mySalvoes.length > 0) {
+            if (this.game[0].ships.length != 0 || this.game[0].ships.length != 0 && this.mySalvoes.length > 0) {
                 this.shipsPlaced = true;
                 this.removeShipOptionsTable = true;
                 for (j in this.game[0].ships) {
