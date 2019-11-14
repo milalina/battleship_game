@@ -67,7 +67,8 @@ public class Salvo {
     }
 
     public void setSalvoLocations(List<String> salvoLocations) {
-        this.salvoLocations = salvoLocations;
+        if (salvoLocations.size()>=5){
+        this.salvoLocations = salvoLocations;}
     }
 
 }

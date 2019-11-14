@@ -39,6 +39,12 @@ public class GamePlayer {
         this.joinDate = joinDate;
     }
 
+    public void setShips(Set<Ship> ships) {
+        if(ships.size()>=5) {
+            this.ships = ships;
+        }
+    }
+
     public void setId(long id) {
         this.id = id;
     }
@@ -59,6 +65,11 @@ public class GamePlayer {
     public void addSalvo(Salvo salvo) {
         salvo.setGamePlayer(this);
         salvoes.add(salvo);
+    }
+
+    public void setSalvoes(List<Salvo> salvoes, Integer gameOverTurnNumber){
+        if(salvoes.size()<= gameOverTurnNumber){
+            this.salvoes = salvoes;}
     }
 
     public Game getGame() {
@@ -190,6 +201,22 @@ public class GamePlayer {
         return shipTypeSinkDtoInAllTurns;
     }
 
+//getting the turn number at which all GP ships are sunk - game over
+
+    public Integer findGameOverTurnNumber() {
+       Integer gameOverTurnNumber=0;
+        if (this.getOpponent()!= null){
+            List<Salvo> salvoes = this.getOpponent().getSalvoes();
+            List<String> allGPShipLocations = getGPShipLocations();
+            for (int turnNumber = 1; turnNumber < salvoes.size()+1; turnNumber++) {
+                List<String> salvoesToEndTheGame = getOpponentSalvoes(getOpponentSalvoesByTurn(turnNumber));
+                if(salvoesToEndTheGame.containsAll(allGPShipLocations)){
+                    gameOverTurnNumber=turnNumber;
+                    setSalvoes(salvoes, gameOverTurnNumber);
+                };
+            }}
+        return gameOverTurnNumber;
+    }
 
     public List<Map<String, Object>> makeShipDtoList() {
         List<Map<String, Object>> myGamePlayerShipDtoList = new ArrayList<>();
