@@ -198,6 +198,7 @@ public class GamePlayer {
             List<String> salvoesToPassAsAParam = getOpponentSalvoes(getOpponentSalvoesByTurn(turnNumber));
             shipTypeSinkDtoInAllTurns.put(turnNumber, this.makeShipTypeSinkDto(salvoesToPassAsAParam));
         }}
+        findGameOverTurnNumber();
         return shipTypeSinkDtoInAllTurns;
     }
 
@@ -211,7 +212,9 @@ public class GamePlayer {
             for (int turnNumber = 1; turnNumber < salvoes.size()+1; turnNumber++) {
                 List<String> salvoesToEndTheGame = getOpponentSalvoes(getOpponentSalvoesByTurn(turnNumber));
                 if(salvoesToEndTheGame.containsAll(allGPShipLocations)){
-                    gameOverTurnNumber=turnNumber;
+                    List<Integer> turnsAfterGameIsOver = new ArrayList<>();
+                    turnsAfterGameIsOver.add(turnNumber);
+                    gameOverTurnNumber=turnsAfterGameIsOver.get(0);
                     setSalvoes(salvoes, gameOverTurnNumber);
                 };
             }}
