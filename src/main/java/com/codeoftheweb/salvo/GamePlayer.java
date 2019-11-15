@@ -71,15 +71,10 @@ public class GamePlayer {
         {ships.add(ship);}
     }
 
-    public void addSalvo(Salvo salvo, Integer gameOverTurnNumber) {
-        salvo.setGamePlayer(this);
-        if(salvoes.size()<= gameOverTurnNumber){
-        salvoes.add(salvo);}
-    }
-
     public void addSalvo(Salvo salvo) {
         salvo.setGamePlayer(this);
-        salvoes.add(salvo);
+        if(gameOver==false){
+        salvoes.add(salvo);}
     }
 
     public void setSalvoes(List<Salvo> salvoes){
@@ -145,17 +140,17 @@ public class GamePlayer {
         return dto;
     }
 
-    Integer gettingLastSalvo() {
+   /* Integer gettingLastSalvo() {
         Integer indexOfLastSalvo;
             if (salvoes.size() > 1) {
                 indexOfLastSalvo = salvoes.size()-1;
             } else {
                 indexOfLastSalvo = null;
             }
-        findGameOverTurnNumber(indexOfLastSalvo);
+        findGameOverTurnNumber();
         return indexOfLastSalvo;
 
-    }
+    }*/
         //where the opponent places salvoes chronologically
 
         public List<Salvo> getOpponentSalvoesByTurn ( int turn){
@@ -220,8 +215,10 @@ public class GamePlayer {
                     shipTypeSinkDtoInAllTurns.put(turnNumber, this.makeShipTypeSinkDto(salvoesToPassAsAParam));
                 }
             }
-            gettingLastSalvo();
+           // gettingLastSalvo();
+            findGameOverTurnNumber();
             return shipTypeSinkDtoInAllTurns;
+
         }
 
         //getting the next salvo, to check later if it is worth adding compared to the current length of the salvo set?
@@ -229,21 +226,15 @@ public class GamePlayer {
 
 //getting the turn number at which all GP ships are sunk - game over
 
-        public boolean findGameOverTurnNumber (Integer indexOfTheLastSalvo) {
+        public boolean findGameOverTurnNumber () {
             Integer gameOverTurnNumber = 0;
             if (this.getOpponent() != null) {
                 List<Salvo> salvoes = this.getOpponent().getSalvoes();
                 List<String> allGPShipLocations = getGPShipLocations();
                 for (int turnNumber = 1; turnNumber < salvoes.size() + 1; turnNumber++) {
                     List<String> salvoesToEndTheGame = getOpponentSalvoes(getOpponentSalvoesByTurn(turnNumber));
-                    if (salvoesToEndTheGame.containsAll(allGPShipLocations)) {
-                        List<Integer> turnsAfterGameIsOver = new ArrayList<>();
-                        turnsAfterGameIsOver.add(turnNumber);
-                        gameOverTurnNumber = turnsAfterGameIsOver.get(0);
-                       if (indexOfTheLastSalvo+1==gameOverTurnNumber){
-                        // setSalvoes(salvoes, gameOverTurnNumber);
-                            Salvo salvo= new Salvo();
-                        addSalvo(salvo, gameOverTurnNumber);}
+                    if (salvoesToEndTheGame.containsAll(allGPShipLocations) &&
+                            this.getOpponent().getSalvoes().size()==this.getSalvoes().size()){
                         gameOver = true;
                     } else {
                         gameOver = false;

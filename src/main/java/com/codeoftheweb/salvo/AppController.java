@@ -180,12 +180,13 @@ public class AppController {
             return new ResponseEntity<>("The user already has salvoes fired", HttpStatus.FORBIDDEN);
         }*/
 
-        System.out.println(salvoDto);
-        List <String>  salvoLocations = salvoDto.getLocations();
-        Salvo salvo=new Salvo(salvoLocations);
-        salvo.setGamePlayer(gamePlayer);
-        salvoRepository.save(salvo);
-        return new ResponseEntity<>("Salvoes added", HttpStatus.CREATED);
+       if(gamePlayer.isGameOver()==false && gamePlayer.getOpponent().isGameOver()==false) {
+           List<String> salvoLocations = salvoDto.getLocations();
+           Salvo salvo = new Salvo(salvoLocations);
+           salvo.setGamePlayer(gamePlayer);
+           salvoRepository.save(salvo);
+           return new ResponseEntity<>("Salvoes added", HttpStatus.CREATED);
+       }else{return new ResponseEntity<>("Game over", HttpStatus.CREATED);}
     }
 
    /*
