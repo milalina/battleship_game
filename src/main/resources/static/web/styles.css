@@ -312,6 +312,7 @@ color: gray;
     color:#40E0D0;
     padding-top: 20px;
 } */
+/* //////////
 .moving-ship-you{
    position: relative;
    animation-name: example-you;
@@ -339,7 +340,7 @@ color: gray;
      75%  {right:0px; top:485px;}
      100% {right:0px; top:0px;}
    }
-
+////////// */
    /*.moving-ship-you{
     position: relative;
     animation-name: example-you;

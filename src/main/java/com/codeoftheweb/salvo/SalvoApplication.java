@@ -140,6 +140,12 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			Salvo salvo4= new Salvo(turn2, salvoLocations4);
             Salvo salvo5= new Salvo(turn1, salvoLocations5);
 
+            /*Integer salvoNumber1 = gamePlayer1.getSalvoes().size()-1;
+            Integer salvoNumber2 = gamePlayer1.getSalvoes().size()-1;
+            Integer salvoNumber3 = gamePlayer1.getSalvoes().size()-1;
+            Integer salvoNumber4 = gamePlayer1.getSalvoes().size()-1;
+            Integer salvoNumber5 = gamePlayer1.getSalvoes().size()-1;*/
+
 			gamePlayer1.addSalvo(salvo1);
 			gamePlayer1.addSalvo(salvo3);
 			gamePlayer2.addSalvo(salvo2);
