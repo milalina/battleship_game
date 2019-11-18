@@ -62,7 +62,6 @@ public class AppController {
             Map<String, Object> dto = new LinkedHashMap<String, Object>();
             dto.put("id", playerRepository.findByUserName(authentication.getName()).getId());
             dto.put("name", (authentication.getName()));
-            //dto.put("gpid", playerRepository.findByUserName(authentication.getName()).getGamePlayerForThisGame(game));
             return dto;
         }
         return null;
@@ -80,7 +79,6 @@ public class AppController {
         Player currentPlayer = currentGamePlayer.getPlayer();
         List<Map<String, Object>> gameView = new ArrayList<>();
         gameView.add(currentGamePlayer.makeGameDTOForGamePlayer());
-        // gameView.add(currentGamePlayer.getGame().getPlayersSalvoesMap());
         return gameView;
     }
 
@@ -182,6 +180,18 @@ public class AppController {
             return new ResponseEntity<>("Game over", HttpStatus.OK);
         }
 
+       /*if(gamePlayer.getScore()==1){
+            return new ResponseEntity<>("You won. Your score is 1", HttpStatus.OK);
+        }
+
+        if(gamePlayer.getScore()==0.5){
+            return new ResponseEntity<>("You ended in a tie. Your score is 0.5", HttpStatus.OK);
+        }
+
+        if(gamePlayer.getScore()==0){
+            return new ResponseEntity<>("You lost. Your score is 0", HttpStatus.OK);
+        }*/
+
         Turn lastTurn = gamePlayer.getGame().getLastTurn();
 
         if (lastTurn.canTheGamePlayerFireSalvo(gamePlayer)) {
@@ -191,88 +201,9 @@ public class AppController {
             salvoRepository.save(salvo);
             return new ResponseEntity<>("Salvoes added", HttpStatus.CREATED);
         } else {
-            return new ResponseEntity<>("Player already shot in this turn. Wait for your opponent", HttpStatus.CREATED);
+            return new ResponseEntity<>("You placed your salvo in this turn. Wait for your opponent to fire", HttpStatus.CREATED);
         }
-
-       /* if(gamePlayer.getSalvoes() != null ){
-            System.out.println("forbidden");
-            return new ResponseEntity<>("The user already has salvoes fired", HttpStatus.FORBIDDEN);
-        }*/
-
-
     }
-
-   /*
-    @RequestMapping(value="/games/player/{gamePlayerId}/salvoes", method=RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> addSalvoes(@PathVariable ("gamePlayerId")  long gamePlayerId, @RequestBody SalvoDto salvoDto, Authentication authentication) {
-        GamePlayer gamePlayer = gamePlayerRepository.findById(gamePlayerId).orElse(null);
-        if(authentication.getName()==null){
-            return new ResponseEntity<>("There is no current user logged in", HttpStatus.UNAUTHORIZED);
-        }
-        if (gamePlayer==null) {
-            return new ResponseEntity<>( "There is no game player with the given ID", HttpStatus.UNAUTHORIZED);
-        }
-        if(gamePlayer.getPlayer().getUserName()!=authentication.getName()){
-            return new ResponseEntity<>("The current user is not the game player the ID references", HttpStatus.UNAUTHORIZED);
-        }
-        if(gamePlayer.getShips() != null && gamePlayer.getShips().size() > 0 ){
-            return new ResponseEntity<>("The user already has salvoes fired", HttpStatus.FORBIDDEN);
-        }
-            List salvoLocations = salvoDto.getLocations();
-            Salvo salvo=new Salvo(salvoLocations);
-            salvo.setGamePlayer(gamePlayer);
-            salvoRepository.save(salvo);
-        return new ResponseEntity<>("Salvoes added", HttpStatus.CREATED);
-    }
-
-    @RequestMapping("/game_view/{gamePlayerId}")
-    public List<Map<String, Object>> findGame (@PathVariable ("gamePlayerId") long gamePlayerId) {
-        GamePlayer currentGamePlayer = gamePlayerRepository.findGamePlayerById(gamePlayerId);
-        Game currentGame = currentGamePlayer.getGame();
-        List<Map<String, Object>> gameView= new ArrayList<>();
-        //gameView.add(currentGame.makeGameDTO());
-        gameView.add(currentGame.makeGameDTOGamePlayer(currentGamePlayer.getPlayer()));
-        return gameView;
-    }*/
-
-
-
-
-
-   /* private Map<String, Object> makeGameDTO(Game game) {
-        List<Long> makeGameDTO = new ArrayList<>();
-        getGames().forEach(oneGame -> {
-            Map<String, Object> dto = new LinkedHashMap <String, Object>();
-            dto.put("id", oneGame.getId());
-            dto.put("created", oneGame.getGameCreatedAt().toInstant().toEpochMilli());
-        });
-        return dto;
-    }*/
-
-
-    /*public List<Long> makeGameDTO() {
-        List<Long> makeGameDTO = new ArrayList<>();
-        getGames().forEach(oneGame -> {
-            Map<String, Object> dto = new LinkedHashMap <String, Object>();
-            dto.put("id", oneGame.getId());
-            dto.put("created", oneGame.getGameCreatedAt().toInstant().toEpochMilli());
-        });
-        return makeGameDTO;
-    }*/
-
-    /*public List<Long> getIds() {
-        List<Long> gameIds = new ArrayList<>();
-        getGames().stream().forEach(oneGame -> {
-            gameIds.add(oneGame.getId());
-        });
-        return gameIds;
-    }*/
-
-    /*public List<Long> getIds2() {
-       return getGames().stream()
-               .map(Game::getId)
-               .collect(toList());
-    }*/
 
     public List<Game> getGames() {
         return gameRepository.findAll();
@@ -280,54 +211,3 @@ public class AppController {
 
 
 }
-
-/*
-@RequestMapping("/games")
-    public List<Object> getAllGames( Authentication authentication) {
-        if (authentication != null){
-            Map<String, Object> dto = new LinkedHashMap<String, Object>();
-            dto.put("name", playerRepository.findByUserName(authentication.getName()).getId());
-            dto.put("id", (authentication.getName()));
-        }
-        List<Game> games = gameRepository
-                .findAll();
-        return games
-                .stream()
-                .map(element -> element.makeGameDTO())
-                .collect(Collectors.toList());
-    }*/
-
-
- /*   @RequestMapping(
-            path = {"/game/{gameId}/player"},
-            method = {RequestMethod.POST}
-    )
-    public ResponseEntity<Object> addPlayer(String playerName, @PathVariable Long gameId) {
-        System.out.println(gameId);
-        return new ResponseEntity(HttpStatus.CREATED);}
-*/
-
-
-
-    /* @RequestMapping(
-            path = {"/game/{gameId}/player"},
-            method = {RequestMethod.POST}
-    )
-    public ResponseEntity<String> joinGame(@RequestParam Long id) {
-        System.out.println(id);
-      Player currentPlayer = playerRepository.findByUserName(authentication.getName());
-        if (currentPlayer==null) {
-            return new ResponseEntity<>("Missing data", HttpStatus.UNAUTHORIZED);
-        }
-        Game gameToJoin = gameRepository.findGameById(id);
-        if (gameToJoin==null) {
-            return new ResponseEntity<>("No such game", HttpStatus.FORBIDDEN);
-        }
-        Set<GamePlayer> gamePlayer = gameToJoin.getGamePlayers();
-        if(gamePlayer.size()>1){
-            return new ResponseEntity<>("Game is full", HttpStatus.FORBIDDEN);
-        }
-        GamePlayer gpTest = new GamePlayer(gameToJoin, currentPlayer, new Date());
-        gamePlayerRepository.save(gpTest);
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }*/

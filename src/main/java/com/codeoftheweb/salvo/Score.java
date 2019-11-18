@@ -46,6 +46,16 @@ public class Score {
         this.playerScore = playerScore;
     }
 
+    Double calculatePlayerScore(GamePlayer gamePlayer){
+        if (gamePlayer.getGPShipLocations().containsAll(gamePlayer.getOpponent().getSalvoes()) &&
+                gamePlayer.getOpponent().getGPShipLocations().containsAll(gamePlayer.getSalvoes())){
+            return 0.5;
+        } else if (gamePlayer.getGPShipLocations().containsAll(gamePlayer.getOpponent().getSalvoes()) &&
+                !gamePlayer.getOpponent().getGPShipLocations().containsAll(gamePlayer.getSalvoes())){
+            return 1.0;
+        }else{return 0.0;}
+    }
+
 
     public Date getFinishDate() {
         return finishDate;
@@ -81,4 +91,6 @@ public class Score {
     public void setGame(Game game) {
         this.game = game;
     }
+
+
 }

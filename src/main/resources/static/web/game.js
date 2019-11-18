@@ -47,7 +47,8 @@ new Vue({
         images: ["assets/carrier.pur.png", "assets/battleship.pur.png", "assets/submarine.pur.png", "assets/destroyer.pur.png", "assets/patrol.pur.png"],
         hitsAndSinksObjectYou:{},
         hitsAndSinksObjectOpponent:{}, 
-        hitsOther:[],   
+        hitsOther:[], 
+        ships:[],  
     },
     methods: {
         fetchData: function () {
@@ -365,6 +366,7 @@ new Vue({
                 this.shipsPlaced = false;
             }
             if (this.game[0].ships.length != 0 || this.game[0].ships.length != 0 && this.mySalvoes.length > 0) {
+                this.ships=this.game[0].ships
                 this.shipsPlaced = true;
                 this.removeShipOptionsTable = true;
                 for (j in this.game[0].ships) {
@@ -437,8 +439,9 @@ new Vue({
                         console.log(shipLocationArrayFromTypeLocationsArray[g], shipTypeFromTypeLocationsArray)
                     }
                 
-            } */
-            for (i in this.shipLocations) {
+            } 
+            
+             for (i in this.shipLocations) {
                 document.getElementById(this.shipLocations[i]).style.backgroundColor = "thistle";
                 var img = document.createElement("img");
                 img.src = "assets/battleship.pur.png";
@@ -447,6 +450,23 @@ new Vue({
                 img.id = (this.shipLocations[i] + "psShipPic")
                 var shipToBeRemoved = document.getElementById(img.id);
                 shipToBeRemoved.parentNode.removeChild(shipToBeRemoved)
+
+            }
+            */
+            for (i in this.ships) {
+                console.log(this.ships[i].type)
+                for (j in this.ships[i].locations){
+                    document.getElementById(this.ships[i].locations[j]).style.backgroundColor = "thistle";
+                    var img = document.createElement("img");
+                    img.src = "assets/"+this.ships[i].type+".pur.png";
+                    var src = document.getElementById(this.ships[i].locations[j]);
+                    src.appendChild(img);
+                    img.id = (this.ships[i].locations[j]+ "psShipPic")
+                    var shipToBeRemoved = document.getElementById(img.id);
+                    shipToBeRemoved.parentNode.removeChild(shipToBeRemoved)
+                  
+                }
+                
 
             }
 
@@ -549,11 +569,15 @@ new Vue({
             console.log(this.hitsOther)
             var arrayWhereYourOpponentIsHit=[]
          
-        }
+        },
+        
+        /*makeCallsEveryFiveSecs(){
+            setInterval(()=> { this.fetchData() }, 10000);}*/
     },
 
     created: function () {
         this.fetchData();
         this.slowingTheOnsetOfFunctions();
+       // this.makeCallsEveryFiveSecs();
     },
 })

@@ -56,6 +56,7 @@
                             v-if="turn.carrier.sink !='1'">
                         </td>
                         <td class="empty_cell_sunk_ship" class="" v-else="">
+                                <span class="glyphicon glyphicon-fire" style="font-size:17px;color:purple;"></span>
                         </td>
                     </tr>
                     <tr>
@@ -66,6 +67,7 @@
                             v-if="turn.battleship.sink !='1'">
                         </td>
                         <td class="empty_cell_sunk_ship" class="" v-else="">
+                                <span class="glyphicon glyphicon-fire" style="font-size:17px;color:purple;"></span>
                         </td>
                     </tr>
                     <tr>
@@ -76,6 +78,7 @@
                             v-if="turn.submarine.sink !='1'">
                         </td>
                         <td class="empty_cell_sunk_ship" class="" v-else="">
+                                <span class="glyphicon glyphicon-fire" style="font-size:17px;color:purple;"></span>
                         </td>
                     </tr>
                     <tr>
@@ -86,6 +89,7 @@
                             v-if="turn.destroyer.sink !='1'">
                         </td>
                         <td class="empty_cell_sunk_ship" class="" v-else="">
+                                <span class="glyphicon glyphicon-fire" style="font-size:17px;color:purple;"></span>
                         </td>
                     </tr>
                     <tr>
@@ -96,6 +100,7 @@
                             v-if="turn.patrol.sink !='1'">
                         </td>
                         <td class="empty_cell_sunk_ship" class="" v-else="">
+                                <span class="glyphicon glyphicon-fire" style="font-size:17px;color:purple;"></span>
                         </td>
                     </tr>
                 </tbody>
@@ -142,8 +147,8 @@
                     </td>
                 </tr>
             </table>
-            <button v-if="showConfirmSalvoesButton" @click="sendSalvoes" class="button right"> Confirm salvos</button>
-            <button v-if="showConfirmSalvoesButton" @click="clearSalvoes" class="button right"> Clear salvos</button>
+            <button v-if="showConfirmSalvoesButton" @click="sendSalvoes" class="button"> Confirm </button>
+            <button v-if="showConfirmSalvoesButton" @click="clearSalvoes" class="button"> Clear </button>
         </div>
         <div class="hits-and-sinks-table-opponent" v-if="shipsPlaced">
             <table class="ship-placement-table ship-placement">
@@ -162,6 +167,7 @@
                             v-if="turnOp.carrier.sink !='1'">
                         </td>
                         <td class="empty_cell_sunk_ship" class="" v-else="">
+                                <span class="glyphicon glyphicon-fire" style="font-size:17px;color:purple;"></span>
                         </td>
                     </tr>
                     <tr>
@@ -172,6 +178,7 @@
                             v-if="turnOp.battleship.sink !='1'">
                         </td>
                         <td class="empty_cell_sunk_ship" class="" v-else="">
+                                <span class="glyphicon glyphicon-fire" style="font-size:17px;color:purple;"></span>
                         </td>
                     </tr>
                     <tr>
@@ -182,6 +189,7 @@
                             v-if="turnOp.submarine.sink !='1'">
                         </td>
                         <td class="empty_cell_sunk_ship" class="" v-else="">
+                                <span class="glyphicon glyphicon-fire" style="font-size:17px;color:purple;"></span>
                         </td>
                     </tr>
                     <tr>
@@ -192,6 +200,7 @@
                             v-if="turnOp.destroyer.sink !='1'">
                         </td>
                         <td class="empty_cell_sunk_ship" class="" v-else="">
+                                <span class="glyphicon glyphicon-fire" style="font-size:17px;color:purple;"></span>
                         </td>
                     </tr>
                     <tr>
@@ -202,6 +211,7 @@
                             v-if="turnOp.patrol.sink !='1'">
                         </td>
                         <td class="empty_cell_sunk_ship" class="" v-else="">
+                                <span class="glyphicon glyphicon-fire" style="font-size:17px;color:purple;"></span>
                         </td>
                     </tr>
                 </tbody>
@@ -269,10 +279,8 @@
                     <td class="empty_cell cell letter ship-placement-table-cells">1</td>
                 </tr>
             </table>
-            <div>
-                <button v-if="showClearButton" class="button add-padding">Clear ships</button>
-                <button @click="sendShips" v-if="showConfirmButton" class="button add-padding">Confirm ships</button>
-            </div>
+                <button v-if="showClearButton" class="button add-padding">Clear</button>
+                <button @click="sendShips" v-if="showConfirmButton" class="button add-padding">Confirm</button>
         </div>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>

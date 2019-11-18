@@ -104,7 +104,7 @@ public class GamePlayer {
 
     public Double getScore() {
         Score playerScore = this.getPlayer().getScore(game);
-        if (playerScore != null && playerScore.getFinishDate() != null) {
+        if (playerScore != null && playerScore.getFinishDate() != null && this.getGame().isGameOver()) {
             return playerScore.getPlayerScore();
         }
         return null;
@@ -129,23 +129,9 @@ public class GamePlayer {
         return dto;
     }
 
-   /* Integer gettingLastSalvo() {
-        Integer indexOfLastSalvo;
-            if (salvoes.size() > 1) {
-                indexOfLastSalvo = salvoes.size()-1;
-            } else {
-                indexOfLastSalvo = null;
-            }
-        findGameOverTurnNumber();
-        return indexOfLastSalvo;
-
-    }*/
-        //where the opponent places salvoes chronologically
-
         public List<Salvo> getOpponentSalvoesByTurn ( int turn){
             return this.getOpponent().getSalvoes().subList(0, turn);
         }
-        //where the opponent places salvoes
 
         public List<String> getOpponentSalvoes (List < Salvo > opponentSalvoesByTurn) {
             List<String> opponentSalvoes = new ArrayList<>();
@@ -157,7 +143,6 @@ public class GamePlayer {
         }
 
 
-        // where gp ship locations are
         public List<String> getGPShipLocations () {
             List<String> shipLocations = new ArrayList<>();
             for (Ship ship : ships) {
@@ -166,7 +151,6 @@ public class GamePlayer {
             return shipLocations;
         }
 
-        // where gp ships are hit by the opponent in this turn
         public List<String> getHits () {
             List<String> shipLocations = this.getGPShipLocations();
             if (shipLocations.size() == 0) {
@@ -177,8 +161,6 @@ public class GamePlayer {
             oponentSalvoes.retainAll(shipLocations);
             return oponentSalvoes;
         }
-
-// sink in a ship type
 
         public Map<String, Object> makeShipTypeSinkDto (List < String > salvoesToPassAsAParam) {
             Map<String, Object> shipTypeSinkDto = new LinkedHashMap<String, Object>();
@@ -194,7 +176,7 @@ public class GamePlayer {
             }
             return shipTypeSinkDto;
         }
-// sink in a ship type in different turns
+
 
         public Map<Integer, Object> makeShipTypeSinkDtoInAllTurns () {
             Map<Integer, Object> shipTypeSinkDtoInAllTurns = new LinkedHashMap<Integer, Object>();
@@ -208,12 +190,6 @@ public class GamePlayer {
             return shipTypeSinkDtoInAllTurns;
 
         }
-
-        //getting the next salvo, to check later if it is worth adding compared to the current length of the salvo set?
-
-
-//getting the turn number at which all GP ships are sunk - game over
-
 
 
         public List<Map<String, Object>> makeShipDtoList () {
@@ -243,13 +219,6 @@ public class GamePlayer {
             return salvoDto;
         }
 
-        //redundant function for making playerSalvoDto
-  /*  public Map<Long, Object> makePlayerSalvoDTO() {
-        Map<Long, Object> dto = new LinkedHashMap<>();
-        Long playerId = this.getPlayer().getId();
-        dto.put(playerId, this.makeGPSalvoDTO());
-        return dto;
-    }*/
 
         @JsonIgnore
         public GamePlayer getOpponent () {
