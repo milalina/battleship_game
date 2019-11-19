@@ -285,13 +285,13 @@ color: gray;
     position: relative;
     border-radius: 15px;
 }
-
+/* styling heading in GameView: where players' names and a message show */
 .left{
     grid-column-start: 2;
     grid-column-end: 3;
     grid-row-start: 1;
     grid-row-end: 2;
-    justify-self: end;
+    justify-self: start;
     padding-top: 10px;
     margin-right: 10px;
 }
@@ -302,8 +302,65 @@ color: gray;
     grid-row-end: 2;
     padding-top: 10px;
     margin-left: 10px;
+    justify-self: end;
 }
-/* .heading{
+.center{
+    grid-column-start: 2;
+    grid-column-end: 5;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    padding-top: 10px;
+    margin-left: 10px;
+    justify-self: center;
+}
+span{
+    color: #40E0D0;
+    font-size: large;
+}
+/*game over*/
+
+.your-shot{
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    justify-self: end;
+    padding-top: 10px;
+    margin-right: 10px;
+    display:none;
+}
+
+.opponent-shot{
+    grid-column-start: 4;
+    grid-column-end: 5;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    padding-top: 10px;
+    margin-left: 10px;
+   display:none;
+}
+
+.firework-left{
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    justify-self: end;
+    padding-top: 10px;
+    margin-right: 10px;
+    display:none;
+}
+
+.firework-right{
+    grid-column-start: 4;
+    grid-column-end: 5;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    padding-top: 10px;
+    margin-left: 10px;
+   display:none;
+}
+ .heading{
     grid-column-start: 2;
     grid-column-end: 5;
     grid-row-start: 1;
@@ -312,6 +369,66 @@ color: gray;
     color:#40E0D0;
     padding-top: 20px;
 } */
+/*//////// you lose
+.moving-ship-you-lose{
+    position: relative;
+    animation-name: example-you-l;
+    animation-duration: 8s;
+ }
+ 
+ @keyframes example-you-l {
+     0%   {left:0px; top:0px;}
+     25%  {left:220px; top:0px;}
+     35%  {left:220px; top:0px;}
+     40%  {left:240px; top:0px;}
+     100% {left:240px; top:600px;}
+   }
+ 
+   .moving-ship-enemy-win{
+     position: relative;
+     animation-name: example-enemy-w;
+     animation-duration: 8s;
+  }
+  
+  @keyframes example-enemy-w {
+
+     0%   {right:0px; top:0px;}
+     25%  {right:250px; top:0px;}
+     40%  {right:250px; top:0px;}
+     45%  {right:310px; top:0px;}
+     90%  {right:310px; top:0px;}
+     100% {right:0px; top:0px;}
+    }
+/* you win*/
+/*
+.moving-ship-you-win{
+   position: relative;
+   animation-name: example-you;
+   animation-duration: 8s;
+}
+
+@keyframes example-you {
+    0%   {left:0px; top:0px;}
+    25%  {left:220px; top:0px;}
+    40%  {left:220px; top:0px;}
+    45%  {left:280px; top:0px;}
+    90%   {left:280px; top:0px;}
+    100% {left:0px; top:0px;}
+  }
+
+  .moving-ship-enemy-lose{
+    position: relative;
+    animation-name: example-enemy;
+    animation-duration: 8s;
+ }
+ 
+ @keyframes example-enemy {
+    0%   {right:0px; top:0px;}
+    25%  {right:250px; top:0px;}
+    35%  {right:250px; top:0px;}
+    40%  {right:270px; top:0px;}
+    100% {right:270px; top:600px;}
+   }*/
 /* //////////
 .moving-ship-you{
    position: relative;
@@ -341,7 +458,7 @@ color: gray;
      100% {right:0px; top:0px;}
    }
 ////////// */
-   /*.moving-ship-you{
+ /*  .moving-ship-you{
     position: relative;
     animation-name: example-you;
     animation-duration: 20s;
@@ -367,7 +484,7 @@ color: gray;
       50%  {right:550px; top:485px;}
       75%  {right:0px; top:485px;}
       100% {right:0px; top:20px;}
-    }*/
+    }
  
 
 

@@ -48,7 +48,8 @@ new Vue({
         hitsAndSinksObjectYou:{},
         hitsAndSinksObjectOpponent:{}, 
         hitsOther:[], 
-        ships:[],  
+        ships:[],
+        message: null,  
     },
     methods: {
         fetchData: function () {
@@ -61,11 +62,8 @@ new Vue({
                 })
                 .then((data) => {
                     console.log(data);
-                    console.log("hello")
-                    //console.log(this.hitsAndSinksObject[0])
                     this.game = data;
                     this.isLoaded();
-
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -102,9 +100,6 @@ new Vue({
                 this.hitsAndSinksObjectOpponent=this.game[0].gamePlayers[1].status
                 this.hitsOther=this.game[0].gamePlayers[1].hits
             }
-            console.log(this.hitsAndSinksObjectYou)
-            console.log(this.hitsOther)
-            this.displayWhereYouHitYourOpponent();
             this.fillArrMySalvoes()
             this.fillArrEnemySalvoes()
         },
@@ -164,8 +159,6 @@ new Vue({
             } else {
                 temporaryArray2ValidityCheck = false;
             }
-
-
 
             //horizontal axis
             temporaryArray1.length = this.shipLength;
@@ -349,21 +342,31 @@ new Vue({
                     contentType: "application/json"
                 })
                 .done((response, status, jqXHR) => {
-                    alert(response);
-                    // this.fetchData();
+                   this.message=response;
+                    setTimeout(() => {
+                        this.message=null;
+                    }, 5000); 
+                   // alert(response)
+                   this.fetchData();
                     this.removeShipOptionsTable = true;
-
+                    this.makeCallsEveryFiveSecs();
                 })
                 .fail(function (jqXHR, status, httpError) {
                     alert("Failed to add ships: " + textStatus + " " + httpError);
                 })
-            console.log("shipsSent")
         },
 
         //after ships are placed
         makeGPShipsArray() {
             if (this.game[0].ships.length == 0) {
                 this.shipsPlaced = false;
+                this.message="Welcome "+this.gamePlayerYou+"!"
+                setTimeout(() => {
+                    this.message="Place your ships";
+                }, 3000);
+                setTimeout(() => {
+                    this.message=null;
+                }, 8000);
             }
             if (this.game[0].ships.length != 0 || this.game[0].ships.length != 0 && this.mySalvoes.length > 0) {
                 this.ships=this.game[0].ships
@@ -374,7 +377,6 @@ new Vue({
                         this.shipLocations.push(this.game[0].ships[j].locations[i])
                     }
                 }
-                // this.clearDisplayedShips()
                 this.fillArrDamagedShipLocations();
             }
 
@@ -396,84 +398,39 @@ new Vue({
                     }
                 })
             })
-            console.log("displayShips is called")
-            //setTimeout( () => this.clearDisplayedShips(), 50)
-            // setTimeout( () => this.displayShips(), 100)
-            this.displayShips()
             this.displayMySalvoes();
+            setTimeout(() => {
+                this.displayShips();
+            }, 100);
         },
 
-        /*  clearDisplayedShips(){
-             console.log(this.shipLocations)
-             for (i in this.shipLocations) {
-                 document.getElementById(this.shipLocations[i]).innerHTML = "";
-                 document.getElementById(this.shipLocations[i]).style.backgroundColor = "#40E0D0"
-             }  
-         },  */
-
         displayShips() {
-           
-            //function for displaying different icons of ships
-            /* console.log(this.shipLocations)
-            var shipDisplayArrayTypeLocation = []
-            for (l in this.game[0].ships) {
-                shipDisplayArrayTypeLocation.push(this.game[0].ships[l].type, this.game[0].ships[l].locations)
-                console.log(shipDisplayArrayTypeLocation)
-            }
-            var shipLocationArrayFromTypeLocationsArray = []
-            var shipTypeFromTypeLocationsArray
-            for (m in shipDisplayArrayTypeLocation) {
-
-                if (m % 2 == 1) {
-                    shipLocationArrayFromTypeLocationsArray = shipDisplayArrayTypeLocation[m]
-                }
-                if (m % 2 == 0) {
-                    shipTypeFromTypeLocationsArray = shipDisplayArrayTypeLocation[m]}
-                    for (g in shipLocationArrayFromTypeLocationsArray) {
-                        document.getElementById(shipLocationArrayFromTypeLocationsArray[g]).style.backgroundColor = "thistle";
-                        var img = document.createElement("img");
-                        img.id = shipTypeFromTypeLocationsArray + shipLocationArrayFromTypeLocationsArray[g]
-                        img.src = "assets/" + shipTypeFromTypeLocationsArray + ".pur.png";
-                        var src = document.getElementById(shipLocationArrayFromTypeLocationsArray[g]);
-                        src.appendChild(img);
-                        console.log(shipLocationArrayFromTypeLocationsArray[g], shipTypeFromTypeLocationsArray)
-                    }
-                
-            } 
-            
-             for (i in this.shipLocations) {
-                document.getElementById(this.shipLocations[i]).style.backgroundColor = "thistle";
-                var img = document.createElement("img");
-                img.src = "assets/battleship.pur.png";
-                var src = document.getElementById(this.shipLocations[i]);
-                src.appendChild(img);
-                img.id = (this.shipLocations[i] + "psShipPic")
-                var shipToBeRemoved = document.getElementById(img.id);
-                shipToBeRemoved.parentNode.removeChild(shipToBeRemoved)
-
-            }
-            */
             for (i in this.ships) {
-                console.log(this.ships[i].type)
                 for (j in this.ships[i].locations){
+                    if(document.getElementById(this.ships[i].locations[j]).innerHTML==='')
+                    {console.log("emptyDoc")
                     document.getElementById(this.ships[i].locations[j]).style.backgroundColor = "thistle";
                     var img = document.createElement("img");
                     img.src = "assets/"+this.ships[i].type+".pur.png";
-                    var src = document.getElementById(this.ships[i].locations[j]);
-                    src.appendChild(img);
-                    img.id = (this.ships[i].locations[j]+ "psShipPic")
-                    var shipToBeRemoved = document.getElementById(img.id);
-                    shipToBeRemoved.parentNode.removeChild(shipToBeRemoved)
+                    var src = document.getElementById(this.ships[i].locations[j])
+                    src.appendChild(img);}else{
+                        console.log("!emptyDoc")
+                        document.getElementById(this.ships[i].locations[j]).style.backgroundColor = "thistle";
+                        var img = document.createElement("img");
+                        img.src = "assets/"+this.ships[i].type+".pur.png";
+                        var src = document.getElementById(this.ships[i].locations[j]);
+                        src.appendChild(img);
+                        img.id = (this.ships[i].locations[j]+ "psShipPic")
+                        var shipToBeRemoved = document.getElementById(img.id);
+                        shipToBeRemoved.parentNode.removeChild(shipToBeRemoved)  
+                    }
                   
                 }
-                
-
             }
 
             for (j in this.damagedShipLocations) {
-                document.getElementById(this.damagedShipLocations[j]).innerHTML = '<i class="glyphicon glyphicon-remove" style="font-size:16px;color:purple;"></i>';
+                document.getElementById(this.damagedShipLocations[j]).innerHTML = '<i class="glyphicon glyphicon-fire" style="font-size:16px;color:mediumorchid;"></i>';
             }
-            console.log(this.shipLocations)
         },
 
         placeSalvoInThisCell(elementId) {
@@ -485,16 +442,14 @@ new Vue({
             if (this.salvoesInThisTurn.length < 5) {
                 if (this.salvoesInThisTurn.includes(coordinateElements)) {
                     this.salvoesInThisTurn = this.salvoesInThisTurn.filter(oneCoordinate => oneCoordinate != coordinateElements)
-                    console.log(this.salvoesInThisTurn)
                     document.getElementById(coordinateElements + "s").innerHTML = "";
                     document.getElementById(coordinateElements + "s").style.backgroundColor = "#40E0D0";
                 } else {
                     this.salvoesInThisTurn.push(coordinateElements)
-                    console.log(this.salvoesInThisTurn)
                 }
                 this.displayFiredSalvoesInThisTurn()
             } else {
-                alert("You've fired all salvoes")
+                this.message="You've fired all salvoes"
             }
             if (this.salvoesInThisTurn.length == 5) {
                 this.showConfirmSalvoesButton = true;
@@ -503,7 +458,7 @@ new Vue({
 
         displayFiredSalvoesInThisTurn() {
             for (i in this.salvoesInThisTurn) {
-                document.getElementById(this.salvoesInThisTurn[i] + "s").innerHTML = '<i class="glyphicon glyphicon-screenshot" style="font-size:17px;color:purple;background-color:thistle;"></i>';
+                document.getElementById(this.salvoesInThisTurn[i] + "s").innerHTML = '<i class="glyphicon glyphicon-screenshot" style="font-size:17px;color:mediumorchid;background-color:thistle;"></i>';
                 document.getElementById(this.salvoesInThisTurn[i] + "s").style.backgroundColor = "thistle";
             }
         },
@@ -523,9 +478,13 @@ new Vue({
                     contentType: "application/json"
                 })
                 .done((response, status, jqXHR) => {
-                    alert(response);
+                    this.message= response;
+                    
                     this.shipsPlaced = true;
                     this.fetchData();
+                    setTimeout(() => {
+                        this.message=null;
+                    }, 5000);
                 })
                 .fail(function (jqXHR, status, httpError) {
                     alert("Failed to add ships: " + textStatus + " " + httpError);
@@ -546,7 +505,6 @@ new Vue({
             for (i in this.mySalvoesObject) {
                 this.mySalvoes.push.apply(this.mySalvoes, this.mySalvoesObject[i]);
             }
-            console.log(this.mySalvoes)
         },
 
         fillArrEnemySalvoes(enemySalvoes, enemySalvoesObject) {
@@ -560,24 +518,15 @@ new Vue({
             }
 
             for (j in this.hitsOther){
-                document.getElementById(this.hitsOther[j] + "s").innerHTML = '<i class="glyphicon glyphicon-screenshot" style="font-size:17px;color:purple;background-color:thistle;"></i>';
+                document.getElementById(this.hitsOther[j] + "s").innerHTML = '<i class="glyphicon glyphicon-screenshot" style="font-size:17px;color:mediumorchid;background-color:thistle;"></i>';
             }
-        },
-
-        displayWhereYouHitYourOpponent(){
-            console.log(this.mySalvoes)
-            console.log(this.hitsOther)
-            var arrayWhereYourOpponentIsHit=[]
-         
-        },
-        
-        /*makeCallsEveryFiveSecs(){
-            setInterval(()=> { this.fetchData() }, 10000);}*/
+        },    
+        makeCallsEveryFiveSecs(){
+            setInterval(()=> { this.fetchData() }, 10000);}
     },
 
     created: function () {
         this.fetchData();
         this.slowingTheOnsetOfFunctions();
-       // this.makeCallsEveryFiveSecs();
     },
 })

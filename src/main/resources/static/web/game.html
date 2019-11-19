@@ -13,10 +13,15 @@
     <div class="container" id="game">
         <div v-if="isLoaded" class="left">
             <button class="player"> {{gamePlayerYou}}</button>
-            <img class="moving-ship-you" src="assets/battleship.pur.png" style="height:40px" alt="">
+            <img class="moving-ship-you-lose" src="assets/battleship.pur.png" style="height:40px" alt="">
         </div>
+        <div v-if="message" class="center"><span>{{message}}</span></div>
+        <div class="your-shot"><img  src="assets/bang.purple.png" alt=""></div>
+        <div class="opponent-shot"><img  src="assets/bang.green.png" alt=""></div>
+        <div class="firework-left"><img  src="assets/firework.purple.png" alt=""></div>
+        <div class="firework-right"><img  src="assets/firework.green.png" alt=""></div>
         <div v-if="isLoaded" class="right">
-            <img class="moving-ship-enemy" src="assets/battleship.gr-ConvertImage.png" style="height:40px" alt="">
+            <img class="moving-ship-enemy-win" src="assets/battleship.gr-ConvertImage.png" style="height:40px" alt="">
             <button class="player"> {{gamePlayerOther}}</button>
         </div>
         <div v-if="shipsPlaced" class="shipG">
@@ -56,7 +61,7 @@
                             v-if="turn.carrier.sink !='1'">
                         </td>
                         <td class="empty_cell_sunk_ship" class="" v-else="">
-                                <span class="glyphicon glyphicon-fire" style="font-size:17px;color:purple;"></span>
+                                <span class="glyphicon glyphicon-remove" style="font-size:17px;color:mediumorchid;"></span>
                         </td>
                     </tr>
                     <tr>
@@ -67,7 +72,7 @@
                             v-if="turn.battleship.sink !='1'">
                         </td>
                         <td class="empty_cell_sunk_ship" class="" v-else="">
-                                <span class="glyphicon glyphicon-fire" style="font-size:17px;color:purple;"></span>
+                                <span class="glyphicon glyphicon-remove " style="font-size:17px;color:mediumorchid;"></span>
                         </td>
                     </tr>
                     <tr>
@@ -78,7 +83,7 @@
                             v-if="turn.submarine.sink !='1'">
                         </td>
                         <td class="empty_cell_sunk_ship" class="" v-else="">
-                                <span class="glyphicon glyphicon-fire" style="font-size:17px;color:purple;"></span>
+                                <span class="glyphicon glyphicon-remove " style="font-size:17px;color:mediumorchid;"></span>
                         </td>
                     </tr>
                     <tr>
@@ -89,7 +94,7 @@
                             v-if="turn.destroyer.sink !='1'">
                         </td>
                         <td class="empty_cell_sunk_ship" class="" v-else="">
-                                <span class="glyphicon glyphicon-fire" style="font-size:17px;color:purple;"></span>
+                                <span class="glyphicon glyphicon-remove " style="font-size:17px;color:mediumorchid;"></span>
                         </td>
                     </tr>
                     <tr>
@@ -100,7 +105,7 @@
                             v-if="turn.patrol.sink !='1'">
                         </td>
                         <td class="empty_cell_sunk_ship" class="" v-else="">
-                                <span class="glyphicon glyphicon-fire" style="font-size:17px;color:purple;"></span>
+                                <span class="glyphicon glyphicon-remove " style="font-size:17px;color:mediumorchid;"></span>
                         </td>
                     </tr>
                 </tbody>
@@ -167,7 +172,7 @@
                             v-if="turnOp.carrier.sink !='1'">
                         </td>
                         <td class="empty_cell_sunk_ship" class="" v-else="">
-                                <span class="glyphicon glyphicon-fire" style="font-size:17px;color:purple;"></span>
+                                <span class="glyphicon glyphicon-remove " style="font-size:17px;color:mediumorchid;"></span>
                         </td>
                     </tr>
                     <tr>
@@ -178,7 +183,7 @@
                             v-if="turnOp.battleship.sink !='1'">
                         </td>
                         <td class="empty_cell_sunk_ship" class="" v-else="">
-                                <span class="glyphicon glyphicon-fire" style="font-size:17px;color:purple;"></span>
+                                <span class="glyphicon glyphicon-remove " style="font-size:17px;color:mediumorchid;"></span>
                         </td>
                     </tr>
                     <tr>
@@ -189,7 +194,7 @@
                             v-if="turnOp.submarine.sink !='1'">
                         </td>
                         <td class="empty_cell_sunk_ship" class="" v-else="">
-                                <span class="glyphicon glyphicon-fire" style="font-size:17px;color:purple;"></span>
+                                <span class="glyphicon glyphicon-remove " style="font-size:17px;color:mediumorchid;"></span>
                         </td>
                     </tr>
                     <tr>
@@ -200,7 +205,7 @@
                             v-if="turnOp.destroyer.sink !='1'">
                         </td>
                         <td class="empty_cell_sunk_ship" class="" v-else="">
-                                <span class="glyphicon glyphicon-fire" style="font-size:17px;color:purple;"></span>
+                                <span class="glyphicon glyphicon-remove " style="font-size:17px;color:mediumorchid;"></span>
                         </td>
                     </tr>
                     <tr>
@@ -211,7 +216,7 @@
                             v-if="turnOp.patrol.sink !='1'">
                         </td>
                         <td class="empty_cell_sunk_ship" class="" v-else="">
-                                <span class="glyphicon glyphicon-fire" style="font-size:17px;color:purple;"></span>
+                                <span class="glyphicon glyphicon-remove " style="font-size:17px;color:mediumorchid;"></span>
                         </td>
                     </tr>
                 </tbody>

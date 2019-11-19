@@ -159,7 +159,10 @@ public class AppController {
             ship.setGamePlayer(gamePlayer);
             shipRepository.save(ship);
         }
-        return new ResponseEntity<>("Ships added", HttpStatus.CREATED);
+        if (gamePlayer.getOpponent().getShips().size()==0){
+            return new ResponseEntity<>("Ships added. Wait for your opponent to place ships", HttpStatus.CREATED);
+        }else{return new ResponseEntity<>("Ships added. Fire salvos", HttpStatus.CREATED);}
+
     }
 
     @RequestMapping(value = "/games/player/{gamePlayerId}/salvoes", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -199,10 +202,8 @@ public class AppController {
             Salvo salvo = new Salvo(salvoLocations);
             salvo.setGamePlayer(gamePlayer);
             salvoRepository.save(salvo);
-            return new ResponseEntity<>("Salvoes added", HttpStatus.CREATED);
-        } else {
-            return new ResponseEntity<>("You placed your salvo in this turn. Wait for your opponent to fire", HttpStatus.CREATED);
-        }
+            return new ResponseEntity<>("Salvoes added. Wait for your opponent to fire", HttpStatus.CREATED);
+        }else{return new ResponseEntity<>("Salvoes not added. Wait for your opponent to finish turn", HttpStatus.CREATED);}
     }
 
     public List<Game> getGames() {
