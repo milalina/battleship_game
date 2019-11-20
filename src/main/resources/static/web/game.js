@@ -51,6 +51,8 @@ new Vue({
         ships: [],
         message: null,
         objectForClearingShips: [],
+        gameOver: false,
+        myScore: 1,
     },
     methods: {
         fetchData: function () {
@@ -75,6 +77,8 @@ new Vue({
             if (this.game.length == 0) {
                 return false;
             } else {
+                this.gameOver = this.game[0].over;
+                this.displayingGameResults();
                 this.getParamsFromUrl();
                 this.makeGPShipsArray();
                 return true
@@ -154,7 +158,7 @@ new Vue({
             temporaryArray1 = this.tableRows.slice(); //horizontal axis
             temporaryArray2 = this.tableCols.slice(); //vertical axis
             manipulableShipLength = this.shipLength
-            temporaryArray2ValidityCheck = false;
+            temporaryArray2ValidityCheck = false; //to make sure the length of the ship is within the grid
 
             if (temporaryArray2.length - temporaryArray2.indexOf(this.letterPointF + "") >= this.shipLength1) {
                 temporaryArray2ValidityCheck = true;
@@ -171,10 +175,11 @@ new Vue({
                 this.numberPointF += this.shipLength
             }
             //vertical axis
+            //if the horisontal coordinates are on the grid && vertical coordinates are on the grid
             if (i >= 0 && temporaryArray2ValidityCheck == true) {
                 temporaryArray2.splice(0, temporaryArray2.indexOf(this.letterPointF + "") + 1);
                 this.shipLength -= 1
-            } else if (temporaryArray2ValidityCheck == true) {
+            } else if (temporaryArray2ValidityCheck == true) { //if else vertical coordinates are on the grid
                 temporaryArray2.splice(0, temporaryArray2.indexOf(this.letterPointF + ""));
             } else(temporaryArray2 = [])
             //vertical axis
@@ -222,7 +227,6 @@ new Vue({
             this.displayShipPlacementOptions2()
         },
         displayShipPlacementOptions2() {
-
             if (this.verticalIntersection == false) {
                 for (l in this.verticalAxis) {
                     if (this.lastCoordinate != 0) {
@@ -282,7 +286,7 @@ new Vue({
                 shipLocationArray.push(verticalAxisReplacementArray)
             }
 
-            
+
             if (this.lastCoordinate != 0) {
                 this.objectForDisplayingSelectedShips.push({
                     "type": "" + this.selectedShipType,
@@ -328,7 +332,7 @@ new Vue({
                     img.src = "assets/" + this.objectForDisplayingSelectedShips[i].type + ".pur.png";
                     var src = document.getElementById(shipLocation[j] + "ps");
                     src.appendChild(img);
-                    
+
                 }
                 this.objectForClearingShips.push(this.objectForDisplayingSelectedShips[0]);
                 console.log(this.objectForClearingShips)
@@ -336,7 +340,7 @@ new Vue({
             }
         },
 
-        clearShips(){
+        clearShips() {
             for (i in this.objectForClearingShips) {
                 var shipLocation = this.objectForClearingShips[i].locations[0]
                 for (j in shipLocation) {
@@ -348,23 +352,26 @@ new Vue({
                     var shipToBeRemoved = document.getElementById(img.id);
                     shipToBeRemoved.parentNode.removeChild(shipToBeRemoved)
                     src.style.backgroundColor = "#40E0D0"
-                    
+
                     //make ships visible in the option table
                     document.getElementById(this.objectForClearingShips[i].type).style.display = "inline"
-                   
-                    this.selectedShipType = 0,
-                    this.shipLength = 0,
-                    this.firstCoordinate = 0,
-                    this.lastCoordinate = 0,
-                    this.letterPointF = 0,
-                    this.numberPointF = 0,
-                    this.letterPointL = 0,
-                    this.numberPointL = 0,
-                    this.horisontalAxis = [];
-                    this.verticalAxis = [];
+
                 }
             }
-            this.objectForClearingShips=[];
+            this.selectedShipType = 0,
+                this.shipLength = 0,
+                this.firstCoordinate = 0,
+                this.lastCoordinate = 0,
+                this.letterPointF = 0,
+                this.numberPointF = 0,
+                this.letterPointL = 0,
+                this.numberPointL = 0,
+                this.horisontalAxis = [];
+            this.verticalAxis = [];
+            this.objectForDisplayingSelectedShipsNoManipulation = [];
+            this.showConfirmButton = false;
+            this.showClearButton = false;
+            this.objectForClearingShips = [];
         },
         sendShips() {
             var objectTypeLocation = []
@@ -568,6 +575,72 @@ new Vue({
             setInterval(() => {
                 this.fetchData()
             }, 10000);
+        },
+
+       /*  displayingGameResults(){
+            setTimeout(() => {
+                this.displayingGameResults2() ;
+            }, 8000);
+        }, */
+    
+        displayingGameResults() {
+            if (this.gameOver == true) {
+                if (this.myScore == 1) {
+                    document.getElementById("ship-you").className = "moving-ship-you-win"
+                    document.getElementById("ship-enemy").className = "moving-ship-enemy-lose"
+                    document.getElementById("opponent-shot1").style.display = "none"
+                    document.getElementById("shot-you1").style.display = "none"
+                    document.getElementById("firework-left1").style.display = "none"
+                    document.getElementById("firework-right1").style.display = "none"
+                    setTimeout(() => document.getElementById("opponent-shot1").className = "opponent-shot", 2000);
+                    setTimeout(() => document.getElementById("shot-you1").className = "your-shot", 2000);
+                    setTimeout(() => document.getElementById("opponent-shot1").style.display = "inline", 2000);
+                    setTimeout(() => document.getElementById("shot-you1").style.display = "inline", 2000);
+                    setTimeout(() => document.getElementById("opponent-shot1").style.display = "none", 2600);
+                    setTimeout(() => document.getElementById("shot-you1").style.display = "none", 2600);
+                    //first firework 
+                    setTimeout(() => document.getElementById("firework-left1").className = "firework-left", 4500);
+                    setTimeout(() => document.getElementById("firework-left1").style.display = "inline", 4500);
+                    setTimeout(() => document.getElementById("firework-left1").style.display = "none", 5000);
+                    //second firework
+                    setTimeout(() => document.getElementById("firework-right1").className = "firework-right", 5500);
+                    setTimeout(() => document.getElementById("firework-right1").style.display = "inline", 5500);
+                    setTimeout(() => document.getElementById("firework-right1").style.display = "none", 6000);
+                    //third firework
+                    setTimeout(() => document.getElementById("firework-left1").className = "firework-left", 6500);
+                    setTimeout(() => document.getElementById("firework-left1").style.display = "inline", 6500);
+                    setTimeout(() => document.getElementById("firework-left1").style.display = "none", 7000);
+                    //second firework
+                    setTimeout(() => document.getElementById("firework-right1").className = "firework-right", 7500);
+                    setTimeout(() => document.getElementById("firework-right1").style.display = "inline", 7500);
+                    setTimeout(() => document.getElementById("firework-right1").style.display = "none", 7900);
+
+
+                    // setTimeout(() => document.getElementById(this.selectedShipType).style.display = "none", 0);
+                    // document.getElementById("opponent-shot1").className = "opponent-shot"
+                    // document.getElementById("shot-you1").className = "your-shot"
+                    // document.getElementById("firework-left1").className = "firework-left"
+                    //  document.getElementById("firework-right1").className = "firework-right"
+
+                    // document.getElementById("opponent-shot1").style.display = "none"
+                    // document.getElementById("shot-you1").style.display = "none"
+                    document.getElementById("firework-left1").style.display = "none"
+                    document.getElementById("firework-right1").style.display = "none"
+
+
+                } else if (this.myScore == 0) {
+                    document.getElementById("ship-you").className = "moving-ship-you-lose"
+                    document.getElementById("ship-enemy").className = "moving-ship-enemy-win"
+                } else {
+                    // document.getElementById("ship-you").className = ""
+                    //document.getElementById("ship - enemy").className = ""
+                }
+            } else {
+                document.getElementById("opponent-shot1").style.display = "none";
+                document.getElementById("shot-you1").style.display = "none";
+                document.getElementById("firework-left1").style.display = "none";
+                document.getElementById("firework-right1").style.display = "none";
+            }
         }
     },
 

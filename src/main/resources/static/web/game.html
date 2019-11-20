@@ -13,15 +13,15 @@
     <div class="container" id="game">
         <div v-if="isLoaded" class="left">
             <button class="player"> {{gamePlayerYou}}</button>
-            <img class="moving-ship-you-lose" src="assets/battleship.pur.png" style="height:40px" alt="">
+            <img id="ship-you"  src="assets/battleship.pur.png" style="height:40px" alt="">
         </div>
         <div v-if="message" class="center"><span>{{message}}</span></div>
-        <div class="your-shot"><img  src="assets/bang.purple.png" alt=""></div>
-        <div class="opponent-shot"><img  src="assets/bang.green.png" alt=""></div>
-        <div class="firework-left"><img  src="assets/firework.purple.png" alt=""></div>
-        <div class="firework-right"><img  src="assets/firework.green.png" alt=""></div>
+        <div id="shot-you1"  ><img src="assets/bang.purple.png" alt=""></div>
+        <div id="opponent-shot1" ><img  src="assets/bang.green.png" alt=""></div>
+        <div id="firework-left1" ><img  src="assets/firework.purple.png" alt=""></div>
+        <div id="firework-right1" ><img  src="assets/firework.green.png" alt=""></div>
         <div v-if="isLoaded" class="right">
-            <img class="moving-ship-enemy-win" src="assets/battleship.gr-ConvertImage.png" style="height:40px" alt="">
+            <img id="ship-enemy" src="assets/battleship.gr-ConvertImage.png" style="height:40px" alt="">
             <button class="player"> {{gamePlayerOther}}</button>
         </div>
         <div v-if="shipsPlaced" class="shipG">
