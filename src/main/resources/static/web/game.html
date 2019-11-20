@@ -131,6 +131,8 @@
                     </td>
                 </tr>
             </table>
+            <button @click="clearShips" v-if="showClearButton" class="button add-padding">Clear</button>
+            <button @click="sendShips" v-if="showConfirmButton" class="button add-padding">Confirm</button>
         </div>
         <div v-if="removeShipOptionsTable" class="salvoG">
             <table class="table">
@@ -284,8 +286,7 @@
                     <td class="empty_cell cell letter ship-placement-table-cells">1</td>
                 </tr>
             </table>
-                <button v-if="showClearButton" class="button add-padding">Clear</button>
-                <button @click="sendShips" v-if="showConfirmButton" class="button add-padding">Confirm</button>
+              
         </div>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>

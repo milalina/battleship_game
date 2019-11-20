@@ -360,6 +360,8 @@ span{
     margin-left: 10px;
    display:none;
 }
+
+/*
  .heading{
     grid-column-start: 2;
     grid-column-end: 5;
@@ -368,8 +370,10 @@ span{
     justify-self: center;
     color:#40E0D0;
     padding-top: 20px;
-} */
-/*//////// you lose
+} 
+
+
+/////// you lose
 .moving-ship-you-lose{
     position: relative;
     animation-name: example-you-l;
@@ -484,7 +488,7 @@ span{
       50%  {right:550px; top:485px;}
       75%  {right:0px; top:485px;}
       100% {right:0px; top:20px;}
-    }
+    }*/
  
 
 

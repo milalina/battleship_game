@@ -45,11 +45,12 @@ new Vue({
         turns: 0,
         showConfirmSalvoesButton: false,
         images: ["assets/carrier.pur.png", "assets/battleship.pur.png", "assets/submarine.pur.png", "assets/destroyer.pur.png", "assets/patrol.pur.png"],
-        hitsAndSinksObjectYou:{},
-        hitsAndSinksObjectOpponent:{}, 
-        hitsOther:[], 
-        ships:[],
-        message: null,  
+        hitsAndSinksObjectYou: {},
+        hitsAndSinksObjectOpponent: {},
+        hitsOther: [],
+        ships: [],
+        message: null,
+        objectForClearingShips: [],
     },
     methods: {
         fetchData: function () {
@@ -88,17 +89,17 @@ new Vue({
                 this.gamePlayerOther = this.game[0].gamePlayers[0].player.email
                 this.mySalvoesObject = this.game[0].gamePlayers[1].salvoes
                 this.enemySalvoesObject = this.game[0].gamePlayers[0].salvoes
-                this.hitsAndSinksObjectYou=this.game[0].gamePlayers[1].status
-                this.hitsAndSinksObjectOpponent=this.game[0].gamePlayers[0].status
-                this.hitsOther=this.game[0].gamePlayers[0].hits
+                this.hitsAndSinksObjectYou = this.game[0].gamePlayers[1].status
+                this.hitsAndSinksObjectOpponent = this.game[0].gamePlayers[0].status
+                this.hitsOther = this.game[0].gamePlayers[0].hits
             } else {
                 this.gamePlayerYou = this.game[0].gamePlayers[0].player.email
                 this.gamePlayerOther = this.game[0].gamePlayers[1].player.email
                 this.mySalvoesObject = this.game[0].gamePlayers[0].salvoes
                 this.enemySalvoesObject = this.game[0].gamePlayers[1].salvoes
-                this.hitsAndSinksObjectYou=this.game[0].gamePlayers[0].status
-                this.hitsAndSinksObjectOpponent=this.game[0].gamePlayers[1].status
-                this.hitsOther=this.game[0].gamePlayers[1].hits
+                this.hitsAndSinksObjectYou = this.game[0].gamePlayers[0].status
+                this.hitsAndSinksObjectOpponent = this.game[0].gamePlayers[1].status
+                this.hitsOther = this.game[0].gamePlayers[1].hits
             }
             this.fillArrMySalvoes()
             this.fillArrEnemySalvoes()
@@ -148,13 +149,14 @@ new Vue({
         displayShipPlacementOptions1() {
             var temporaryArray1 = [];
             var temporaryArray2 = [];
+            console.log(this.numberPointF, this.shipLength)
             var i = this.numberPointF - this.shipLength; // is my ship within the grid?
             temporaryArray1 = this.tableRows.slice(); //horizontal axis
             temporaryArray2 = this.tableCols.slice(); //vertical axis
             manipulableShipLength = this.shipLength
             temporaryArray2ValidityCheck = false;
 
-            if (temporaryArray2.length - temporaryArray2.indexOf(this.letterPointF + "") > this.shipLength1) {
+            if (temporaryArray2.length - temporaryArray2.indexOf(this.letterPointF + "") >= this.shipLength1) {
                 temporaryArray2ValidityCheck = true;
             } else {
                 temporaryArray2ValidityCheck = false;
@@ -184,26 +186,37 @@ new Vue({
                 }
             }
             //checking if there are intersections in placed ships and displayed options 
-
+            //intersection: vertical axis
+            var q;
             for (q in this.objectForDisplayingSelectedShipsNoManipulation) {
-                this.shipLocationsAsOneArray.push(this.objectForDisplayingSelectedShipsNoManipulation[q].locations[0])
+                this.shipLocationsAsOneArray.push.apply(this.shipLocationsAsOneArray, this.objectForDisplayingSelectedShipsNoManipulation[q].locations[0])
             }
-            console.log(this.shipLocationsAsOneArray, this.selectedShipType)
-
+            var overlapCoordinatesVerticalAxes = []
             for (l in this.verticalAxis) {
-                if (this.shipLocationsAsOneArray.includes(this.verticalAxis[l])) {
-                    console.log(this.shipLocationsAsOneArray)
-                    this.verticalIntersection = true;
-                } else {
-                    this.verticalIntersection = false;
+                var b;
+                b = this.shipLocationsAsOneArray.filter(oneCoordinate => oneCoordinate == this.verticalAxis[l])
+                if (b.length != 0) {
+                    overlapCoordinatesVerticalAxes.push(b)
                 }
             }
+            if (overlapCoordinatesVerticalAxes.length > 0) {
+                this.verticalIntersection = true;
+            } else {
+                this.verticalIntersection = false;
+            }
+            //intersection: horisontal axis
+            var overlapCoordinatesHorisontalAxes = []
             for (m in this.horisontalAxis) {
-                if (this.shipLocationsAsOneArray.includes(this.horisontalAxis[m])) {
-                    this.horizontalIntersection = true;
-                } else {
-                    this.horizontalIntersection = false;
+                var b;
+                b = this.shipLocationsAsOneArray.filter(oneCoordinate => oneCoordinate == this.horisontalAxis[m]);
+                if (b.length > 0) {
+                    overlapCoordinatesHorisontalAxes.push(b)
                 }
+            }
+            if (overlapCoordinatesHorisontalAxes.length > 0) {
+                this.horizontalIntersection = true;
+            } else {
+                this.horizontalIntersection = false;
             }
 
             this.displayShipPlacementOptions2()
@@ -235,9 +248,7 @@ new Vue({
 
             if (this.horizontalIntersection == false) {
                 for (m in this.horisontalAxis) {
-                    if (this.lastCoordinate != 0) {
-                        /*document.getElementById(this.horisontalAxis[m] + "ps").innerHTML=""
-                        document.getElementById(this.horisontalAxis[m] + "ps").style.backgroundColor = "#40E0D0"*/
+                    if (this.lastCoordinate != 0) { //=GP clicked on the end of the ship
                         var img = document.createElement("img");
                         img.id = this.selectedShipType + m + 'hA'
                         img.src = "assets/" + this.selectedShipType + ".pur.png";
@@ -246,7 +257,6 @@ new Vue({
                         var shipToBeRemoved = document.getElementById(img.id);
                         shipToBeRemoved.parentNode.removeChild(shipToBeRemoved)
                         src.style.backgroundColor = "#40E0D0"
-
                     } else {
                         document.getElementById(this.horisontalAxis[m] + "ps").style.backgroundColor = "thistle";
                         var img = document.createElement("img");
@@ -258,7 +268,6 @@ new Vue({
                     }
                 }
             }
-
             var shipLocationArray = []
             var verticalAxisReplacementArray = this.verticalAxis.slice();
             if (verticalAxisReplacementArray.length != this.shipLength1 && verticalAxisReplacementArray.length != 0) {
@@ -273,7 +282,7 @@ new Vue({
                 shipLocationArray.push(verticalAxisReplacementArray)
             }
 
-
+            
             if (this.lastCoordinate != 0) {
                 this.objectForDisplayingSelectedShips.push({
                     "type": "" + this.selectedShipType,
@@ -319,11 +328,44 @@ new Vue({
                     img.src = "assets/" + this.objectForDisplayingSelectedShips[i].type + ".pur.png";
                     var src = document.getElementById(shipLocation[j] + "ps");
                     src.appendChild(img);
+                    
                 }
+                this.objectForClearingShips.push(this.objectForDisplayingSelectedShips[0]);
+                console.log(this.objectForClearingShips)
                 this.objectForDisplayingSelectedShips = [];
             }
         },
 
+        clearShips(){
+            for (i in this.objectForClearingShips) {
+                var shipLocation = this.objectForClearingShips[i].locations[0]
+                for (j in shipLocation) {
+                    document.getElementById(shipLocation[j] + "ps").style.backgroundColor = "thistle";
+                    var img = document.createElement("img");
+                    img.id = (shipLocation[j] + "psShipPic")
+                    img.src = "assets/" + this.objectForClearingShips[i].type + ".pur.png";
+                    var src = document.getElementById(shipLocation[j] + "ps");
+                    var shipToBeRemoved = document.getElementById(img.id);
+                    shipToBeRemoved.parentNode.removeChild(shipToBeRemoved)
+                    src.style.backgroundColor = "#40E0D0"
+                    
+                    //make ships visible in the option table
+                    document.getElementById(this.objectForClearingShips[i].type).style.display = "inline"
+                   
+                    this.selectedShipType = 0,
+                    this.shipLength = 0,
+                    this.firstCoordinate = 0,
+                    this.lastCoordinate = 0,
+                    this.letterPointF = 0,
+                    this.numberPointF = 0,
+                    this.letterPointL = 0,
+                    this.numberPointL = 0,
+                    this.horisontalAxis = [];
+                    this.verticalAxis = [];
+                }
+            }
+            this.objectForClearingShips=[];
+        },
         sendShips() {
             var objectTypeLocation = []
             for (i in this.objectForDisplayingSelectedShipsNoManipulation) {
@@ -342,12 +384,12 @@ new Vue({
                     contentType: "application/json"
                 })
                 .done((response, status, jqXHR) => {
-                   this.message=response;
+                    this.message = response;
                     setTimeout(() => {
-                        this.message=null;
-                    }, 5000); 
-                   // alert(response)
-                   this.fetchData();
+                        this.message = null;
+                    }, 5000);
+                    // alert(response)
+                    this.fetchData();
                     this.removeShipOptionsTable = true;
                     this.makeCallsEveryFiveSecs();
                 })
@@ -360,16 +402,16 @@ new Vue({
         makeGPShipsArray() {
             if (this.game[0].ships.length == 0) {
                 this.shipsPlaced = false;
-                this.message="Welcome "+this.gamePlayerYou+"!"
+                this.message = "Welcome " + this.gamePlayerYou + "!"
                 setTimeout(() => {
-                    this.message="Place your ships";
+                    this.message = "Place your ships";
                 }, 3000);
                 setTimeout(() => {
-                    this.message=null;
+                    this.message = null;
                 }, 8000);
             }
             if (this.game[0].ships.length != 0 || this.game[0].ships.length != 0 && this.mySalvoes.length > 0) {
-                this.ships=this.game[0].ships
+                this.ships = this.game[0].ships
                 this.shipsPlaced = true;
                 this.removeShipOptionsTable = true;
                 for (j in this.game[0].ships) {
@@ -382,13 +424,13 @@ new Vue({
 
         },
 
-        slowingTheOnsetOfFunctions(){
+        slowingTheOnsetOfFunctions() {
             window.addEventListener('load', (event) => {
                 this.displayMySalvoes();
                 this.displayShips();
-            console.log('page is fully loaded');
-          });
-           },
+                console.log('page is fully loaded');
+            });
+        },
 
         fillArrDamagedShipLocations() {
             this.shipLocations.forEach(oneShipLocation => {
@@ -406,25 +448,26 @@ new Vue({
 
         displayShips() {
             for (i in this.ships) {
-                for (j in this.ships[i].locations){
-                    if(document.getElementById(this.ships[i].locations[j]).innerHTML==='')
-                    {console.log("emptyDoc")
-                    document.getElementById(this.ships[i].locations[j]).style.backgroundColor = "thistle";
-                    var img = document.createElement("img");
-                    img.src = "assets/"+this.ships[i].type+".pur.png";
-                    var src = document.getElementById(this.ships[i].locations[j])
-                    src.appendChild(img);}else{
+                for (j in this.ships[i].locations) {
+                    if (document.getElementById(this.ships[i].locations[j]).innerHTML === '') {
+                        console.log("emptyDoc")
+                        document.getElementById(this.ships[i].locations[j]).style.backgroundColor = "thistle";
+                        var img = document.createElement("img");
+                        img.src = "assets/" + this.ships[i].type + ".pur.png";
+                        var src = document.getElementById(this.ships[i].locations[j])
+                        src.appendChild(img);
+                    } else {
                         console.log("!emptyDoc")
                         document.getElementById(this.ships[i].locations[j]).style.backgroundColor = "thistle";
                         var img = document.createElement("img");
-                        img.src = "assets/"+this.ships[i].type+".pur.png";
+                        img.src = "assets/" + this.ships[i].type + ".pur.png";
                         var src = document.getElementById(this.ships[i].locations[j]);
                         src.appendChild(img);
-                        img.id = (this.ships[i].locations[j]+ "psShipPic")
+                        img.id = (this.ships[i].locations[j] + "psShipPic")
                         var shipToBeRemoved = document.getElementById(img.id);
-                        shipToBeRemoved.parentNode.removeChild(shipToBeRemoved)  
+                        shipToBeRemoved.parentNode.removeChild(shipToBeRemoved)
                     }
-                  
+
                 }
             }
 
@@ -449,7 +492,7 @@ new Vue({
                 }
                 this.displayFiredSalvoesInThisTurn()
             } else {
-                this.message="You've fired all salvoes"
+                this.message = "You've fired all salvoes"
             }
             if (this.salvoesInThisTurn.length == 5) {
                 this.showConfirmSalvoesButton = true;
@@ -478,12 +521,12 @@ new Vue({
                     contentType: "application/json"
                 })
                 .done((response, status, jqXHR) => {
-                    this.message= response;
-                    
+                    this.message = response;
+
                     this.shipsPlaced = true;
                     this.fetchData();
                     setTimeout(() => {
-                        this.message=null;
+                        this.message = null;
                     }, 5000);
                 })
                 .fail(function (jqXHR, status, httpError) {
@@ -517,12 +560,15 @@ new Vue({
                 document.getElementById(this.mySalvoes[i] + "s").style.backgroundColor = "thistle";
             }
 
-            for (j in this.hitsOther){
+            for (j in this.hitsOther) {
                 document.getElementById(this.hitsOther[j] + "s").innerHTML = '<i class="glyphicon glyphicon-screenshot" style="font-size:17px;color:mediumorchid;background-color:thistle;"></i>';
             }
-        },    
-        makeCallsEveryFiveSecs(){
-            setInterval(()=> { this.fetchData() }, 10000);}
+        },
+        makeCallsEveryFiveSecs() {
+            setInterval(() => {
+                this.fetchData()
+            }, 10000);
+        }
     },
 
     created: function () {
