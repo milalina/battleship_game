@@ -76,6 +76,18 @@ public class AppController {
     @RequestMapping("/game_view/{gamePlayerId}")
     public List<Map<String, Object>> findGame(@PathVariable("gamePlayerId") long gamePlayerId, Authentication authentication) {
         GamePlayer currentGamePlayer = gamePlayerRepository.findGamePlayerById(gamePlayerId);
+
+        //FIXME: This block should not be here - it should be on some update code
+        Game game = currentGamePlayer.getGame();
+        Score score=currentGamePlayer.getPlayer().getScore(game);
+        if (score.calculatePlayerScore(currentGamePlayer)!=null){
+            scoreRepository.save(score);
+        }
+        Score scoreForOpponent=currentGamePlayer.getOpponent().getPlayer().getScore(game);
+        if (scoreForOpponent.calculatePlayerScore(currentGamePlayer.getOpponent())!=null){
+            scoreRepository.save(scoreForOpponent);
+        }
+
         Player currentPlayer = currentGamePlayer.getPlayer();
         List<Map<String, Object>> gameView = new ArrayList<>();
         gameView.add(currentGamePlayer.makeGameDTOForGamePlayer());
@@ -106,6 +118,10 @@ public class AppController {
         gameRepository.save(newGame);
         GamePlayer gpTest = new GamePlayer(newGame, currentPlayer, new Date());
         gamePlayerRepository.save(gpTest);
+        Score score = new Score();
+        score.setGame(gpTest.getGame());
+        score.setPlayer(gpTest.getPlayer());
+        scoreRepository.save(score);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -128,6 +144,10 @@ public class AppController {
         }
         GamePlayer gpTest = new GamePlayer(gameToJoin, currentPlayer, new Date());
         gamePlayerRepository.save(gpTest);
+        Score score = new Score();
+        score.setGame(gpTest.getGame());
+        score.setPlayer(gpTest.getPlayer());
+        scoreRepository.save(score);
         return new ResponseEntity<>(makeMap("gpid", gpTest.getId()), HttpStatus.CREATED);
     }
 
@@ -202,6 +222,7 @@ public class AppController {
             Salvo salvo = new Salvo(salvoLocations);
             salvo.setGamePlayer(gamePlayer);
             salvoRepository.save(salvo);
+
             return new ResponseEntity<>("Salvoes added. Wait for your opponent to fire", HttpStatus.CREATED);
         }else{return new ResponseEntity<>("Salvoes not added. Wait for your opponent to finish turn", HttpStatus.CREATED);}
     }

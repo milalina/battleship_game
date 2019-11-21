@@ -115,6 +115,7 @@ public class GamePlayer {
         gameDTOForGamePlayerMap.putAll(this.getGame().makeGameDTO());
         gameDTOForGamePlayerMap.put("ships", this.makeShipDtoList());
         gameDTOForGamePlayerMap.put("over", this.getGame().isGameOver());
+        gameDTOForGamePlayerMap.put("turn", this.getGame().getLastTurn().canTheGamePlayerFireSalvo(this));
         return gameDTOForGamePlayerMap;
     }
 
@@ -176,7 +177,6 @@ public class GamePlayer {
             }
             return shipTypeSinkDto;
         }
-
 
         public Map<Integer, Object> makeShipTypeSinkDtoInAllTurns () {
             Map<Integer, Object> shipTypeSinkDtoInAllTurns = new LinkedHashMap<Integer, Object>();

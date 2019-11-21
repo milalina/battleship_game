@@ -357,6 +357,31 @@ span{
     margin-left: 10px;
 }
 
+.game-over{
+    color:#40E0D0;
+    font-size: xx-large;
+    font-style: bold;  
+}
+
+.r{
+    grid-column-start: 4;
+    grid-column-end: 5;
+    grid-row-start: 6;
+    grid-row-end: 7;
+    justify-self: start;
+    margin-top: 100px;
+    margin-left: 10px;
+}
+
+.l{
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 6;
+    grid-row-end: 7;
+    justify-self: end;
+    margin-top: 100px;
+    margin-right: 10px;
+}
 
  .heading{
     grid-column-start: 2;

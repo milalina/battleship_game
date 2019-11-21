@@ -3,7 +3,9 @@ package com.codeoftheweb.salvo;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class Score {
@@ -13,11 +15,11 @@ public class Score {
     private long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="game_id")
+    @JoinColumn(name = "game_id")
     private Game game;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="player_id")
+    @JoinColumn(name = "player_id")
     private Player player;
 
     private Date finishDate;
@@ -28,17 +30,17 @@ public class Score {
         return playerScore;
     }
 
-    public long playerId(){
+    public long playerId() {
         return player.getId();
     }
 
     public Score(Date finishDate, double playerScore, Game game) {
         this.finishDate = finishDate;
         this.playerScore = playerScore;
-        this.game=game;
+        this.game = game;
     }
 
-    public long gameId(){
+    public long gameId() {
         return game.getId();
     }
 
@@ -46,16 +48,34 @@ public class Score {
         this.playerScore = playerScore;
     }
 
-    Double calculatePlayerScore(GamePlayer gamePlayer){
-        if (gamePlayer.getGPShipLocations().containsAll(gamePlayer.getOpponent().getSalvoes()) &&
-                gamePlayer.getOpponent().getGPShipLocations().containsAll(gamePlayer.getSalvoes())){
-            return 0.5;
-        } else if (gamePlayer.getGPShipLocations().containsAll(gamePlayer.getOpponent().getSalvoes()) &&
-                !gamePlayer.getOpponent().getGPShipLocations().containsAll(gamePlayer.getSalvoes())){
-            return 1.0;
-        }else{return 0.0;}
+    Double calculatePlayerScore(GamePlayer gamePlayer) {
+        if (game.isGameOver()) {
+            this.finishDate = new Date();
+            if (this.getAllSalvoesAsString(gamePlayer.getOpponent()).containsAll(gamePlayer.getGPShipLocations()) &&
+                    this.getAllSalvoesAsString(gamePlayer).containsAll(gamePlayer.getOpponent().getGPShipLocations())) {
+                playerScore = 0.5;
+                return playerScore;
+            } else if (this.getAllSalvoesAsString(gamePlayer.getOpponent()).containsAll(gamePlayer.getGPShipLocations()) &&
+                    !this.getAllSalvoesAsString(gamePlayer).containsAll(gamePlayer.getOpponent().getGPShipLocations())) {
+                playerScore = 0.0;
+                return playerScore;
+            } else {
+                playerScore = 1.0;
+                return playerScore;
+            }
+        } else {
+            return null;
+        }
     }
 
+    private List<String> getAllSalvoesAsString(GamePlayer gamePlayer) {
+        List<Salvo> salvoesAsInstances = gamePlayer.getSalvoes();
+        List<String> salvoesAsAStringOfLocations = new ArrayList<>();
+        for (Salvo oneSalvo : salvoesAsInstances) {
+            salvoesAsAStringOfLocations.addAll(oneSalvo.getSalvoLocations());
+        }
+        return salvoesAsAStringOfLocations;
+    }
 
     public Date getFinishDate() {
         return finishDate;

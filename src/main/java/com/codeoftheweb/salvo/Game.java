@@ -129,7 +129,7 @@ public class Game {
     private boolean gamePlayerDestroyedAllShipsOfOtherGamePlayer(GamePlayer gamePlayer, GamePlayer otherGamePlayer) {
         boolean result = false;
         if (gamePlayer != null) {
-            List<Salvo> salvoes = gamePlayer.getSalvoes();
+           List<Salvo> salvoes = this.getOnlySalvoesFromCompleteTurns().get(gamePlayer); //changed salvoes to salvoes from completed turns
             List<String> allGPShipLocations = otherGamePlayer.getGPShipLocations();
             for (int turnNumber = 1; turnNumber < salvoes.size() + 1; turnNumber++) {
                 List<String> salvoesToEndTheGame = otherGamePlayer.getOpponentSalvoes(otherGamePlayer.getOpponentSalvoesByTurn(turnNumber));

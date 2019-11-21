@@ -78,7 +78,14 @@ new Vue({
                 return false;
             } else {
                 this.gameOver = this.game[0].over;
-                this.displayingGameResults();
+                console.log(this.game[0].turn)
+                if(this.game[0].turn==true){
+                    this.message="Place salvoes"
+                   /*  setTimeout(() => {
+                        this.message = null;
+                    }, 3000); */
+
+                }
                 this.getParamsFromUrl();
                 this.makeGPShipsArray();
                 return true
@@ -392,9 +399,9 @@ new Vue({
                 })
                 .done((response, status, jqXHR) => {
                     this.message = response;
-                    setTimeout(() => {
+                    /* setTimeout(() => {
                         this.message = null;
-                    }, 5000);
+                    }, 5000); */
                     // alert(response)
                     this.fetchData();
                     this.removeShipOptionsTable = true;
@@ -532,7 +539,10 @@ new Vue({
 
                     this.shipsPlaced = true;
                     this.fetchData();
-                    setTimeout(() => {
+                    setTimeout(()=>{
+                        this.displayingGameResults(),4000
+                    })
+                   setTimeout(() => {
                         this.message = null;
                     }, 5000);
                 })
@@ -586,12 +596,13 @@ new Vue({
         displayingGameResults() {
             if (this.gameOver == true) {
                 if (this.myScore == 1) {
+                    this.message=null;
                     document.getElementById("ship-you").className = "moving-ship-you-win"
                     document.getElementById("ship-enemy").className = "moving-ship-enemy-lose"
-                    document.getElementById("opponent-shot1").style.display = "none"
+                    /* document.getElementById("opponent-shot1").style.display = "none"
                     document.getElementById("shot-you1").style.display = "none"
                     document.getElementById("firework-left1").style.display = "none"
-                    document.getElementById("firework-right1").style.display = "none"
+                    document.getElementById("firework-right1").style.display = "none" */
                     setTimeout(() => document.getElementById("opponent-shot1").className = "opponent-shot", 2000);
                     setTimeout(() => document.getElementById("shot-you1").className = "your-shot", 2000);
                     setTimeout(() => document.getElementById("opponent-shot1").style.display = "inline", 2000);

@@ -16,10 +16,10 @@
             <img id="ship-you"  src="assets/battleship.pur.png" style="height:40px" alt="">
         </div>
         <div v-if="message" class="center"><span>{{message}}</span></div>
-        <div id="shot-you1"  ><img src="assets/bang.purple.png" alt=""></div>
-        <div id="opponent-shot1" ><img  src="assets/bang.green.png" alt=""></div>
-        <div id="firework-left1" ><img  src="assets/firework.purple.png" alt=""></div>
-        <div id="firework-right1" ><img  src="assets/firework.green.png" alt=""></div>
+        <div id="shot-you1" style="display:none" ><img src="assets/bang.purple.png" alt=""></div>
+        <div id="opponent-shot1" style="display:none"><img  src="assets/bang.green.png" alt=""></div>
+        <div id="firework-left1" style="display:none"><img  src="assets/firework.purple.png" alt=""></div>
+        <div id="firework-right1" style="display:none"><img  src="assets/firework.green.png" alt=""></div>
         <div v-if="isLoaded" class="right">
             <img id="ship-enemy" src="assets/battleship.gr-ConvertImage.png" style="height:40px" alt="">
             <button class="player"> {{gamePlayerOther}}</button>
@@ -44,7 +44,10 @@
                 </tr>
             </table>
         </div>
-        <div class="hits-and-sinks-table-you" v-if="shipsPlaced">
+        <div class="l" v-if="gameOver">
+            <p class="game-over">Game</p>
+        </div>
+        <div class="hits-and-sinks-table-you" v-if="shipsPlaced && !gameOver">
             <table class="ship-placement-table ship-placement">
                 <thead>
                     <tr>
@@ -157,7 +160,10 @@
             <button v-if="showConfirmSalvoesButton" @click="sendSalvoes" class="button"> Confirm </button>
             <button v-if="showConfirmSalvoesButton" @click="clearSalvoes" class="button"> Clear </button>
         </div>
-        <div class="hits-and-sinks-table-opponent" v-if="shipsPlaced">
+        <div class="r" v-if="gameOver">
+            <p class="game-over">Over</p>
+        </div>
+        <div class="hits-and-sinks-table-opponent" v-if="shipsPlaced && !gameOver">
             <table class="ship-placement-table ship-placement">
                 <thead>
                     <tr>
