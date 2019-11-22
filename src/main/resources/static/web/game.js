@@ -52,7 +52,9 @@ new Vue({
         message: null,
         objectForClearingShips: [],
         gameOver: false,
-        myScore: 1,
+        myScore: null,
+        enemyScore: null,
+        displayScore: false,
     },
     methods: {
         fetchData: function () {
@@ -84,8 +86,10 @@ new Vue({
                    /*  setTimeout(() => {
                         this.message = null;
                     }, 3000); */
-
                 }
+                setTimeout(()=>{
+                    this.displayingGameResults(),4000
+                })
                 this.getParamsFromUrl();
                 this.makeGPShipsArray();
                 return true
@@ -99,21 +103,27 @@ new Vue({
                 this.gamePlayerYou = this.game[0].gamePlayers[1].player.email
                 this.gamePlayerOther = this.game[0].gamePlayers[0].player.email
                 this.mySalvoesObject = this.game[0].gamePlayers[1].salvoes
-                this.enemySalvoesObject = this.game[0].gamePlayers[0].salvoes
+                this.damagedShipLocations = this.game[0].gamePlayers[1].hits
+                console.log(this.enemySalvoesObject)
+                console.log(this.game[0].gamePlayers[0].hits)
+                console.log(this.enemySalvoes)
+                console.log("hello")
                 this.hitsAndSinksObjectYou = this.game[0].gamePlayers[1].status
                 this.hitsAndSinksObjectOpponent = this.game[0].gamePlayers[0].status
                 this.hitsOther = this.game[0].gamePlayers[0].hits
+                this.myScore= this.game[0].gamePlayers[1].score
             } else {
                 this.gamePlayerYou = this.game[0].gamePlayers[0].player.email
                 this.gamePlayerOther = this.game[0].gamePlayers[1].player.email
                 this.mySalvoesObject = this.game[0].gamePlayers[0].salvoes
-                this.enemySalvoesObject = this.game[0].gamePlayers[1].salvoes
+                this.damagedShipLocations = this.game[0].gamePlayers[0].hits
                 this.hitsAndSinksObjectYou = this.game[0].gamePlayers[0].status
                 this.hitsAndSinksObjectOpponent = this.game[0].gamePlayers[1].status
                 this.hitsOther = this.game[0].gamePlayers[1].hits
+                this.enemyScore= this.game[0].gamePlayers[0].score
             }
             this.fillArrMySalvoes()
-            this.fillArrEnemySalvoes()
+           // this.fillArrEnemySalvoes()
         },
 
         //before ships are placed
@@ -447,13 +457,13 @@ new Vue({
         },
 
         fillArrDamagedShipLocations() {
-            this.shipLocations.forEach(oneShipLocation => {
+            /* this.shipLocations.forEach(oneShipLocation => {
                 this.enemySalvoes.map(oneEnemySalvo => {
                     if (oneEnemySalvo == oneShipLocation) {
                         this.damagedShipLocations.push(oneShipLocation)
                     }
                 })
-            })
+            }) */
             this.displayMySalvoes();
             setTimeout(() => {
                 this.displayShips();
@@ -539,9 +549,6 @@ new Vue({
 
                     this.shipsPlaced = true;
                     this.fetchData();
-                    setTimeout(()=>{
-                        this.displayingGameResults(),4000
-                    })
                    setTimeout(() => {
                         this.message = null;
                     }, 5000);
@@ -561,17 +568,17 @@ new Vue({
             }
             this.salvoesInThisTurn = []
         },
-        fillArrMySalvoes(mySalvoes, mySalvoesObject) {
+       fillArrMySalvoes(mySalvoes, mySalvoesObject) {
             for (i in this.mySalvoesObject) {
                 this.mySalvoes.push.apply(this.mySalvoes, this.mySalvoesObject[i]);
             }
         },
 
-        fillArrEnemySalvoes(enemySalvoes, enemySalvoesObject) {
+         /*fillArrEnemySalvoes(enemySalvoes, enemySalvoesObject) {
             for (i in this.enemySalvoesObject) {
                 this.enemySalvoes.push.apply(this.enemySalvoes, this.enemySalvoesObject[i]);
             }
-        },
+        }, */
         displayMySalvoes() {
             for (i in this.mySalvoes) {
                 document.getElementById(this.mySalvoes[i] + "s").style.backgroundColor = "thistle";
@@ -596,6 +603,7 @@ new Vue({
         displayingGameResults() {
             if (this.gameOver == true) {
                 if (this.myScore == 1) {
+                    this.enemyScore=0,
                     this.message=null;
                     document.getElementById("ship-you").className = "moving-ship-you-win"
                     document.getElementById("ship-enemy").className = "moving-ship-enemy-lose"
@@ -637,14 +645,24 @@ new Vue({
                     // document.getElementById("shot-you1").style.display = "none"
                     document.getElementById("firework-left1").style.display = "none"
                     document.getElementById("firework-right1").style.display = "none"
+                    setTimeout(() => this.displayScore=true, 8000);
+                    
 
 
                 } else if (this.myScore == 0) {
-                    document.getElementById("ship-you").className = "moving-ship-you-lose"
-                    document.getElementById("ship-enemy").className = "moving-ship-enemy-win"
-                } else {
-                    // document.getElementById("ship-you").className = ""
-                    //document.getElementById("ship - enemy").className = ""
+                    this.enemyScore=1;
+                document.getElementById("opponent-shot1").style.display = "none";
+                document.getElementById("shot-you1").style.display = "none";
+                document.getElementById("firework-left1").style.display = "none";
+                document.getElementById("firework-right1").style.display = "none";
+                this.displayScore=true
+                } else { this.myScore=0.5,
+                    this.enemyScore=0.5,
+                document.getElementById("opponent-shot1").style.display = "none";
+                document.getElementById("shot-you1").style.display = "none";
+                document.getElementById("firework-left1").style.display = "none";
+                document.getElementById("firework-right1").style.display = "none";
+                this.displayScore=true
                 }
             } else {
                 document.getElementById("opponent-shot1").style.display = "none";

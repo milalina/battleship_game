@@ -383,6 +383,27 @@ span{
     margin-right: 10px;
 }
 
+.my-score{
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    justify-self: end;
+    margin-right: 0px;
+}
+.enemy-score{
+    grid-column-start: 4;
+    grid-column-end: 5;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    justify-self: start;
+    margin-left: 0px;
+}
+.score-number{
+    color:#40E0D0;
+    font-size: xx-large;
+    font-style: bold;    
+}
  .heading{
     grid-column-start: 2;
     grid-column-end: 5;

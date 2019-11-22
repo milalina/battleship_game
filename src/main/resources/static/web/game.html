@@ -20,6 +20,8 @@
         <div id="opponent-shot1" style="display:none"><img  src="assets/bang.green.png" alt=""></div>
         <div id="firework-left1" style="display:none"><img  src="assets/firework.purple.png" alt=""></div>
         <div id="firework-right1" style="display:none"><img  src="assets/firework.green.png" alt=""></div>
+        <div v-if="displayScore" class="my-score"><p class="score-number">{{myScore}}:</p></div>
+        <div v-if="displayScore" class="enemy-score"><p class="score-number">{{enemyScore}}</p></div>
         <div v-if="isLoaded" class="right">
             <img id="ship-enemy" src="assets/battleship.gr-ConvertImage.png" style="height:40px" alt="">
             <button class="player"> {{gamePlayerOther}}</button>
